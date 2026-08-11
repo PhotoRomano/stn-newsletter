@@ -4,6 +4,32 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Messenger — Week of August 14, 2026 · St. Nicholas Serbian Orthodox Church · DRAFT</title>
+<style>
+  /* ── Mobile responsive overrides ─────────────────── */
+  @media only screen and (max-width: 620px) {
+    /* Force full width on the main card */
+    .email-body { width: 100% !important; }
+
+    /* Tighter side padding in content sections */
+    .pad  { padding-left: 16px !important; padding-right: 16px !important; }
+
+    /* Quick-links: collapse 4 cols → 2×2 */
+    .ql-cell { width: 50% !important; box-sizing: border-box !important; }
+    .ql-cell.r2 { border-top: 1px solid #c8d5e8 !important; }
+    .ql-cell.left { border-left: none !important; }
+
+    /* Service schedule: remove fixed date-column width */
+    .svc-date { width: auto !important; white-space: normal !important; font-size: 13px !important; }
+
+    /* Giving buttons: stack vertically */
+    .give-cell { display: block !important; width: 100% !important;
+                 padding: 0 0 10px 0 !important; box-sizing: border-box !important; }
+    .give-cell a { padding-top: 13px !important; padding-bottom: 13px !important; }
+
+    /* Slightly smaller masthead heading */
+    .issue-title { font-size: 22px !important; }
+  }
+</style>
 </head>
 <body style="margin:0; padding:0; background:#eef1f6; font-family:Georgia,'Times New Roman',serif; color:#2b2b2b;">
 
@@ -17,64 +43,64 @@
 
 <center>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#eef1f6;">
-<tr><td align="center" style="padding:24px 12px;">
+<tr><td align="center" style="padding:16px 8px;">
 
-<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:600px; max-width:600px; background:#ffffff; border:1px solid #c8d5e8;">
+<table class="email-body" role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:600px; max-width:600px; background:#ffffff; border:1px solid #c8d5e8;">
 
   <!-- ══ Masthead ══ -->
-  <tr><td style="background:#ffffff; padding:16px 20px 10px; text-align:center;">
+  <tr><td style="background:#ffffff; padding:14px 16px 10px; text-align:center;">
     <img src="../st_nicholas_banner.png" width="560" alt="St. Nicholas Serbian Orthodox Church — Elkins Park, PA"
          style="display:block; margin:0 auto; width:100%; max-width:560px; height:auto;">
   </td></tr>
 
-  <!-- Serbian flag stripe row: thin red · blue header · thin white · gold rule -->
+  <!-- flag stripe: red · navy header · gold rule -->
   <tr><td style="height:3px; background:#c31f27;"></td></tr>
-  <tr><td style="background:#02306e; padding:14px 30px; text-align:center;">
-    <span style="color:#ffffff; font-family:'El Messiri',Georgia,serif; font-size:26px; font-weight:700; letter-spacing:1px;">The Messenger</span><br>
+  <tr><td style="background:#02306e; padding:14px 20px; text-align:center;">
+    <span class="issue-title" style="color:#ffffff; font-family:'El Messiri',Georgia,serif; font-size:26px; font-weight:700; letter-spacing:1px;">The Messenger</span><br>
     <span style="color:#a8c4e0; font-size:13px; font-style:italic; letter-spacing:.3px;">Week of August 14, 2026 &nbsp;·&nbsp; Добро дошли · Welcome</span>
   </td></tr>
   <tr><td style="height:4px; background:#c9a227;"></td></tr>
 
-  <!-- ══ Quick links ══ -->
-  <tr><td style="padding:14px 20px;">
+  <!-- ══ Quick links (4 col → 2×2 on mobile) ══ -->
+  <tr><td style="padding:12px 16px;">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f0f4fb; border:1px solid #c8d5e8; border-radius:3px;">
       <tr>
-        <td style="padding:11px; text-align:center; font-size:13px;"><a href="https://stnicholasphilly.org/calendar.html" style="color:#02306e; text-decoration:none;">&#128197; Calendar</a></td>
-        <td style="padding:11px; text-align:center; font-size:13px; border-left:1px solid #c8d5e8;"><a href="https://stnicholasphilly.org/donate" style="color:#02306e; text-decoration:none;">&#128591; Donate</a></td>
-        <td style="padding:11px; text-align:center; font-size:13px; border-left:1px solid #c8d5e8;"><a href="https://www.instagram.com/stnicholasphilly" style="color:#02306e; text-decoration:none;">&#128247; Instagram</a></td>
-        <td style="padding:11px; text-align:center; font-size:13px; border-left:1px solid #c8d5e8;"><a href="mailto:stnicholas.soc@gmail.com" style="color:#02306e; text-decoration:none;">&#9993; Contact</a></td>
+        <td class="ql-cell left"  style="padding:11px; text-align:center; font-size:13px; width:25%;"><a href="https://stnicholasphilly.org/calendar.html" style="color:#02306e; text-decoration:none;">&#128197; Calendar</a></td>
+        <td class="ql-cell"       style="padding:11px; text-align:center; font-size:13px; width:25%; border-left:1px solid #c8d5e8;"><a href="https://stnicholasphilly.org/donate" style="color:#02306e; text-decoration:none;">&#128591; Donate</a></td>
+        <td class="ql-cell r2 left" style="padding:11px; text-align:center; font-size:13px; width:25%; border-left:1px solid #c8d5e8;"><a href="https://www.instagram.com/stnicholasphilly" style="color:#02306e; text-decoration:none;">&#128247; Instagram</a></td>
+        <td class="ql-cell r2"   style="padding:11px; text-align:center; font-size:13px; width:25%; border-left:1px solid #c8d5e8;"><a href="mailto:stnicholas.soc@gmail.com" style="color:#02306e; text-decoration:none;">&#9993; Contact</a></td>
       </tr>
     </table>
   </td></tr>
 
   <!-- ══ This Week at the Altar ══ -->
-  <tr><td style="padding:6px 32px 20px;">
+  <tr><td class="pad" style="padding:6px 32px 20px;">
     <h2 style="font-size:20px; color:#02306e; font-family:'El Messiri',Georgia,serif; font-weight:700; border-bottom:2px solid #c9a227; padding-bottom:7px; margin:18px 0 14px;">
       &#10013;&#65038; This Week at the Altar
     </h2>
     <p style="font-size:13px; color:#6a7d96; font-style:italic; margin:0 0 14px;">We worship on the Julian Calendar. All are welcome — come as you are.</p>
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:15px;">
       <tr style="border-bottom:1px solid #e5eaf2;">
-        <td style="padding:9px 0; width:170px; font-weight:bold; color:#02306e; font-family:'El Messiri',Georgia,serif;">Thursday, Aug 14</td>
+        <td class="svc-date" style="padding:9px 12px 9px 0; width:150px; font-weight:bold; color:#02306e; font-family:'El Messiri',Georgia,serif; white-space:nowrap;">Thursday, Aug 14</td>
         <td style="padding:9px 0; color:#444;">Dormition Fast begins — two weeks of fasting &amp; prayer</td>
       </tr>
       <tr style="border-bottom:1px solid #e5eaf2;">
-        <td style="padding:9px 0; font-weight:bold; color:#8c1419; font-family:'El Messiri',Georgia,serif;">Sunday, Aug 16</td>
+        <td class="svc-date" style="padding:9px 12px 9px 0; width:150px; font-weight:bold; color:#8c1419; font-family:'El Messiri',Georgia,serif; white-space:nowrap;">Sunday, Aug 16</td>
         <td style="padding:9px 0; font-weight:bold; color:#8c1419;">Divine Liturgy &nbsp;&mdash;&nbsp; 10:00 AM</td>
       </tr>
       <tr style="border-bottom:1px solid #e5eaf2;">
-        <td style="padding:9px 0; font-weight:bold; color:#02306e; font-family:'El Messiri',Georgia,serif;">Monday, Aug 18</td>
+        <td class="svc-date" style="padding:9px 12px 9px 0; width:150px; font-weight:bold; color:#02306e; font-family:'El Messiri',Georgia,serif; white-space:nowrap;">Monday, Aug 18</td>
         <td style="padding:9px 0; color:#444;">Eve of the Transfiguration &mdash; <strong>[BOARD: Vespers time?]</strong></td>
       </tr>
       <tr>
-        <td style="padding:9px 0; font-weight:bold; color:#8c1419; font-family:'El Messiri',Georgia,serif;">Tuesday, Aug 19</td>
+        <td class="svc-date" style="padding:9px 12px 9px 0; width:150px; font-weight:bold; color:#8c1419; font-family:'El Messiri',Georgia,serif; white-space:nowrap;">Tuesday, Aug 19</td>
         <td style="padding:9px 0; font-weight:bold; color:#8c1419;">&#10013;&#65038; Transfiguration — Divine Liturgy &nbsp;<strong>[BOARD: time?]</strong></td>
       </tr>
     </table>
   </td></tr>
 
   <!-- ══ Dormition Fast ══ -->
-  <tr><td style="padding:6px 32px 20px;">
+  <tr><td class="pad" style="padding:6px 32px 20px;">
     <h2 style="font-size:20px; color:#02306e; font-family:'El Messiri',Georgia,serif; font-weight:700; border-bottom:2px solid #c9a227; padding-bottom:7px; margin:18px 0 14px;">
       &#128293; The Dormition Fast — August 14–28
     </h2>
@@ -83,9 +109,8 @@
       the <strong>Dormition of the Most Holy Theotokos</strong> (August 28). This fast is one of the most spiritually
       rich periods of the Orthodox year, calling us to stillness alongside the Mother of God.
     </p>
-    <!-- Fasting guide card -->
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f0f4fb; border:1px solid #c8d5e8; border-left:4px solid #02306e; margin:4px 0 12px;">
-      <tr><td style="padding:14px 16px; font-size:14px; color:#1a2e4a; line-height:1.7;">
+      <tr><td style="padding:14px 16px; font-size:14px; color:#1a2e4a; line-height:1.8;">
         <strong>Wed &amp; Fri</strong> — strict: no meat, dairy, fish, wine, or oil<br>
         <strong>Mon, Tue, Thu, Sat, Sun</strong> — fish, wine &amp; oil permitted<br>
         <strong>Transfiguration (Aug 19)</strong> — Great Feast: fish, wine &amp; oil freely permitted
@@ -96,11 +121,10 @@
     </p>
   </td></tr>
 
-  <!-- ══ Transfiguration ══ -->
-  <tr><td style="padding:0 32px 20px;">
-    <!-- Feast card — styled box, calm and luminous -->
+  <!-- ══ Transfiguration feast card ══ -->
+  <tr><td class="pad" style="padding:0 32px 20px;">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:linear-gradient(135deg,#02306e 0%,#01204a 100%); border-radius:4px; margin-top:4px;">
-      <tr><td style="padding:24px 24px 20px; text-align:center;">
+      <tr><td style="padding:24px 20px 20px; text-align:center;">
         <div style="color:#c9a227; font-size:28px; margin-bottom:4px;">&#10024;</div>
         <h3 style="color:#ffffff; font-family:'El Messiri',Georgia,serif; font-size:20px; font-weight:700; margin:0 0 6px;">Transfiguration of Our Lord</h3>
         <div style="color:#a8c4e0; font-size:15px; margin-bottom:14px;">Tuesday, August 19 &nbsp;·&nbsp; Преображење Господње</div>
@@ -119,7 +143,7 @@
   </td></tr>
 
   <!-- ══ Church School ══ -->
-  <tr><td style="padding:6px 32px 20px;">
+  <tr><td class="pad" style="padding:6px 32px 20px;">
     <h2 style="font-size:20px; color:#02306e; font-family:'El Messiri',Georgia,serif; font-weight:700; border-bottom:2px solid #c9a227; padding-bottom:7px; margin:18px 0 14px;">
       &#128218; Church School — New Year Approaching
     </h2>
@@ -128,23 +152,19 @@
       Children learn the Orthodox faith, Scripture, and the traditions of our Church alongside their friends
       in a warm parish environment.
     </p>
-    <p style="font-size:15px; line-height:1.7; color:#333; margin:0 0 12px;">
+    <p style="font-size:15px; line-height:1.7; color:#333; margin:0 0 14px;">
       <strong>[BOARD: first day of Church School? Any enrollment info or teacher news to share?]</strong>
     </p>
-    <table role="presentation" cellpadding="0" cellspacing="0">
-      <tr><td>
-        <a href="mailto:stnicholas.soc@gmail.com?subject=Church%20School%20Enrollment"
-           style="display:inline-block; background:#02306e; color:#ffffff; text-decoration:none; padding:11px 22px; font-size:14px; font-weight:bold; border-radius:2px;">
-          Enroll Your Child &rarr;
-        </a>
-      </td></tr>
-    </table>
+    <a href="mailto:stnicholas.soc@gmail.com?subject=Church%20School%20Enrollment"
+       style="display:inline-block; background:#02306e; color:#ffffff; text-decoration:none; padding:11px 22px; font-size:14px; font-weight:bold; border-radius:2px;">
+      Enroll Your Child &rarr;
+    </a>
   </td></tr>
 
   <!-- ══ Serbian Language School ══ -->
-  <tr><td style="padding:0 32px 20px;">
+  <tr><td class="pad" style="padding:0 32px 20px;">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f8f4e8; border:1px solid #e0d4a0; border-left:4px solid #c9a227;">
-      <tr><td style="padding:18px 20px;">
+      <tr><td style="padding:18px 16px;">
         <h2 style="font-size:19px; color:#02306e; font-family:'El Messiri',Georgia,serif; font-weight:700; margin:0 0 10px;">
           &#127463;&#127462; Serbian Language School — Registration Open
         </h2>
@@ -158,17 +178,17 @@
           This is one of the most meaningful things we can do to pass our heritage to the next generation.
         </p>
         <a href="mailto:srpskizavicajni@easterndiocese.org?subject=Zavičajna%20Reč%20Enrollment"
-           style="display:inline-block; background:#c9a227; color:#3a2e00; text-decoration:none; padding:10px 20px; font-size:14px; font-weight:bold; border-radius:2px;">
+           style="display:inline-block; background:#c9a227; color:#3a2e00; text-decoration:none; padding:10px 18px; font-size:14px; font-weight:bold; border-radius:2px; word-break:break-all;">
           Register &rarr; srpskizavicajni@easterndiocese.org
         </a>
       </td></tr>
     </table>
   </td></tr>
 
-  <!-- ══ Youth Social Call-to-Action ══ -->
-  <tr><td style="padding:0 32px 20px;">
+  <!-- ══ Youth Social ══ -->
+  <tr><td class="pad" style="padding:0 32px 20px;">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f0f7f0; border:1px solid #b8d8b8; border-left:4px solid #24764a;">
-      <tr><td style="padding:18px 20px;">
+      <tr><td style="padding:18px 16px;">
         <h2 style="font-size:19px; color:#155a2b; font-family:'El Messiri',Georgia,serif; font-weight:700; margin:0 0 10px;">
           &#127881; Teens of St. Nicholas — Let&rsquo;s Connect
         </h2>
@@ -177,11 +197,9 @@
           We&rsquo;re looking for one or two teens who want to help <strong>organize a youth social event</strong> this fall
           — a game night, a hike, a coffee hour hangout, whatever sounds fun.
         </p>
-        <p style="font-size:14.5px; line-height:1.6; color:#555; margin:0 0 14px;">
-          No experience needed. Just a willingness to reach out. Any teen (or parent of a teen) who&rsquo;s interested
-          — reply to this email or write us at
-          <a href="mailto:stnicholas.soc@gmail.com" style="color:#155a2b;">stnicholas.soc@gmail.com</a>
-          and we&rsquo;ll get something started together.
+        <p style="font-size:14.5px; line-height:1.6; color:#555; margin:0 0 12px;">
+          No experience needed. Just a willingness to reach out. Any teen (or parent of a teen) who&rsquo;s interested —
+          reply to this email or write <a href="mailto:stnicholas.soc@gmail.com" style="color:#155a2b;">stnicholas.soc@gmail.com</a>.
         </p>
         <p style="font-size:14px; color:#155a2b; font-style:italic; margin:0;">
           &ldquo;Let no one despise your youth, but be an example to the believers.&rdquo; (1 Tim. 4:12)
@@ -191,32 +209,32 @@
   </td></tr>
 
   <!-- ══ On the Horizon ══ -->
-  <tr><td style="padding:0 32px 20px;">
+  <tr><td class="pad" style="padding:0 32px 20px;">
     <h2 style="font-size:20px; color:#02306e; font-family:'El Messiri',Georgia,serif; font-weight:700; border-bottom:2px solid #c9a227; padding-bottom:7px; margin:4px 0 14px;">
       &#128197; On the Horizon
     </h2>
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14.5px;">
       <tr style="border-bottom:1px solid #e5eaf2;">
-        <td style="padding:9px 0 9px 4px; width:100px; font-weight:bold; color:#02306e; font-family:'El Messiri',Georgia,serif; white-space:nowrap;">Aug 28</td>
+        <td class="svc-date" style="padding:9px 12px 9px 0; width:90px; font-weight:bold; color:#02306e; font-family:'El Messiri',Georgia,serif; white-space:nowrap;">Aug 28</td>
         <td style="padding:9px 0;"><strong>Dormition of the Theotokos</strong> — culminating feast of the fast. <span style="color:#8c1419;">[BOARD: service time?]</span></td>
       </tr>
       <tr style="border-bottom:1px solid #e5eaf2;">
-        <td style="padding:9px 0 9px 4px; font-weight:bold; color:#02306e; font-family:'El Messiri',Georgia,serif; white-space:nowrap;">Sep 12–13</td>
+        <td class="svc-date" style="padding:9px 12px 9px 0; width:90px; font-weight:bold; color:#02306e; font-family:'El Messiri',Georgia,serif; white-space:nowrap;">Sep 12–13</td>
         <td style="padding:9px 0;"><strong>SerbFest — Live Music!</strong> Our beloved annual Serbian Food Festival returns. Volunteers &amp; bakers needed — reply to help.</td>
       </tr>
       <tr style="border-bottom:1px solid #e5eaf2;">
-        <td style="padding:9px 0 9px 4px; font-weight:bold; color:#02306e; font-family:'El Messiri',Georgia,serif; white-space:nowrap;">Sep 21</td>
+        <td class="svc-date" style="padding:9px 12px 9px 0; width:90px; font-weight:bold; color:#02306e; font-family:'El Messiri',Georgia,serif; white-space:nowrap;">Sep 21</td>
         <td style="padding:9px 0;">Nativity of the Theotokos — Liturgy &amp; luncheon</td>
       </tr>
       <tr>
-        <td style="padding:9px 0 9px 4px; font-weight:bold; color:#02306e; font-family:'El Messiri',Georgia,serif; white-space:nowrap;">Dec 21</td>
+        <td class="svc-date" style="padding:9px 12px 9px 0; width:90px; font-weight:bold; color:#02306e; font-family:'El Messiri',Georgia,serif; white-space:nowrap;">Dec 21</td>
         <td style="padding:9px 0;">Church Slava — St. Nicholas the Wonderworker (lunch)</td>
       </tr>
     </table>
   </td></tr>
 
   <!-- ══ Community Care ══ -->
-  <tr><td style="padding:6px 32px 20px;">
+  <tr><td class="pad" style="padding:6px 32px 20px;">
     <h2 style="font-size:20px; color:#02306e; font-family:'El Messiri',Georgia,serif; font-weight:700; border-bottom:2px solid #c9a227; padding-bottom:7px; margin:18px 0 14px;">
       &#10084;&#65039; Caring for Our Own
     </h2>
@@ -231,8 +249,8 @@
     </p>
   </td></tr>
 
-  <!-- ══ Giving — all green ══ -->
-  <tr><td style="padding:0 32px 24px;">
+  <!-- ══ Giving — all green, stacks on mobile ══ -->
+  <tr><td class="pad" style="padding:0 32px 24px;">
     <h2 style="font-size:20px; color:#02306e; font-family:'El Messiri',Georgia,serif; font-weight:700; border-bottom:2px solid #c9a227; padding-bottom:7px; margin:4px 0 14px;">
       &#128591; Support Your Parish
     </h2>
@@ -242,21 +260,21 @@
     </p>
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
       <tr>
-        <td style="padding:0 5px 0 0;">
+        <td class="give-cell" style="padding:0 5px 0 0; vertical-align:top;">
           <a href="https://stnicholasphilly.org/donate"
              style="display:block; text-align:center; background:#155a2b; color:#ffffff; text-decoration:none; padding:14px 4px; font-size:14px; font-weight:bold; letter-spacing:.3px;">
             Give Monthly
           </a>
           <div style="text-align:center; font-size:11px; color:#6a7d96; margin-top:4px;">Steady parish support</div>
         </td>
-        <td style="padding:0 5px;">
+        <td class="give-cell" style="padding:0 5px; vertical-align:top;">
           <a href="https://stnicholasphilly.org/donate"
              style="display:block; text-align:center; background:#24764a; color:#ffffff; text-decoration:none; padding:14px 4px; font-size:14px; font-weight:bold; letter-spacing:.3px;">
             Give Once
           </a>
           <div style="text-align:center; font-size:11px; color:#6a7d96; margin-top:4px;">Any amount, anytime</div>
         </td>
-        <td style="padding:0 0 0 5px;">
+        <td class="give-cell" style="padding:0 0 0 5px; vertical-align:top;">
           <a href="https://stnicholasphilly.org/donate"
              style="display:block; text-align:center; background:#3d8f68; color:#ffffff; text-decoration:none; padding:14px 4px; font-size:14px; font-weight:bold; letter-spacing:.3px;">
             Give by Zelle
@@ -268,9 +286,9 @@
   </td></tr>
 
   <!-- ══ Need a Priest ══ -->
-  <tr><td style="padding:0 32px 28px;">
+  <tr><td class="pad" style="padding:0 32px 28px;">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f0f4fb; border:1px solid #c8d5e8;">
-      <tr><td style="padding:16px 18px;">
+      <tr><td style="padding:16px 16px;">
         <p style="font-size:15px; line-height:1.65; color:#333; margin:0;">
           <strong style="color:#02306e;">&#128366; Need a Priest?</strong><br>
           For a baptism, confession, a hospital visit, or simply a difficult time — Fr. Milorad is here for you.
@@ -282,7 +300,7 @@
 
   <!-- ══ Footer ══ -->
   <tr><td style="height:3px; background:#c31f27;"></td></tr>
-  <tr><td style="background:#02306e; padding:24px 30px; text-align:center;">
+  <tr><td style="background:#02306e; padding:22px 20px; text-align:center;">
     <div style="color:#a8c4e0; font-size:14px; margin-bottom:10px;">
       <a href="https://stnicholasphilly.org/calendar.html" style="color:#a8c4e0; text-decoration:none;">&#128197; Calendar</a>
       &nbsp;&middot;&nbsp;
