@@ -45,6 +45,19 @@
     /* Footer links: more breathing room for tap targets */
     .footer-links a { display: inline-block !important; padding: 4px 0 !important; }
   }
+
+  /* ── Wide-browser treatment (Outlook desktop ignores media queries and
+       stays at 600px; Gmail/Outlook web reading panes are usually under
+       820px so they stay at 600px too — only a full browser window widens) ── */
+  @media only screen and (min-width: 820px) {
+    .shell        { padding: 40px 8px !important; }
+    .email-body   { width: 680px !important; max-width: 680px !important; }
+    .pad          { padding-left: 46px !important; padding-right: 46px !important; }
+    .masthead-img { max-width: 620px !important; }
+    .copy         { font-size: 16.5px !important; line-height: 1.8 !important; }
+    .section-h2   { font-size: 22px !important; }
+    .issue-title  { font-size: 30px !important; }
+  }
 </style>
 </head>
 <body style="margin:0; padding:0; background:#eef1f6; font-family:Georgia,'Times New Roman',serif; color:#2b2b2b;">
@@ -59,7 +72,7 @@
 
 <center>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#eef1f6;">
-<tr><td align="center" style="padding:16px 8px;">
+<tr><td class="shell" align="center" style="padding:16px 8px;">
 
 <table class="email-body" role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:600px; max-width:600px; background:#ffffff; border:1px solid #c8d5e8;">
 
@@ -77,7 +90,7 @@
 
   <!-- ══ Masthead ══ -->
   <tr><td style="background:#ffffff; padding:14px 16px 10px; text-align:center;">
-    <img src="../st_nicholas_banner.png" width="560" alt="St. Nicholas Serbian Orthodox Church — Elkins Park, PA"
+    <img class="masthead-img" src="https://photoromano.github.io/stn-newsletter/st_nicholas_banner.png" width="560" alt="St. Nicholas Serbian Orthodox Church — Elkins Park, PA"
          style="display:block; margin:0 auto; width:100%; max-width:560px; height:auto;">
   </td></tr>
 
@@ -121,7 +134,7 @@
     <h2 class="section-h2" style="font-size:20px; color:#02306e; font-family:'El Messiri',Georgia,serif; font-weight:700; border-bottom:2px solid #c9a227; padding-bottom:7px; margin:18px 0 14px;">
       &#128293; The Dormition Fast — August 14–29
     </h2>
-    <p style="font-size:15px; line-height:1.7; color:#333; margin:0 0 12px;">
+    <p class="copy" style="font-size:15px; line-height:1.7; color:#333; margin:0 0 12px;">
       We are in the <strong>Dormition Fast</strong> — a period of fasting and prayer in preparation for
       the <strong>Dormition of the Most Holy Theotokos</strong> (August 28). This fast is one of the most spiritually
       rich periods of the Orthodox year, calling us to stillness alongside the Mother of God.
@@ -148,12 +161,12 @@
     <h2 class="section-h2" style="font-size:20px; color:#02306e; font-family:'El Messiri',Georgia,serif; font-weight:700; border-bottom:2px solid #c9a227; padding-bottom:7px; margin:18px 0 14px;">
       &#128218; Church School — New Year Approaching
     </h2>
-    <p style="font-size:15px; line-height:1.7; color:#333; margin:0 0 10px;">
+    <p class="copy" style="font-size:15px; line-height:1.7; color:#333; margin:0 0 10px;">
       Our Church School will be welcoming students again soon as the new program year begins in September.
       Children learn the Orthodox faith, Scripture, and the traditions of our Church alongside their friends
       in a warm parish environment.
     </p>
-    <p style="font-size:15px; line-height:1.7; color:#333; margin:0 0 14px;">
+    <p class="copy" style="font-size:15px; line-height:1.7; color:#333; margin:0 0 14px;">
       <strong>Classes begin Sunday, September 20.</strong> Enrollment details are on our sign-up page.
     </p>
     <a href="https://photoromano.github.io/stn-newsletter/church-school-signup.html"
@@ -169,7 +182,7 @@
         <h2 class="section-h2" style="font-size:19px; color:#02306e; font-family:'El Messiri',Georgia,serif; font-weight:700; margin:0 0 10px;">
           &#127479;&#127480; Serbian Language School — Registration Open
         </h2>
-        <p style="font-size:15px; line-height:1.7; color:#333; margin:0 0 10px;">
+        <p class="copy" style="font-size:15px; line-height:1.7; color:#333; margin:0 0 10px;">
           Want your children to keep the language of their grandparents?
           Serbian carries more than words — it's the language of our Liturgy, our Slava, our songs, and the stories
           passed down from baba and deda. Keeping it alive keeps our children connected to who we are.
@@ -178,7 +191,7 @@
           Classes are taught by native-speaking teachers and follow an age-appropriate curriculum — beginners are welcome.
           This is one of the most meaningful things we can do to pass our heritage to the next generation.
         </p>
-        <p style="font-size:15px; line-height:1.7; color:#333; margin:0 0 14px;">
+        <p class="copy" style="font-size:15px; line-height:1.7; color:#333; margin:0 0 14px;">
           <strong>Classes begin Sunday, September 20.</strong> Enrollment details are on our sign-up page.
         </p>
         <a href="https://photoromano.github.io/stn-newsletter/school-signup.html"
@@ -196,7 +209,7 @@
         <h2 class="section-h2" style="font-size:19px; color:#155a2b; font-family:'El Messiri',Georgia,serif; font-weight:700; margin:0 0 10px;">
           &#127881; Teens of St. Nicholas — Let&rsquo;s Connect
         </h2>
-        <p style="font-size:15px; line-height:1.7; color:#333; margin:0 0 10px;">
+        <p class="copy" style="font-size:15px; line-height:1.7; color:#333; margin:0 0 10px;">
           Our parish is home to a wonderful group of young people — and we&rsquo;d love to see them come together.
           We&rsquo;re looking for one or two teens who want to help <strong>organize a youth social event</strong> this fall
           — a game night, a hike, a coffee hour hangout, whatever sounds fun.
@@ -254,7 +267,7 @@
     <h2 class="section-h2" style="font-size:20px; color:#02306e; font-family:'El Messiri',Georgia,serif; font-weight:700; border-bottom:2px solid #c9a227; padding-bottom:7px; margin:4px 0 14px;">
       &#128591; Support Your Parish
     </h2>
-    <p style="font-size:15px; line-height:1.7; color:#333; margin:0 0 18px;">
+    <p class="copy" style="font-size:15px; line-height:1.7; color:#333; margin:0 0 18px;">
       Our services, our school, and the care we show one another are all sustained by this family&rsquo;s generosity.
       If St. Nicholas is your spiritual home, please consider a gift.
     </p>
@@ -282,7 +295,7 @@
   <tr><td class="pad" style="padding:0 32px 28px;">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f0f4fb; border:1px solid #c8d5e8;">
       <tr><td style="padding:16px 16px;">
-        <p style="font-size:15px; line-height:1.65; color:#333; margin:0;">
+        <p class="copy" style="font-size:15px; line-height:1.65; color:#333; margin:0;">
           <strong style="color:#02306e;">&#128366; Need a Priest?</strong><br>
           For a baptism, confession, a hospital visit, or simply a difficult time — Fr. Milorad is here for you.
           Reach out at <a href="mailto:FrMilorad@stnicholasphilly.org" style="color:#02306e;">FrMilorad@stnicholasphilly.org</a> and he will be in touch.
@@ -297,7 +310,7 @@
   <tr><td class="pad" style="padding:0 32px 24px;">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f8f4e8; border:1px solid #e0d4a0; border-left:4px solid #c9a227;">
       <tr><td style="padding:18px 16px; text-align:center;">
-        <p style="font-size:15px; line-height:1.65; color:#333; margin:0 0 10px;">
+        <p class="copy" style="font-size:15px; line-height:1.65; color:#333; margin:0 0 10px;">
           <strong style="color:#02306e;">&#128228; Know a Family Who&rsquo;d Love This?</strong><br>
           Forward this email, or share our mailing list with them directly.
         </p>
