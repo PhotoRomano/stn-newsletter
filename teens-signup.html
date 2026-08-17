@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teens of St. Nicholas Sign-Up — St. Nicholas Serbian Orthodox Church</title>
+<style>
+  body { margin: 0; background: #ece7dd; font-family: Georgia, serif; color: #2b2b2b; }
+  .wrap { max-width: 600px; margin: 48px auto; padding: 0 20px 60px; }
+  .hd { background: #155a2b; color: #fff; padding: 28px 32px; border-radius: 6px 6px 0 0; }
+  .hd h1 { margin: 0 0 4px; font-size: 26px; font-family: Georgia, serif; }
+  .hd p { margin: 0; color: #b8ddc0; font-size: 14px; font-style: italic; }
+  .gold { height: 4px; background: #c9a227; }
+  .body { background: #fff; border: 1px solid #ddd4c4; border-top: none; padding: 32px; }
+  label { display: block; font-size: 13px; font-weight: bold; color: #155a2b; margin-bottom: 4px; }
+  input[type=text], input[type=email], input[type=tel], textarea, select {
+    width: 100%; box-sizing: border-box; padding: 10px 12px;
+    border: 1px solid #c8b8a0; border-radius: 4px; font-size: 15px;
+    font-family: Georgia, serif; background: #faf8f4;
+  }
+  input:focus, textarea:focus, select:focus { outline: none; border-color: #155a2b; }
+  textarea { resize: vertical; min-height: 80px; }
+  .row { display: flex; gap: 14px; }
+  .row > div { flex: 1; }
+  .field { margin-bottom: 18px; }
+  .section-label {
+    font-size: 11px; font-weight: bold; letter-spacing: .6px; color: #155a2b;
+    text-transform: uppercase; margin: 28px 0 16px;
+    border-top: 1px solid #e7ddc6; padding-top: 18px;
+  }
+  .opt-note { font-size: 12px; color: #888; font-weight: normal; margin-left: 4px; font-style: italic; }
+  .req { color: #8c1419; }
+  .hint { font-size: 12px; color: #888; margin-top: 3px; }
+  .checks label { font-size: 14px; font-weight: normal; color: #333; display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .checks input { width: auto; }
+  button[type=submit] {
+    width: 100%; padding: 14px; background: #155a2b; color: #fff; border: none;
+    border-radius: 4px; font-size: 16px; font-family: Georgia, serif;
+    cursor: pointer; margin-top: 8px; letter-spacing: .3px;
+  }
+  button[type=submit]:hover { background: #0f4520; }
+  #msg { display: none; margin-top: 20px; padding: 16px; border-radius: 4px; font-size: 15px; text-align: center; }
+  .footer-note { text-align: center; font-size: 12px; color: #999; margin-top: 24px; }
+  .footer-note a { color: #155a2b; }
+  @media(max-width:480px){ .row { flex-direction: column; gap: 0; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hd">
+    <h1>Teens of St. Nicholas</h1>
+    <p>St. Nicholas Serbian Orthodox Church &mdash; Elkins Park, PA</p>
+  </div>
+  <div class="gold"></div>
+  <div class="body">
+    <p style="margin:0 0 24px;font-size:15px;color:#555;">Thank you for your interest in Teens of St. Nicholas. Tell us a bit about yourself below and we&rsquo;ll be in touch.</p>
+
+    <form id="teens-form" action="https://formsubmit.co/StNicholas.SOC@gmail.com" method="POST">
+      <input type="hidden" name="_subject" value="Teens of St. Nicholas Sign-Up">
+      <input type="hidden" name="_next" value="https://photoromano.github.io/stn-newsletter/teens-signup.html?sent=1">
+      <input type="hidden" name="_captcha" value="false">
+      <input type="hidden" name="_template" value="table">
+
+      <div class="section-label">Teen Information</div>
+
+      <div class="row">
+        <div class="field"><label>First Name <span class="req">*</span></label><input type="text" name="Teen First Name" required></div>
+        <div class="field"><label>Last Name <span class="req">*</span></label><input type="text" name="Teen Last Name" required></div>
+      </div>
+      <div class="row">
+        <div class="field">
+          <label>Age <span class="req">*</span></label>
+          <select name="Teen Age" required>
+            <option value="">Select age…</option>
+            <option>12</option><option>13</option><option>14</option><option>15</option>
+            <option>16</option><option>17</option><option>18</option>
+          </select>
+        </div>
+        <div class="field"><label>Phone or Email <span class="opt-note">the teen&rsquo;s own, if they have one</span></label><input type="text" name="Teen Contact" placeholder=""></div>
+      </div>
+
+      <div class="section-label">Parent / Guardian Information</div>
+
+      <div class="row">
+        <div class="field"><label>Parent First Name <span class="req">*</span></label><input type="text" name="Parent First Name" required></div>
+        <div class="field"><label>Parent Last Name <span class="req">*</span></label><input type="text" name="Parent Last Name" required></div>
+      </div>
+      <div class="row">
+        <div class="field"><label>Email <span class="req">*</span></label><input type="email" name="Parent Email" required placeholder="you@example.com"></div>
+        <div class="field"><label>Phone <span class="req">*</span></label><input type="tel" name="Parent Phone" required placeholder="(215) 555-0100"></div>
+      </div>
+
+      <div class="section-label">Get Involved</div>
+
+      <div class="field checks">
+        <label><input type="checkbox" name="Interested in Leading" value="Yes"> I&rsquo;d like to help organize or lead something, not just attend</label>
+      </div>
+      <div class="field">
+        <label>Got an idea for an activity or event? Want to lead a volunteer project? Tell us about it <span class="opt-note">optional, but we&rsquo;d love to hear it</span></label>
+        <textarea name="Activity or Volunteer Idea" placeholder="e.g. a game night, a hike, helping run the coffee hour, organizing a food drive…"></textarea>
+      </div>
+
+      <div class="section-label">Additional Information <span class="opt-note">optional</span></div>
+
+      <div class="field">
+        <label>Anything else you&rsquo;d like us to know?</label>
+        <textarea name="Notes" placeholder="Anything you'd like us to know…"></textarea>
+      </div>
+
+      <button type="submit">Submit Sign-Up</button>
+    </form>
+
+    <div id="msg"></div>
+    <p class="footer-note"><a href="https://stnicholasphilly.org">stnicholasphilly.org</a></p>
+  </div>
+</div>
+
+<script>
+  // Show confirmation if redirected back after FormSubmit success
+  if (window.location.search.includes('sent=1')) {
+    document.getElementById('teens-form').style.display = 'none';
+    var msg = document.getElementById('msg');
+    msg.style.cssText = 'display:block;background:#f0f7ee;color:#2e6b2e;border:1px solid #b8d8b8;';
+    msg.textContent = 'Thank you! We received your sign-up and will be in touch soon.';
+  }
+</script>
+</body>
+</html>
