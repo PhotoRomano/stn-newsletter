@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Пријава — Српска школа језика — Црква Светог Николе</title>
+<style>
+  body { margin: 0; background: #ece7dd; font-family: Georgia, serif; color: #2b2b2b; }
+  .wrap { max-width: 600px; margin: 48px auto; padding: 0 20px 60px; }
+  .hd { background: #8c1419; color: #fff; padding: 28px 32px; border-radius: 6px 6px 0 0; }
+  .hd h1 { margin: 0 0 4px; font-size: 26px; font-family: Georgia, serif; }
+  .hd p { margin: 0; color: #e8c873; font-size: 14px; font-style: italic; }
+  .gold { height: 4px; background: #c9a227; }
+  .body { background: #fff; border: 1px solid #ddd4c4; border-top: none; padding: 32px; }
+  label { display: block; font-size: 13px; font-weight: bold; color: #5a2a2a; margin-bottom: 4px; }
+  input[type=text], input[type=email], input[type=tel], textarea, select {
+    width: 100%; box-sizing: border-box; padding: 10px 12px;
+    border: 1px solid #c8b8a0; border-radius: 4px; font-size: 15px;
+    font-family: Georgia, serif; background: #faf8f4;
+  }
+  input:focus, textarea:focus, select:focus { outline: none; border-color: #8c1419; }
+  textarea { resize: vertical; min-height: 80px; }
+  .row { display: flex; gap: 14px; }
+  .row > div { flex: 1; }
+  .field { margin-bottom: 18px; }
+  .section-label {
+    font-size: 11px; font-weight: bold; letter-spacing: .6px; color: #8c1419;
+    text-transform: uppercase; margin: 28px 0 16px;
+    border-top: 1px solid #e7ddc6; padding-top: 18px;
+  }
+  .opt-note { font-size: 12px; color: #888; font-weight: normal; margin-left: 4px; font-style: italic; }
+  .req { color: #8c1419; }
+  .hint { font-size: 12px; color: #888; margin-top: 3px; }
+  button[type=submit] {
+    width: 100%; padding: 14px; background: #8c1419; color: #fff; border: none;
+    border-radius: 4px; font-size: 16px; font-family: Georgia, serif;
+    cursor: pointer; margin-top: 8px; letter-spacing: .3px;
+  }
+  button[type=submit]:hover { background: #6e0f12; }
+  #msg { display: none; margin-top: 20px; padding: 16px; border-radius: 4px; font-size: 15px; text-align: center; }
+  .footer-note { text-align: center; font-size: 12px; color: #999; margin-top: 24px; }
+  .footer-note a { color: #8c1419; }
+  @media(max-width:480px){ .row { flex-direction: column; gap: 0; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hd">
+    <h1>Српска школа језика</h1>
+    <p>Српска православна црква Светог Николе &mdash; Elkins Park, PA</p>
+  </div>
+  <div class="gold"></div>
+  <div class="body">
+    <p style="margin:0 0 24px;font-size:15px;color:#555;">Хвала на интересовању за нашу Српску школу језика. Молимо вас да попуните формулар испод и јавићемо вам се са детаљима о упису.</p>
+
+    <form id="school-form" action="https://formsubmit.co/StNicholas.SOC@gmail.com" method="POST">
+      <input type="hidden" name="_subject" value="Serbian Language School Sign-Up (SR)">
+      <input type="hidden" name="_next" value="https://photoromano.github.io/stn-newsletter/school-signup-sr.html?sent=1">
+      <input type="hidden" name="_captcha" value="false">
+      <input type="hidden" name="_template" value="table">
+
+      <div class="section-label">Информације о ученику</div>
+
+      <div class="row">
+        <div class="field"><label>Име ученика <span class="req">*</span></label><input type="text" name="Student First Name" required placeholder=""></div>
+        <div class="field"><label>Презиме ученика <span class="req">*</span></label><input type="text" name="Student Last Name" required placeholder=""></div>
+      </div>
+      <div class="row">
+        <div class="field">
+          <label>Узраст <span class="req">*</span></label>
+          <select name="Student Age" required>
+            <option value="">Изаберите узраст…</option>
+            <option>4</option><option>5</option><option>6</option><option>7</option>
+            <option>8</option><option>9</option><option>10</option><option>11</option>
+            <option>12</option><option>13</option><option>14</option><option>15+</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Ниво знања српског <span class="req">*</span></label>
+          <select name="Serbian Level" required>
+            <option value="">Изаберите ниво…</option>
+            <option>Никакав — потпуни почетник</option>
+            <option>Делимичан — говори мало код куће</option>
+            <option>Течно говори — али не чита/пише</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="section-label">Информације о родитељу/старатељу</div>
+
+      <div class="row">
+        <div class="field"><label>Име родитеља <span class="req">*</span></label><input type="text" name="Parent First Name" required></div>
+        <div class="field"><label>Презиме родитеља <span class="req">*</span></label><input type="text" name="Parent Last Name" required></div>
+      </div>
+      <div class="row">
+        <div class="field"><label>Имејл <span class="req">*</span></label><input type="email" name="Parent Email" required placeholder="vi@example.com"></div>
+        <div class="field"><label>Телефон <span class="req">*</span></label><input type="tel" name="Parent Phone" required placeholder="(215) 555-0100"></div>
+      </div>
+
+      <div class="section-label">Додатне информације <span class="opt-note">необавезно</span></div>
+
+      <div class="field">
+        <label>Уписујете и браћу/сестре?</label>
+        <input type="text" name="Siblings" placeholder="нпр. Такође уписујемо Марију, узраст 7">
+      </div>
+      <div class="field">
+        <label>Питања или напомене за наставника</label>
+        <textarea name="Notes" placeholder="Било шта што желите да знамо…"></textarea>
+      </div>
+
+      <button type="submit">Пошаљи пријаву</button>
+    </form>
+
+    <div id="msg"></div>
+    <p class="footer-note"><a href="https://stnicholasphilly.org">stnicholasphilly.org</a></p>
+  </div>
+</div>
+
+<script>
+  // Show confirmation if redirected back after FormSubmit success
+  if (window.location.search.includes('sent=1')) {
+    document.getElementById('school-form').style.display = 'none';
+    var msg = document.getElementById('msg');
+    msg.style.cssText = 'display:block;background:#f0f7ee;color:#2e6b2e;border:1px solid #b8d8b8;';
+    msg.textContent = 'Хвала! Примили смо вашу пријаву и јавићемо вам се ускоро.';
+  }
+</script>
+</body>
+</html>
