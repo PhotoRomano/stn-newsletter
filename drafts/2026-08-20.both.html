@@ -29,16 +29,14 @@
     /* Slightly smaller masthead heading */
     .issue-title { font-size: 22px !important; }
 
-    /* Bilingual columns: stack English above Serbian, divider becomes a top rule */
-    .bl-col { display: block !important; width: 100% !important;
-              padding-left: 0 !important; padding-right: 0 !important; border-left: none !important; }
-    .bl-sr { border-top: 1px solid #e5eaf2 !important; padding-top: 14px !important; margin-top: 14px !important; }
   }
 
-  /* ── Desktop: English | Serbian side by side ── */
+  /* ── Desktop: restore English | Serbian side by side ── */
   @media only screen and (min-width: 621px) {
-    .bl-en { padding-right: 16px !important; }
-    .bl-sr { padding-left: 16px !important; border-left: 1px solid #e5eaf2 !important; }
+    .bl-en { display: table-cell !important; width: 50% !important; vertical-align: top !important;
+             padding-right: 16px !important; }
+    .bl-sr { display: table-cell !important; width: 50% !important; vertical-align: top !important;
+             padding-left: 16px !important; border-left: 1px solid #e5eaf2 !important; }
   }
 
   /* ── Wide desktop: give the two-column layout more room to breathe ── */
@@ -46,8 +44,8 @@
     .shell      { padding: 40px 8px !important; }
     .email-body { width: 900px !important; max-width: 900px !important; }
     .pad        { padding-left: 44px !important; padding-right: 44px !important; }
-    .bl-en      { padding-right: 26px !important; }
-    .bl-sr      { padding-left: 26px !important; }
+    .bl-en      { display: table-cell !important; width: 50% !important; vertical-align: top !important; padding-right: 26px !important; }
+    .bl-sr      { display: table-cell !important; width: 50% !important; vertical-align: top !important; padding-left: 26px !important; border-left: 1px solid #e5eaf2 !important; }
   }
 </style>
 </head>
@@ -108,7 +106,7 @@
   <!-- ══ This Week at the Altar ══ -->
   <tr><td class="pad" style="padding:6px 32px 20px;">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
-      <td class="bl-col bl-en" valign="top" width="50%">
+      <td class="bl-col bl-en" valign="top" style="display:block; width:100%; box-sizing:border-box;">
         <h2 style="font-size:19px; color:#02306e; font-family:'El Messiri',Georgia,serif; font-weight:700; border-bottom:2px solid #c9a227; padding-bottom:7px; margin:18px 0 14px;">&#10013;&#65038; This Week at the Altar</h2>
         <p style="font-size:13px; color:#6a7d96; font-style:italic; margin:0 0 14px;">We worship on the Julian Calendar. All are welcome — come as you are.</p>
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14.5px;">
@@ -122,7 +120,7 @@
           &#128250; Missed last Sunday? <a href="https://www.youtube.com/@svetinikolasvetinikolaphil2668" style="color:#02306e;">Watch the homily on YouTube</a>.
         </p>
       </td>
-      <td class="bl-col bl-sr" valign="top" width="50%">
+      <td class="bl-col bl-sr" valign="top" style="display:block; width:100%; box-sizing:border-box;">
         <h2 style="font-size:19px; color:#02306e; font-family:'El Messiri',Georgia,serif; font-weight:700; border-bottom:2px solid #c9a227; padding-bottom:7px; margin:18px 0 14px;">&#10013;&#65038; Ове недеље у олтару</h2>
         <p style="font-size:13px; color:#6a7d96; font-style:italic; margin:0 0 14px;">Богослужимо по јулијанском календару. Сви су добродошли — дођите онакви какви јесте.</p>
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14.5px;">
@@ -142,7 +140,7 @@
   <!-- ══ Dormition Fast ══ -->
   <tr><td class="pad" style="padding:6px 32px 20px;">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
-      <td class="bl-col bl-en" valign="top" width="50%">
+      <td class="bl-col bl-en" valign="top" style="display:block; width:100%; box-sizing:border-box;">
         <h2 style="font-size:18px; color:#02306e; font-family:'El Messiri',Georgia,serif; font-weight:700; border-bottom:2px solid #c9a227; padding-bottom:7px; margin:18px 0 14px;">&#128293; The Dormition Fast — Aug 14&ndash;29</h2>
         <p style="font-size:14px; line-height:1.65; color:#333; margin:0 0 12px;">
           We are in the <strong>Dormition Fast</strong> — a period of fasting and prayer in preparation for
@@ -165,7 +163,7 @@
           &mdash; St. Basil the Great
         </p>
       </td>
-      <td class="bl-col bl-sr" valign="top" width="50%">
+      <td class="bl-col bl-sr" valign="top" style="display:block; width:100%; box-sizing:border-box;">
         <h2 style="font-size:18px; color:#02306e; font-family:'El Messiri',Georgia,serif; font-weight:700; border-bottom:2px solid #c9a227; padding-bottom:7px; margin:18px 0 14px;">&#128293; Успенски пост — 14&ndash;29. август</h2>
         <p style="font-size:14px; line-height:1.65; color:#333; margin:0 0 12px;">
           Налазимо се у <strong>Успенском посту</strong> — периоду поста и молитве у припреми за
@@ -193,7 +191,7 @@
   <!-- ══ Church School ══ -->
   <tr><td class="pad" style="padding:6px 32px 20px;">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
-      <td class="bl-col bl-en" valign="top" width="50%">
+      <td class="bl-col bl-en" valign="top" style="display:block; width:100%; box-sizing:border-box;">
         <h2 style="font-size:18px; color:#02306e; font-family:'El Messiri',Georgia,serif; font-weight:700; border-bottom:2px solid #c9a227; padding-bottom:7px; margin:18px 0 14px;">&#128218; Church School — New Year Approaching</h2>
         <p style="font-size:14px; line-height:1.65; color:#333; margin:0 0 10px;">
           Our Church School welcomes students again as the new program year begins in September. Children learn
@@ -207,7 +205,7 @@
           Enroll Your Child &rarr;
         </a>
       </td>
-      <td class="bl-col bl-sr" valign="top" width="50%">
+      <td class="bl-col bl-sr" valign="top" style="display:block; width:100%; box-sizing:border-box;">
         <h2 style="font-size:18px; color:#02306e; font-family:'El Messiri',Georgia,serif; font-weight:700; border-bottom:2px solid #c9a227; padding-bottom:7px; margin:18px 0 14px;">&#128218; Црквена школа — Приближава се нова година</h2>
         <p style="font-size:14px; line-height:1.65; color:#333; margin:0 0 10px;">
           Наша Црквена школа ускоро ће поново примити ученике, јер нова програмска година почиње у септембру.
@@ -229,7 +227,7 @@
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f8f4e8; border:1px solid #e0d4a0; border-left:4px solid #c9a227;">
       <tr><td style="padding:18px 16px;">
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
-          <td class="bl-col bl-en" valign="top" width="50%">
+          <td class="bl-col bl-en" valign="top" style="display:block; width:100%; box-sizing:border-box;">
             <h2 style="font-size:17px; color:#02306e; font-family:'El Messiri',Georgia,serif; font-weight:700; margin:0 0 10px;">&#127479;&#127480; Serbian Language School — Registration Open</h2>
             <p style="font-size:14px; line-height:1.6; color:#333; margin:0 0 10px;">
               Want your children to keep the language of their grandparents? Serbian carries more than words —
@@ -247,7 +245,7 @@
               Enroll in Serbian School &rarr;
             </a>
           </td>
-          <td class="bl-col bl-sr" valign="top" width="50%">
+          <td class="bl-col bl-sr" valign="top" style="display:block; width:100%; box-sizing:border-box;">
             <h2 style="font-size:17px; color:#02306e; font-family:'El Messiri',Georgia,serif; font-weight:700; margin:0 0 10px;">&#127479;&#127480; Српска школа језика — Уписи отворени</h2>
             <p style="font-size:14px; line-height:1.6; color:#333; margin:0 0 10px;">
               Желите ли да ваша деца сачувају језик својих бака и дека? Српски језик носи више од речи — то је
@@ -275,7 +273,7 @@
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f0f7f0; border:1px solid #b8d8b8; border-left:4px solid #24764a;">
       <tr><td style="padding:18px 16px;">
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
-          <td class="bl-col bl-en" valign="top" width="50%">
+          <td class="bl-col bl-en" valign="top" style="display:block; width:100%; box-sizing:border-box;">
             <h2 style="font-size:17px; color:#155a2b; font-family:'El Messiri',Georgia,serif; font-weight:700; margin:0 0 10px;">&#127881; Young Adults</h2>
             <p style="font-size:14px; line-height:1.6; color:#333; margin:0 0 10px;">
               Our parish is home to a wonderful group of young people — we&rsquo;d love to see them come together.
@@ -295,7 +293,7 @@
               &ldquo;Let no one despise your youth.&rdquo; (1 Tim. 4:12)
             </p>
           </td>
-          <td class="bl-col bl-sr" valign="top" width="50%">
+          <td class="bl-col bl-sr" valign="top" style="display:block; width:100%; box-sizing:border-box;">
             <h2 style="font-size:17px; color:#155a2b; font-family:'El Messiri',Georgia,serif; font-weight:700; margin:0 0 10px;">&#127881; Млади</h2>
             <p style="font-size:14px; line-height:1.6; color:#333; margin:0 0 10px;">
               Наша парохија је дом дивне групе младих људи — волели бисмо да их видимо окупљене. Тражимо тинејџере
@@ -323,7 +321,7 @@
   <!-- ══ On the Horizon ══ -->
   <tr><td class="pad" style="padding:0 32px 20px;">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
-      <td class="bl-col bl-en" valign="top" width="50%">
+      <td class="bl-col bl-en" valign="top" style="display:block; width:100%; box-sizing:border-box;">
         <h2 style="font-size:18px; color:#02306e; font-family:'El Messiri',Georgia,serif; font-weight:700; border-bottom:2px solid #c9a227; padding-bottom:7px; margin:4px 0 14px;">&#128197; On the Horizon</h2>
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:13.5px;">
           <tr style="border-bottom:1px solid #e5eaf2;">
@@ -344,7 +342,7 @@
           </tr>
         </table>
       </td>
-      <td class="bl-col bl-sr" valign="top" width="50%">
+      <td class="bl-col bl-sr" valign="top" style="display:block; width:100%; box-sizing:border-box;">
         <h2 style="font-size:18px; color:#02306e; font-family:'El Messiri',Georgia,serif; font-weight:700; border-bottom:2px solid #c9a227; padding-bottom:7px; margin:4px 0 14px;">&#128197; На хоризонту</h2>
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:13.5px;">
           <tr style="border-bottom:1px solid #e5eaf2;">
@@ -373,14 +371,14 @@
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f8f4e8; border:1px solid #e0d4a0; border-left:4px solid #c9a227;">
       <tr><td style="padding:16px 16px;">
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
-          <td class="bl-col bl-en" valign="top" width="50%">
+          <td class="bl-col bl-en" valign="top" style="display:block; width:100%; box-sizing:border-box;">
             <p style="font-size:14px; line-height:1.55; color:#333; margin:0;">
               <strong style="color:#02306e;">&#129309; Ways to Help This Week</strong><br>
               We could use a hand baking for coffee hour, or helping set up for SerbFest. Any time you can give
               makes a difference — reply to this email to help.
             </p>
           </td>
-          <td class="bl-col bl-sr" valign="top" width="50%">
+          <td class="bl-col bl-sr" valign="top" style="display:block; width:100%; box-sizing:border-box;">
             <p style="font-size:14px; line-height:1.55; color:#333; margin:0;">
               <strong style="color:#02306e;">&#129309; Начини да помогнете ове недеље</strong><br>
               Требала би нам помоћ у печењу колача за дружење после литургије, или у постављању за фестивал хране.
@@ -397,7 +395,7 @@
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#fdf1e0; border:1px solid #e8c98a; border-left:4px solid #c31f27;">
       <tr><td style="padding:18px 16px;">
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
-          <td class="bl-col bl-en" valign="top" width="50%">
+          <td class="bl-col bl-en" valign="top" style="display:block; width:100%; box-sizing:border-box;">
             <h2 style="font-size:17px; color:#8c1419; font-family:'El Messiri',Georgia,serif; font-weight:700; margin:0 0 10px;">&#127881; Bring a Friend to SerbFest!</h2>
             <p style="font-size:14px; line-height:1.6; color:#333; margin:0 0 14px;">
               Our biggest event of the year is September 12&ndash;13 — sarma, ćevapi, live music, and the whole
@@ -409,7 +407,7 @@
               See the Flyer &rarr;
             </a>
           </td>
-          <td class="bl-col bl-sr" valign="top" width="50%">
+          <td class="bl-col bl-sr" valign="top" style="display:block; width:100%; box-sizing:border-box;">
             <h2 style="font-size:17px; color:#8c1419; font-family:'El Messiri',Georgia,serif; font-weight:700; margin:0 0 10px;">&#127881; Доведите пријатеља!</h2>
             <p style="font-size:14px; line-height:1.6; color:#333; margin:0 0 14px;">
               Наш највећи догађај у години је 12&ndash;13. септембра — сарма, ћевапи, жива музика и цела заједница
@@ -429,7 +427,7 @@
   <!-- ══ Community Care ══ -->
   <tr><td class="pad" style="padding:6px 32px 20px;">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
-      <td class="bl-col bl-en" valign="top" width="50%">
+      <td class="bl-col bl-en" valign="top" style="display:block; width:100%; box-sizing:border-box;">
         <h2 style="font-size:18px; color:#02306e; font-family:'El Messiri',Georgia,serif; font-weight:700; border-bottom:2px solid #c9a227; padding-bottom:7px; margin:18px 0 14px;">&#10084;&#65039; Caring for Our Own</h2>
         <p style="font-size:14px; color:#8c1419; margin:0 0 8px;"><strong>Please keep Ilija and Stojana Lacković in your prayers this week.</strong></p>
         <p style="font-size:13px; line-height:1.6; color:#6a7d96; font-style:italic; margin:0;">
@@ -438,7 +436,7 @@
           <a href="mailto:hello@stnicholasphilly.org" style="color:#02306e;">hello@stnicholasphilly.org</a>.
         </p>
       </td>
-      <td class="bl-col bl-sr" valign="top" width="50%">
+      <td class="bl-col bl-sr" valign="top" style="display:block; width:100%; box-sizing:border-box;">
         <h2 style="font-size:18px; color:#02306e; font-family:'El Messiri',Georgia,serif; font-weight:700; border-bottom:2px solid #c9a227; padding-bottom:7px; margin:18px 0 14px;">&#10084;&#65039; Брига о нашима</h2>
         <p style="font-size:14px; color:#8c1419; margin:0 0 8px;"><strong>Молимо вас да ове недеље у молитвама држите Илију и Стојану Лаковић.</strong></p>
         <p style="font-size:13px; line-height:1.6; color:#6a7d96; font-style:italic; margin:0;">
@@ -456,13 +454,13 @@
       &#128591; Support Your Parish &nbsp;/&nbsp; &#128591; Подржите своју парохију
     </h2>
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
-      <td class="bl-col bl-en" valign="top" width="50%">
+      <td class="bl-col bl-en" valign="top" style="display:block; width:100%; box-sizing:border-box;">
         <p style="font-size:13.5px; line-height:1.6; color:#333; margin:0 0 14px;">
           Our services, our school, and the care we show one another are all sustained by this family&rsquo;s
           generosity. If St. Nicholas is your spiritual home, please consider a gift.
         </p>
       </td>
-      <td class="bl-col bl-sr" valign="top" width="50%">
+      <td class="bl-col bl-sr" valign="top" style="display:block; width:100%; box-sizing:border-box;">
         <p style="font-size:13.5px; line-height:1.6; color:#333; margin:0 0 14px;">
           Наше службе, наша школа и брига коју показујемо једни за друге одржавају се захваљујући дарежљивости ове
           породице. Ако вам је Свети Никола духовни дом, размислите о прилогу.
@@ -494,7 +492,7 @@
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f0f4fb; border:1px solid #c8d5e8;">
       <tr><td style="padding:16px 16px;">
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
-          <td class="bl-col bl-en" valign="top" width="50%">
+          <td class="bl-col bl-en" valign="top" style="display:block; width:100%; box-sizing:border-box;">
             <p style="font-size:14px; line-height:1.6; color:#333; margin:0;">
               <strong style="color:#02306e;">&#128366; Need a Priest?</strong><br>
               For a baptism, confession, a hospital visit, or simply a difficult time — Fr. Milorad is here for
@@ -503,7 +501,7 @@
               and he will be in touch.
             </p>
           </td>
-          <td class="bl-col bl-sr" valign="top" width="50%">
+          <td class="bl-col bl-sr" valign="top" style="display:block; width:100%; box-sizing:border-box;">
             <p style="font-size:14px; line-height:1.6; color:#333; margin:0;">
               <strong style="color:#02306e;">&#128366; Потребан вам је свештеник?</strong><br>
               За крштење, исповест, посету болници или просто тежак тренутак — јереј Милорад је ту за вас.
