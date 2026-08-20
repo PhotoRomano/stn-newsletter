@@ -109,9 +109,9 @@ document.getElementById('sub-form').addEventListener('submit', function(e) {
   };
   if (cf.length) data.custom_fields = cf;
 
-  fetch('https://api.beehiiv.com/v2/publications/pub_3d3143a5-5814-440b-97d6-3445e4e2ef7c/subscriptions', {
+  fetch('https://stnicholas-subscribe-proxy.photoromano.workers.dev/', {
     method: 'POST',
-    headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer rQdhFFURUz1V5ccPYaK0hgEafBg22Tb5sQRwlxoz0jAyf1X39xP6o3IrpOHWO6V7'},
+    headers: {'Content-Type': 'application/json'},
     body: JSON.stringify(data)
   }).then(function(r) {
     var msg = document.getElementById('msg');
