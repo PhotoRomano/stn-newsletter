@@ -1,0 +1,158 @@
+<style>
+.SECTION_TITLE{display:none !important;}
+.tsu-wrap{max-width:640px;margin:0 auto;}
+.tsu-body{padding:36px 22px 60px;}
+.tsu-row{display:flex;gap:14px;}
+.tsu-row>div{flex:1;}
+.tsu-field{margin-bottom:18px;}
+.tsu-field label{display:block;font-size:13px;font-weight:bold;color:#03457d;margin-bottom:4px;font-family:'El Messiri',Georgia,serif;}
+.tsu-field input[type=text],.tsu-field input[type=email],.tsu-field input[type=tel],.tsu-field select,.tsu-field textarea{
+  width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid #c8d5e8;border-radius:4px;
+  font-size:15px;font-family:Merriweather,Georgia,"Times New Roman",serif;background:#f8fafc;
+}
+.tsu-field textarea{resize:vertical;min-height:80px;}
+.tsu-field input:focus,.tsu-field select:focus,.tsu-field textarea:focus{outline:none;border-color:#03457d;}
+.tsu-section-label{font-size:11px;font-weight:bold;letter-spacing:.6px;color:#03457d;text-transform:uppercase;margin:28px 0 16px;border-top:1px solid #e2e8ee;padding-top:18px;}
+.tsu-opt-note{font-size:12px;color:#888;font-weight:normal;margin-left:4px;font-style:italic;}
+.tsu-req{color:#c31f27;}
+.tsu-checks label{font-size:14px;font-weight:normal;color:#333;display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+.tsu-checks input{width:auto;}
+#tsu-submit-btn{
+  width:100%;padding:14px;background:#03457d;color:#fff;border:none;border-radius:4px;
+  font-size:16px;font-family:'El Messiri',Georgia,serif;font-weight:700;cursor:pointer;margin-top:8px;letter-spacing:.3px;
+}
+#tsu-submit-btn:hover{background:#022a4d;}
+#tsu-submit-btn:disabled{opacity:.6;cursor:default;}
+#tsu-msg{display:none;margin-top:20px;padding:16px;border-radius:4px;font-size:15px;text-align:center;}
+@media(max-width:480px){ .tsu-row { flex-direction: column; gap: 0; } }
+</style>
+
+<div class="stn-pagehero" style="background: linear-gradient(120deg, #03457d 0%, #022a4d 100%);">
+  <div class="stn-wrap">
+    <div class="krest" style="color:#f6bb42; font-size:24px;">&#10013;&#65038;</div>
+    <h1 style="color:#fff; font-family:'El Messiri', Georgia, serif; font-size:36px; font-weight:700; text-align:center;">
+      <span class="stn-en">Young Adults of St. Nicholas Sign-Up</span><span class="stn-sr">Пријава — Млади Светог Николе</span>
+    </h1>
+    <p style="color:#bcd4ea; font-size:16px; text-align:center;">
+      <span class="stn-en">Get involved with our young adults community.</span><span class="stn-sr">Укључите се у нашу заједницу младих.</span>
+    </p>
+  </div>
+</div>
+
+<div class="stn-wrap tsu-wrap">
+<div class="tsu-body">
+
+  <p style="margin:0 0 24px;font-size:15px;color:#333;">
+    <span class="stn-en">Thank you for your interest in Young Adults of St. Nicholas. Tell us a bit about yourself below and we&rsquo;ll be in touch.</span><span class="stn-sr">Хвала на интересовању за групу Млади Светог Николе. Реците нам мало о себи испод и јавићемо вам се.</span>
+  </p>
+
+  <form id="tsu-form">
+    <input type="hidden" name="_form" value="Young Adults">
+
+    <div class="tsu-section-label"><span class="stn-en">Participant Information</span><span class="stn-sr">Информације о учеснику</span></div>
+
+    <div class="tsu-row">
+      <div class="tsu-field">
+        <label><span class="stn-en">First Name</span><span class="stn-sr">Име</span> <span class="tsu-req">*</span></label>
+        <input type="text" name="Teen First Name" required>
+      </div>
+      <div class="tsu-field">
+        <label><span class="stn-en">Last Name</span><span class="stn-sr">Презиме</span> <span class="tsu-req">*</span></label>
+        <input type="text" name="Teen Last Name" required>
+      </div>
+    </div>
+    <div class="tsu-row">
+      <div class="tsu-field">
+        <label><span class="stn-en">Age</span><span class="stn-sr">Узраст</span> <span class="tsu-req">*</span></label>
+        <select name="Teen Age" required>
+          <option value="">Select age…</option>
+          <option>12</option><option>13</option><option>14</option><option>15</option>
+          <option>16</option><option>17</option><option>18</option><option>19</option>
+          <option>20</option><option>21</option><option>22</option><option>23</option>
+          <option>24</option><option>25</option><option>26</option><option>27</option>
+          <option>28</option>
+        </select>
+      </div>
+      <div class="tsu-field">
+        <label><span class="stn-en">Phone or Email</span><span class="stn-sr">Телефон или имејл</span> <span class="tsu-opt-note"><span class="stn-en">the participant's own, if different from parent/guardian</span><span class="stn-sr">учесника, ако је различит од родитеља/старатеља</span></span></label>
+        <input type="text" name="Teen Contact" placeholder="">
+      </div>
+    </div>
+
+    <div class="tsu-section-label"><span class="stn-en">Parent / Guardian Information</span><span class="stn-sr">Информације о родитељу/старатељу</span></div>
+
+    <div class="tsu-row">
+      <div class="tsu-field">
+        <label><span class="stn-en">Parent First Name</span><span class="stn-sr">Име родитеља</span> <span class="tsu-req">*</span></label>
+        <input type="text" name="Parent First Name" required>
+      </div>
+      <div class="tsu-field">
+        <label><span class="stn-en">Parent Last Name</span><span class="stn-sr">Презиме родитеља</span> <span class="tsu-req">*</span></label>
+        <input type="text" name="Parent Last Name" required>
+      </div>
+    </div>
+    <div class="tsu-row">
+      <div class="tsu-field">
+        <label><span class="stn-en">Email</span><span class="stn-sr">Имејл</span> <span class="tsu-req">*</span></label>
+        <input type="email" name="Parent Email" required placeholder="you@example.com">
+      </div>
+      <div class="tsu-field">
+        <label><span class="stn-en">Phone</span><span class="stn-sr">Телефон</span> <span class="tsu-req">*</span></label>
+        <input type="tel" name="Parent Phone" required placeholder="(215) 555-0100">
+      </div>
+    </div>
+
+    <div class="tsu-section-label"><span class="stn-en">Get Involved</span><span class="stn-sr">Укључите се</span></div>
+
+    <div class="tsu-field tsu-checks">
+      <label><input type="checkbox" name="Interested in Leading" value="Yes"> <span class="stn-en">I&rsquo;d like to help organize or lead something, not just attend</span><span class="stn-sr">Желим да помогнем у организацији или да водим нешто, не само да присуствујем</span></label>
+    </div>
+    <div class="tsu-field">
+      <label><span class="stn-en">Got an idea for an activity or event? Want to lead a volunteer project? Tell us about it</span><span class="stn-sr">Имате идеју за активност или догађај? Желите да водите волонтерски пројекат? Реците нам</span> <span class="tsu-opt-note"><span class="stn-en">optional, but we'd love to hear it</span><span class="stn-sr">необавезно, али волели бисмо да чујемо</span></span></label>
+      <textarea name="Activity or Volunteer Idea" placeholder="e.g. a game night, a hike, helping run the coffee hour, organizing a food drive…"></textarea>
+    </div>
+
+    <div class="tsu-section-label">
+      <span class="stn-en">Additional Information</span><span class="stn-sr">Додатне информације</span>
+      <span class="tsu-opt-note"><span class="stn-en">optional</span><span class="stn-sr">необавезно</span></span>
+    </div>
+
+    <div class="tsu-field">
+      <label><span class="stn-en">Anything else you'd like us to know?</span><span class="stn-sr">Има ли још нешто што желите да знамо?</span></label>
+      <textarea name="Notes" placeholder="Anything you'd like us to know…"></textarea>
+    </div>
+
+    <button type="submit" id="tsu-submit-btn"><span class="stn-en">Submit Sign-Up</span><span class="stn-sr">Пошаљи пријаву</span></button>
+  </form>
+
+  <div id="tsu-msg"></div>
+
+</div>
+</div>
+
+<script>
+(function(){
+  var form = document.getElementById('tsu-form');
+  var btn = document.getElementById('tsu-submit-btn');
+  var msg = document.getElementById('tsu-msg');
+  form.addEventListener('submit', function(ev){
+    ev.preventDefault();
+    btn.disabled = true;
+    fetch('https://script.google.com/macros/s/AKfycbwS-OlZuyW6TTYo52ErSkl1GuJJxoWEpscBGycpyo8sqmNdJjWgF38ZDfHJx7N8Tyalhg/exec', {
+      method: 'POST',
+      body: new FormData(form)
+    }).then(function(r){
+      if (!r.ok) throw new Error('bad status');
+      return r.json();
+    }).then(function(){
+      form.style.display = 'none';
+      msg.style.cssText = 'display:block;background:#f0f7ee;color:#2e6b2e;border:1px solid #b8d8b8;';
+      msg.innerHTML = '<span class="stn-en">Thank you! We received your sign-up and will be in touch soon.</span><span class="stn-sr">Хвала! Примили смо вашу пријаву и јавићемо вам се ускоро.</span>';
+    }).catch(function(){
+      btn.disabled = false;
+      msg.style.cssText = 'display:block;background:#fdeceb;color:#a4271f;border:1px solid #f3c6c2;';
+      msg.innerHTML = '<span class="stn-en">Connection error — please try again, or email hello@stnicholasphilly.org.</span><span class="stn-sr">Грешка у вези — покушајте поново или пошаљите имејл на hello@stnicholasphilly.org.</span>';
+    });
+  });
+})();
+</script>
