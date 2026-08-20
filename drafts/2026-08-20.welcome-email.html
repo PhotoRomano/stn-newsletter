@@ -14,7 +14,9 @@
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="#eef1f6" style="background:#eef1f6;">
 <tr><td align="center" style="padding:16px 8px;">
 
-<table role="presentation" width="600" cellpadding="0" cellspacing="0" bgcolor="#ffffff" style="width:600px; max-width:600px; background:#ffffff; border:1px solid #c8d5e8;">
+<!-- fluid content table: width=100% + max-width (not a fixed px width), so it
+     shrinks to fit a phone screen instead of forcing horizontal scroll -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="#ffffff" style="width:100%; max-width:600px; background:#ffffff; border:1px solid #c8d5e8;">
 
   <!-- ══ Masthead ══ -->
   <tr><td bgcolor="#ffffff" style="background:#ffffff; padding:14px 16px 6px; text-align:center;">
@@ -29,53 +31,55 @@
 
   <!-- flag stripe: red · navy header · gold rule -->
   <tr><td bgcolor="#c31f27" style="height:3px; background:#c31f27; line-height:3px; font-size:1px;">&nbsp;</td></tr>
-  <tr><td bgcolor="#02306e" style="background:#02306e; padding:14px 20px; text-align:center;">
-    <span style="color:#ffffff; font-family:'El Messiri',Georgia,serif; font-size:26px; font-weight:700; letter-spacing:1px;">The Messenger &nbsp;/&nbsp; Гласник</span><br>
-    <span style="color:#a8c4e0; font-size:13px; font-style:italic; letter-spacing:.3px;">Our First Weekly Issue &nbsp;&middot;&nbsp; Наше прво недељно издање</span>
+  <tr><td bgcolor="#02306e" style="background:#02306e; padding:14px 16px; text-align:center;">
+    <span style="color:#ffffff; font-family:'El Messiri',Georgia,serif; font-size:24px; font-weight:700; letter-spacing:.5px;">The Messenger &nbsp;/&nbsp; Гласник</span><br>
+    <span style="color:#a8c4e0; font-size:12.5px; font-style:italic; letter-spacing:.2px;">Our First Weekly Issue &nbsp;&middot;&nbsp; Наше прво недељно издање</span>
   </td></tr>
   <tr><td bgcolor="#c9a227" style="height:4px; background:#c9a227; line-height:4px; font-size:1px;">&nbsp;</td></tr>
 
   <!-- ══ Welcome copy ══ -->
-  <tr><td style="padding:28px 32px 24px;">
-    <h2 style="font-size:19px; color:#02306e; font-family:'El Messiri',Georgia,serif; font-weight:700; border-bottom:2px solid #c9a227; padding-bottom:7px; margin:0 0 16px;">&#128075; Welcome to The Messenger</h2>
-    <p style="font-size:15px; line-height:1.7; color:#333; margin:0 0 14px;">
+  <tr><td style="padding:24px 20px 20px;">
+    <h2 style="font-size:18px; color:#02306e; font-family:'El Messiri',Georgia,serif; font-weight:700; border-bottom:2px solid #c9a227; padding-bottom:7px; margin:0 0 14px;">&#128075; Welcome to The Messenger</h2>
+    <p style="font-size:15px; line-height:1.65; color:#333; margin:0 0 14px;">
       Starting today, The Messenger — brought to you by St. Nicholas Serbian Orthodox Church — is delivered
       every week with a short note from us about everything going on in your parish. The email will be brief,
       and the following link takes you to this week&rsquo;s full issue on our website: parish news, the coming
       week&rsquo;s services, feast days, and ways to get involved.
     </p>
-    <p style="font-size:15px; line-height:1.7; color:#333; margin:0 0 20px;">
+    <p style="font-size:15px; line-height:1.65; color:#333; margin:0 0 20px;">
       You can choose your preferred language on the website.
     </p>
-    <div style="text-align:center; margin:0;">
-      <a href="https://stnicholasphilly.org/newsletter-2026-08-20"
-         style="display:inline-block; background:#02306e; color:#ffffff; text-decoration:none; padding:14px 28px; font-size:15px; font-weight:bold; letter-spacing:.3px; border-radius:2px;">
-        Read This Week&rsquo;s Issue &rarr;
-      </a>
-    </div>
-    <p style="font-size:13px; color:#333; text-align:center; margin:14px 0 0;">
-      <a href="https://stnicholasphilly.org/newsletter-2026-08-20">https://stnicholasphilly.org/newsletter-2026-08-20</a>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+      <tr><td align="center">
+        <a href="https://stnicholasphilly.org/newsletter-2026-08-20"
+           style="display:block; width:100%; max-width:280px; box-sizing:border-box; background:#02306e; color:#ffffff; text-decoration:none; padding:14px 12px; font-size:15px; font-weight:bold; letter-spacing:.2px; border-radius:2px; text-align:center;">
+          Read This Week&rsquo;s Issue &rarr;
+        </a>
+      </td></tr>
+    </table>
+    <p style="font-size:13px; color:#333; text-align:center; word-break:break-all; margin:14px 0 0;">
+      <a href="https://stnicholasphilly.org/newsletter-2026-08-20" style="color:#02306e;">https://stnicholasphilly.org/newsletter-2026-08-20</a>
     </p>
   </td></tr>
 
   <!-- ══ Welcome copy — Serbian mirror ══ -->
-  <tr><td style="padding:0 32px 28px;">
-    <h2 style="font-size:19px; color:#02306e; font-family:'El Messiri',Georgia,serif; font-weight:700; border-bottom:2px solid #c9a227; padding-bottom:7px; margin:0 0 16px;">&#128075; Добродошли у Гласник</h2>
-    <p style="font-size:15px; line-height:1.7; color:#333; margin:0 0 14px;">
+  <tr><td style="padding:0 20px 24px;">
+    <h2 style="font-size:18px; color:#02306e; font-family:'El Messiri',Georgia,serif; font-weight:700; border-bottom:2px solid #c9a227; padding-bottom:7px; margin:0 0 14px;">&#128075; Добродошли у Гласник</h2>
+    <p style="font-size:15px; line-height:1.65; color:#333; margin:0 0 14px;">
       Од данас, Гласник — који издаје Српска православна црква Светог Николе — стиже сваке недеље, са кратком
       поруком од нас о свему што се дешава у вашој парохији. Имејл ће бити кратак, а следећа веза вас води до
       целог издања ове недеље на нашем сајту: вести из парохије, службе за наредну недељу, празници и начини
       да се укључите.
     </p>
-    <p style="font-size:15px; line-height:1.7; color:#333; margin:0;">
+    <p style="font-size:15px; line-height:1.65; color:#333; margin:0;">
       Жељени језик можете изабрати на сајту.
     </p>
   </td></tr>
 
   <!-- ══ Footer ══ -->
   <tr><td bgcolor="#c31f27" style="height:3px; background:#c31f27; line-height:3px; font-size:1px;">&nbsp;</td></tr>
-  <tr><td bgcolor="#02306e" style="background:#02306e; padding:22px 20px; text-align:center;">
-    <div style="color:#a8c4e0; font-size:14px; margin-bottom:10px;">
+  <tr><td bgcolor="#02306e" style="background:#02306e; padding:20px 16px;">
+    <div style="color:#a8c4e0; font-size:13px; text-align:center; line-height:1.8; margin-bottom:10px;">
       <a href="https://stnicholasphilly.org/calendar.html" style="color:#a8c4e0; text-decoration:none;">&#128197; Calendar / Календар</a>
       &nbsp;&middot;&nbsp;
       <a href="https://www.facebook.com/stnicholasphilly" style="color:#a8c4e0; text-decoration:none;">&#128248; Facebook</a>
@@ -84,8 +88,8 @@
       &nbsp;&middot;&nbsp;
       <a href="https://www.instagram.com/stnicholasphilly" style="color:#a8c4e0; text-decoration:none;">&#128247; Instagram</a>
     </div>
-    <div style="color:#c9a227; font-size:13px; margin-bottom:14px;">&#9993; hello@stnicholasphilly.org</div>
-    <div style="color:#7090b8; font-size:11.5px; line-height:1.65;">
+    <div style="color:#c9a227; font-size:13px; text-align:center; margin-bottom:14px;">&#9993; hello@stnicholasphilly.org</div>
+    <div style="color:#7090b8; font-size:11px; text-align:center; line-height:1.6;">
       You&rsquo;re receiving this because you&rsquo;re part of the St. Nicholas Serbian Orthodox family in Elkins Park, PA.<br>
       Ово писмо примате јер сте део српске православне породице Светог Николе у Елкинс Парку, ПА.<br>
       506 Stahr Road, Elkins Park, PA 19027<br>
