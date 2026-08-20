@@ -24,7 +24,8 @@ function doPost(e) {
     p['Interested in Leading'] || '',
     p['Activity or Volunteer Idea'] || '',
     p['Siblings'] || '',
-    p['Notes'] || ''
+    p['Notes'] || '',
+    p['Serbian Level'] || ''
   ];
 
   var sheet = SpreadsheetApp.openById(SHEET_ID).getSheets()[0];
