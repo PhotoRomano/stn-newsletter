@@ -97,6 +97,16 @@ function doPost(e) {
     .setMimeType(ContentService.MimeType.JSON);
 }
 
+// Run this once manually from the Apps Script editor (select "setupSheets" in the
+// function dropdown, click Run) to create all 5 tabs with their headers right away,
+// instead of waiting for each form's first real submission.
+function setupSheets() {
+  Object.keys(FORMS).forEach(function (formName) {
+    var form = FORMS[formName];
+    getOrCreateSheet(form.tab, form.headers);
+  });
+}
+
 function notify(formName, name, row) {
   try {
     MailApp.sendEmail({
