@@ -1,0 +1,138 @@
+<style>
+.SECTION_TITLE{display:none !important;}
+.csu-wrap{max-width:640px;margin:0 auto;}
+.csu-body{padding:36px 22px 60px;}
+.csu-row{display:flex;gap:14px;}
+.csu-row>div{flex:1;}
+.csu-field{margin-bottom:18px;}
+.csu-field label{display:block;font-size:13px;font-weight:bold;color:#03457d;margin-bottom:4px;font-family:'El Messiri',Georgia,serif;}
+.csu-field input[type=text],.csu-field input[type=email],.csu-field input[type=tel],.csu-field select,.csu-field textarea{
+  width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid #c8d5e8;border-radius:4px;
+  font-size:15px;font-family:Merriweather,Georgia,"Times New Roman",serif;background:#f8fafc;
+}
+.csu-field textarea{resize:vertical;min-height:80px;}
+.csu-field input:focus,.csu-field select:focus,.csu-field textarea:focus{outline:none;border-color:#03457d;}
+.csu-section-label{font-size:11px;font-weight:bold;letter-spacing:.6px;color:#03457d;text-transform:uppercase;margin:28px 0 16px;border-top:1px solid #e2e8ee;padding-top:18px;}
+.csu-opt-note{font-size:12px;color:#888;font-weight:normal;margin-left:4px;font-style:italic;}
+.csu-req{color:#c31f27;}
+.csu-check-row{display:flex;flex-wrap:wrap;gap:10px 20px;}
+.csu-check-row label{display:flex;align-items:center;gap:6px;font-size:14px;font-family:Merriweather,Georgia,serif;font-weight:normal;color:#222;}
+.csu-check-row input[type=checkbox]{width:auto;}
+#svf-submit-btn{
+  width:100%;padding:14px;background:#03457d;color:#fff;border:none;border-radius:4px;
+  font-size:16px;font-family:'El Messiri',Georgia,serif;font-weight:700;cursor:pointer;margin-top:8px;letter-spacing:.3px;
+}
+#svf-submit-btn:hover{background:#022a4d;}
+#svf-submit-btn:disabled{opacity:.6;cursor:default;}
+#svf-msg{display:none;margin-top:20px;padding:16px;border-radius:4px;font-size:15px;text-align:center;}
+@media(max-width:480px){ .csu-row { flex-direction: column; gap: 0; } }
+</style>
+
+<div class="stn-pagehero" style="background: linear-gradient(120deg, #03457d 0%, #022a4d 100%);">
+  <div class="stn-wrap">
+    <div class="krest" style="color:#f6bb42; font-size:24px;">&#10013;&#65038;</div>
+    <h1 style="color:#fff; font-family:'El Messiri', Georgia, serif; font-size:36px; font-weight:700; text-align:center;">
+      <span class="stn-en">SerbFest Volunteer Sign-Up</span><span class="stn-sr">Пријава волонтера за Serbfest</span>
+    </h1>
+    <p style="color:#bcd4ea; font-size:16px; text-align:center;">
+      <span class="stn-en">Friday, September 11 &ndash; Sunday, September 13. We need all the help we can get!</span><span class="stn-sr">Петак, 11. септембар &ndash; недеља, 13. септембар. Потребна нам је свака помоћ!</span>
+    </p>
+  </div>
+</div>
+
+<div class="stn-wrap csu-wrap">
+<div class="csu-body">
+
+  <p style="margin:0 0 24px;font-size:15px;color:#333;">
+    <span class="stn-en">Thank you for volunteering for SerbFest! Let us know when you're available and what you'd like to help with, and we'll be in touch.</span><span class="stn-sr">Хвала што волонтирате на Serbfest-у! Јавите нам када сте доступни и у чему бисте желели да помогнете, и јавићемо вам се.</span>
+  </p>
+
+  <form id="svf-form">
+    <input type="hidden" name="_form" value="SerbFest Volunteer">
+
+    <div class="csu-section-label"><span class="stn-en">Your Information</span><span class="stn-sr">Ваши подаци</span></div>
+
+    <div class="csu-row">
+      <div class="csu-field">
+        <label><span class="stn-en">First Name</span><span class="stn-sr">Име</span> <span class="csu-req">*</span></label>
+        <input type="text" name="First Name" required>
+      </div>
+      <div class="csu-field">
+        <label><span class="stn-en">Last Name</span><span class="stn-sr">Презиме</span> <span class="csu-req">*</span></label>
+        <input type="text" name="Last Name" required>
+      </div>
+    </div>
+    <div class="csu-row">
+      <div class="csu-field">
+        <label><span class="stn-en">Email</span><span class="stn-sr">Имејл</span> <span class="csu-req">*</span></label>
+        <input type="email" name="Email" required placeholder="you@example.com">
+      </div>
+      <div class="csu-field">
+        <label><span class="stn-en">Phone</span><span class="stn-sr">Телефон</span> <span class="csu-req">*</span></label>
+        <input type="tel" name="Phone" required placeholder="(215) 555-0100">
+      </div>
+    </div>
+
+    <div class="csu-section-label"><span class="stn-en">When Are You Available?</span><span class="stn-sr">Када сте доступни?</span></div>
+
+    <div class="csu-field csu-check-row">
+      <label><input type="checkbox" name="Friday Setup" value="Yes"> <span class="stn-en">Friday, Sept 11 (setup)</span><span class="stn-sr">Петак, 11. септембар (постављање)</span></label>
+      <label><input type="checkbox" name="Saturday" value="Yes"> <span class="stn-en">Saturday, Sept 12</span><span class="stn-sr">Субота, 12. септембар</span></label>
+      <label><input type="checkbox" name="Sunday" value="Yes"> <span class="stn-en">Sunday, Sept 13</span><span class="stn-sr">Недеља, 13. септембар</span></label>
+    </div>
+
+    <div class="csu-section-label">
+      <span class="stn-en">What Would You Like to Help With?</span><span class="stn-sr">У чему бисте желели да помогнете?</span>
+      <span class="csu-opt-note"><span class="stn-en">check all that apply</span><span class="stn-sr">означите све што важи</span></span>
+    </div>
+
+    <div class="csu-field csu-check-row">
+      <label><input type="checkbox" name="Kitchen Prep &amp; Cooking" value="Yes"> <span class="stn-en">Kitchen prep &amp; cooking</span><span class="stn-sr">Припрема хране / кухиња</span></label>
+      <label><input type="checkbox" name="Grill/Roasting" value="Yes"> <span class="stn-en">Grill / roasting</span><span class="stn-sr">Роштиљ / печење</span></label>
+      <label><input type="checkbox" name="Tent Setup/Breakdown" value="Yes"> <span class="stn-en">Tent setup / breakdown</span><span class="stn-sr">Постављање / растурање шатора</span></label>
+      <label><input type="checkbox" name="Serving/Cashier" value="Yes"> <span class="stn-en">Serving / cashier</span><span class="stn-sr">Услуживање / каса</span></label>
+      <label><input type="checkbox" name="Cleaning" value="Yes"> <span class="stn-en">Cleaning</span><span class="stn-sr">Чишћење</span></label>
+      <label><input type="checkbox" name="Kids Zone Supervision" value="Yes"> <span class="stn-en">Kids' zone supervision</span><span class="stn-sr">Надзор дечије зоне</span></label>
+      <label><input type="checkbox" name="Yard/Grounds Work" value="Yes"> <span class="stn-en">Yard / grounds work</span><span class="stn-sr">Радови у дворишту</span></label>
+      <label><input type="checkbox" name="Wherever Needed" value="Yes"> <span class="stn-en">Wherever needed</span><span class="stn-sr">Било где је потребно</span></label>
+    </div>
+
+    <div class="csu-field">
+      <label><span class="stn-en">Anything else we should know?</span><span class="stn-sr">Има ли нешто друго што треба да знамо?</span></label>
+      <textarea name="Notes" placeholder="Anything you'd like us to know…"></textarea>
+    </div>
+
+    <button type="submit" id="svf-submit-btn"><span class="stn-en">Submit Sign-Up</span><span class="stn-sr">Пошаљи пријаву</span></button>
+  </form>
+
+  <div id="svf-msg"></div>
+
+</div>
+</div>
+
+<script>
+(function(){
+  var form = document.getElementById('svf-form');
+  var btn = document.getElementById('svf-submit-btn');
+  var msg = document.getElementById('svf-msg');
+  form.addEventListener('submit', function(ev){
+    ev.preventDefault();
+    btn.disabled = true;
+    fetch('https://script.google.com/macros/s/AKfycbwS-OlZuyW6TTYo52ErSkl1GuJJxoWEpscBGycpyo8sqmNdJjWgF38ZDfHJx7N8Tyalhg/exec', {
+      method: 'POST',
+      body: new FormData(form)
+    }).then(function(r){
+      if (!r.ok) throw new Error('bad status');
+      return r.json();
+    }).then(function(){
+      form.style.display = 'none';
+      msg.style.cssText = 'display:block;background:#f0f7ee;color:#2e6b2e;border:1px solid #b8d8b8;';
+      msg.innerHTML = '<span class="stn-en">Thank you! We received your sign-up and will be in touch soon.</span><span class="stn-sr">Хвала! Примили смо вашу пријаву и јавићемо вам се ускоро.</span>';
+    }).catch(function(){
+      btn.disabled = false;
+      msg.style.cssText = 'display:block;background:#fdeceb;color:#a4271f;border:1px solid #f3c6c2;';
+      msg.innerHTML = '<span class="stn-en">Connection error — please try again, or email hello@stnicholasphilly.org.</span><span class="stn-sr">Грешка у вези — покушајте поново или пошаљите имејл на hello@stnicholasphilly.org.</span>';
+    });
+  });
+})();
+</script>

@@ -1,0 +1,145 @@
+<style>
+.SECTION_TITLE{display:none !important;}
+.csu-wrap{max-width:640px;margin:0 auto;}
+.csu-body{padding:36px 22px 60px;}
+.csu-row{display:flex;gap:14px;}
+.csu-row>div{flex:1;}
+.csu-field{margin-bottom:18px;}
+.csu-field label{display:block;font-size:13px;font-weight:bold;color:#03457d;margin-bottom:4px;font-family:'El Messiri',Georgia,serif;}
+.csu-field input[type=text],.csu-field input[type=email],.csu-field input[type=tel],.csu-field select,.csu-field textarea{
+  width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid #c8d5e8;border-radius:4px;
+  font-size:15px;font-family:Merriweather,Georgia,"Times New Roman",serif;background:#f8fafc;
+}
+.csu-field textarea{resize:vertical;min-height:80px;}
+.csu-field input:focus,.csu-field select:focus,.csu-field textarea:focus{outline:none;border-color:#03457d;}
+.csu-section-label{font-size:11px;font-weight:bold;letter-spacing:.6px;color:#03457d;text-transform:uppercase;margin:28px 0 16px;border-top:1px solid #e2e8ee;padding-top:18px;}
+.csu-opt-note{font-size:12px;color:#888;font-weight:normal;margin-left:4px;font-style:italic;}
+.csu-req{color:#c31f27;}
+#cks-submit-btn{
+  width:100%;padding:14px;background:#03457d;color:#fff;border:none;border-radius:4px;
+  font-size:16px;font-family:'El Messiri',Georgia,serif;font-weight:700;cursor:pointer;margin-top:8px;letter-spacing:.3px;
+}
+#cks-submit-btn:hover{background:#022a4d;}
+#cks-submit-btn:disabled{opacity:.6;cursor:default;}
+#cks-msg{display:none;margin-top:20px;padding:16px;border-radius:4px;font-size:15px;text-align:center;}
+@media(max-width:480px){ .csu-row { flex-direction: column; gap: 0; } }
+</style>
+
+<div class="stn-pagehero" style="background: linear-gradient(120deg, #03457d 0%, #022a4d 100%);">
+  <div class="stn-wrap">
+    <div class="krest" style="color:#f6bb42; font-size:24px;">&#10013;&#65038;</div>
+    <h1 style="color:#fff; font-family:'El Messiri', Georgia, serif; font-size:36px; font-weight:700; text-align:center;">
+      <span class="stn-en">Cookie &amp; Cake Volunteer Sign-Up</span><span class="stn-sr">Пријава за колаче и торте</span>
+    </h1>
+    <p style="color:#bcd4ea; font-size:16px; text-align:center;">
+      <span class="stn-en">For SerbFest, September 11&ndash;13. Bake something, help staff the dessert table, or both!</span><span class="stn-sr">За Serbfest, 11&ndash;13. септембар. Испеците нешто, помозите за столом са колачима, или обоје!</span>
+    </p>
+  </div>
+</div>
+
+<div class="stn-wrap csu-wrap">
+<div class="csu-body">
+
+  <p style="margin:0 0 24px;font-size:15px;color:#333;">
+    <span class="stn-en">Fill in whichever section(s) apply to you below — baking, table duty, or both.</span><span class="stn-sr">Попуните одељак(е) који се односе на вас &ndash; печење, дежурство за столом, или оба.</span>
+  </p>
+
+  <form id="cks-form">
+    <input type="hidden" name="_form" value="Cookie and Cake">
+
+    <div class="csu-section-label"><span class="stn-en">Your Information</span><span class="stn-sr">Ваши подаци</span></div>
+
+    <div class="csu-row">
+      <div class="csu-field">
+        <label><span class="stn-en">First Name</span><span class="stn-sr">Име</span> <span class="csu-req">*</span></label>
+        <input type="text" name="First Name" required>
+      </div>
+      <div class="csu-field">
+        <label><span class="stn-en">Last Name</span><span class="stn-sr">Презиме</span> <span class="csu-req">*</span></label>
+        <input type="text" name="Last Name" required>
+      </div>
+    </div>
+    <div class="csu-row">
+      <div class="csu-field">
+        <label><span class="stn-en">Email</span><span class="stn-sr">Имејл</span> <span class="csu-req">*</span></label>
+        <input type="email" name="Email" required placeholder="you@example.com">
+      </div>
+      <div class="csu-field">
+        <label><span class="stn-en">Phone</span><span class="stn-sr">Телефон</span> <span class="csu-req">*</span></label>
+        <input type="tel" name="Phone" required placeholder="(215) 555-0100">
+      </div>
+    </div>
+
+    <div class="csu-section-label">
+      <span class="stn-en">Baking</span><span class="stn-sr">Печење</span>
+      <span class="csu-opt-note"><span class="stn-en">optional</span><span class="stn-sr">необавезно</span></span>
+    </div>
+
+    <div class="csu-field">
+      <label><span class="stn-en">What are you planning to bring?</span><span class="stn-sr">Шта планирате да донесете?</span></label>
+      <input type="text" name="Baking What" placeholder="e.g. 2 dozen cookies, 1 cake">
+    </div>
+    <div class="csu-field">
+      <label><span class="stn-en">When can you drop it off?</span><span class="stn-sr">Када можете да га донесете?</span></label>
+      <select name="Baking Drop-off">
+        <option value="">— <span class="stn-en">Not baking</span> —</option>
+        <option>Friday evening</option>
+        <option>Saturday morning</option>
+        <option>Sunday morning</option>
+      </select>
+    </div>
+
+    <div class="csu-section-label">
+      <span class="stn-en">Staffing the Dessert Table</span><span class="stn-sr">Дежурство за столом са колачима</span>
+      <span class="csu-opt-note"><span class="stn-en">optional</span><span class="stn-sr">необавезно</span></span>
+    </div>
+
+    <div class="csu-field">
+      <label><span class="stn-en">Which shift can you cover?</span><span class="stn-sr">Коју смену можете да покријете?</span></label>
+      <select name="Staffing Shift">
+        <option value="">— <span class="stn-en">Not staffing the table</span> —</option>
+        <option>Saturday</option>
+        <option>Sunday</option>
+        <option>Either day</option>
+      </select>
+    </div>
+
+    <div class="csu-field">
+      <label><span class="stn-en">Anything else we should know?</span><span class="stn-sr">Има ли нешто друго што треба да знамо?</span></label>
+      <textarea name="Notes" placeholder="Anything you'd like us to know…"></textarea>
+    </div>
+
+    <button type="submit" id="cks-submit-btn"><span class="stn-en">Submit Sign-Up</span><span class="stn-sr">Пошаљи пријаву</span></button>
+  </form>
+
+  <div id="cks-msg"></div>
+
+</div>
+</div>
+
+<script>
+(function(){
+  var form = document.getElementById('cks-form');
+  var btn = document.getElementById('cks-submit-btn');
+  var msg = document.getElementById('cks-msg');
+  form.addEventListener('submit', function(ev){
+    ev.preventDefault();
+    btn.disabled = true;
+    fetch('https://script.google.com/macros/s/AKfycbwS-OlZuyW6TTYo52ErSkl1GuJJxoWEpscBGycpyo8sqmNdJjWgF38ZDfHJx7N8Tyalhg/exec', {
+      method: 'POST',
+      body: new FormData(form)
+    }).then(function(r){
+      if (!r.ok) throw new Error('bad status');
+      return r.json();
+    }).then(function(){
+      form.style.display = 'none';
+      msg.style.cssText = 'display:block;background:#f0f7ee;color:#2e6b2e;border:1px solid #b8d8b8;';
+      msg.innerHTML = '<span class="stn-en">Thank you! We received your sign-up and will be in touch soon.</span><span class="stn-sr">Хвала! Примили смо вашу пријаву и јавићемо вам се ускоро.</span>';
+    }).catch(function(){
+      btn.disabled = false;
+      msg.style.cssText = 'display:block;background:#fdeceb;color:#a4271f;border:1px solid #f3c6c2;';
+      msg.innerHTML = '<span class="stn-en">Connection error — please try again, or email hello@stnicholasphilly.org.</span><span class="stn-sr">Грешка у вези — покушајте поново или пошаљите имејл на hello@stnicholasphilly.org.</span>';
+    });
+  });
+})();
+</script>
