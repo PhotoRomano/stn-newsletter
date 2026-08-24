@@ -118,7 +118,7 @@
   form.addEventListener('submit', function(ev){
     ev.preventDefault();
     btn.disabled = true;
-    fetch('https://script.google.com/macros/s/AKfycbwS-OlZuyW6TTYo52ErSkl1GuJJxoWEpscBGycpyo8sqmNdJjWgF38ZDfHJx7N8Tyalhg/exec', {
+    fetch('https://script.google.com/macros/s/AKfycbxG7pwfPCl-fOXK8iKTg8gfnaba8i1PUfFD_cWwnid8MFy8AzVFQ-mpzwBdJkw4QYxfSA/exec', {
       method: 'POST',
       body: new FormData(form)
     }).then(function(r){
