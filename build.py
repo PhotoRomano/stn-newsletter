@@ -129,7 +129,7 @@ SHELL = {
         share_buttons=[("Share the Sign-Up Link", "https://photoromano.github.io/stn-newsletter/subscribe.html")],
         footer_links=[("Calendar", "https://stnicholasphilly.org/calendar.html"),
                       ("Facebook", "https://www.facebook.com/stnicholasphilly"),
-                      ("YouTube", "https://www.youtube.com/@stnicholasphilly"),
+                      ("YouTube", "https://www.youtube.com/@svetinikolasvetinikolaphil2668"),
                       ("Instagram", "https://www.instagram.com/stnicholasphilly")],
         footer_note="You&rsquo;re receiving this because you&rsquo;re part of the St. Nicholas Serbian "
                     "Orthodox family in Elkins Park, PA.",
@@ -157,7 +157,7 @@ SHELL = {
         share_buttons=[("Поделите линк за пријаву", "https://photoromano.github.io/stn-newsletter/subscribe-sr.html")],
         footer_links=[("Календар", "https://stnicholasphilly.org/calendar.html"),
                       ("Фејсбук", "https://www.facebook.com/stnicholasphilly"),
-                      ("Јутјуб", "https://www.youtube.com/@stnicholasphilly"),
+                      ("Јутјуб", "https://www.youtube.com/@svetinikolasvetinikolaphil2668"),
                       ("Инстаграм", "https://www.instagram.com/stnicholasphilly")],
         footer_note="Ово писмо примате јер сте део српске православне породице Светог Николе у Елкинс "
                     "Парку, Пенсилванија.",
