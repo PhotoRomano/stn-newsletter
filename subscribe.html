@@ -2,87 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Join Our Mailing List — St. Nicholas Serbian Orthodox Church</title>
-<style>
-  body { margin: 0; background: #ece7dd; font-family: Merriweather, Georgia, serif; color: #2b2b2b; }
-  .wrap { max-width: 480px; margin: 40px auto; padding: 0 20px; text-align: center; }
-  .hd { background: #03457D; color: #fff; padding: 24px 28px; border-radius: 6px 6px 0 0; }
-  .hd h1 { margin: 0 0 4px; font-family: 'El Messiri', Georgia, serif; font-size: 22px; }
-  .gold { height: 4px; background: #f6bb42; }
-  .body { background: #fff; border: 1px solid #ddd4c4; border-top: none; padding: 24px 28px; border-radius: 0 0 6px 6px; }
-  .stn-btn { display: inline-block; margin-top: 12px; padding: 12px 24px; background: #03457D; color: #fff; text-decoration: none; border-radius: 4px; font-family: 'El Messiri', Georgia, serif; font-weight: 600; }
-</style>
+<meta http-equiv="refresh" content="0; url=https://stnicholasphilly.org/join">
+<link rel="canonical" href="https://stnicholasphilly.org/join">
+<title>St. Nicholas Serbian Orthodox Church</title>
 </head>
 <body>
-<div class="wrap">
-  <div class="hd"><h1>The Messenger</h1></div>
-  <div class="gold"></div>
-  <div class="body">
-    <p>Loading the sign-up form…</p>
-    <p>If it doesn't open automatically, <a href="#" onclick="openSubscribeModal();return false;" class="stn-btn">Join Our Mailing List</a></p>
-  </div>
-</div>
-
-<!-- Beehiiv Subscribe Modal (copied verbatim from stnicholasphilly.org homepage, same worker endpoint) -->
-<div id="stn-sub-overlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);z-index:9999;align-items:center;justify-content:center;padding:20px;box-sizing:border-box;">
-  <div style="background:#fff;border-radius:8px;padding:32px 28px;max-width:480px;width:100%;position:relative;font-family:Merriweather,serif;max-height:90vh;overflow-y:auto;">
-    <button onclick="closeSubscribeModal()" style="position:absolute;top:12px;right:16px;background:none;border:none;font-size:22px;cursor:pointer;color:#555;">&times;</button>
-    <div style="font-family:'El Messiri',sans-serif;font-size:22px;font-weight:600;color:#03457D;margin-bottom:4px;">Join Our Mailing List</div>
-    <p style="margin:0 0 20px;font-size:14px;color:#555;">Receive parish news, feast-day reminders, and event updates.</p>
-    <form id="stn-sub-form">
-      <div style="display:flex;gap:12px;margin-bottom:12px;">
-        <div style="flex:1;"><label style="display:block;font-size:12px;font-weight:700;margin-bottom:4px;color:#03457D;">First Name <span style="color:#c00;">*</span></label><input id="sub-first" type="text" required placeholder="Anna" style="width:100%;box-sizing:border-box;padding:9px 11px;border:1px solid #b0bec5;border-radius:4px;font-size:14px;"></div>
-        <div style="flex:1;"><label style="display:block;font-size:12px;font-weight:700;margin-bottom:4px;color:#03457D;">Last Name <span style="color:#c00;">*</span></label><input id="sub-last" type="text" required placeholder="Smith" style="width:100%;box-sizing:border-box;padding:9px 11px;border:1px solid #b0bec5;border-radius:4px;font-size:14px;"></div>
-      </div>
-      <div style="margin-bottom:20px;"><label style="display:block;font-size:12px;font-weight:700;margin-bottom:4px;color:#03457D;">Email <span style="color:#c00;">*</span></label><input id="sub-email" type="email" required placeholder="you@example.com" style="width:100%;box-sizing:border-box;padding:9px 11px;border:1px solid #b0bec5;border-radius:4px;font-size:14px;"></div>
-      <div style="border-top:1px solid #e8e8e8;margin:4px 0 16px;"></div>
-      <div style="font-size:12px;font-weight:700;color:#03457D;margin-bottom:12px;letter-spacing:.3px;">TELL US MORE <span style="font-weight:400;color:#888;">(optional)</span></div>
-      <div style="margin-bottom:12px;"><label style="display:block;font-size:12px;font-weight:700;margin-bottom:4px;color:#444;">Family</label><input id="sub-family" type="text" placeholder="e.g. married with two children" style="width:100%;box-sizing:border-box;padding:9px 11px;border:1px solid #b0bec5;border-radius:4px;font-size:14px;"></div>
-      <div style="margin-bottom:16px;"><label style="display:block;font-size:12px;font-weight:700;margin-bottom:4px;color:#444;">Your Family&#8217;s Slava</label><input id="sub-slava" type="text" placeholder="e.g. St. Nicholas, St. George" style="width:100%;box-sizing:border-box;padding:9px 11px;border:1px solid #b0bec5;border-radius:4px;font-size:14px;"></div>
-      <div style="margin-bottom:12px;"><label style="display:block;font-size:12px;font-weight:700;margin-bottom:8px;color:#444;">Interests</label>
-        <label style="display:flex;align-items:center;gap:8px;font-size:13px;margin-bottom:7px;cursor:pointer;"><input type="checkbox" id="sub-school" style="width:15px;height:15px;"> Serbian language school</label>
-        <label style="display:flex;align-items:center;gap:8px;font-size:13px;margin-bottom:7px;cursor:pointer;"><input type="checkbox" id="sub-vol-liturgy" style="width:15px;height:15px;"> Volunteering: liturgy &amp; chanting</label>
-        <label style="display:flex;align-items:center;gap:8px;font-size:13px;margin-bottom:7px;cursor:pointer;"><input type="checkbox" id="sub-vol-kitchen" style="width:15px;height:15px;"> Volunteering: kitchen &amp; food</label>
-        <label style="display:flex;align-items:center;gap:8px;font-size:13px;margin-bottom:7px;cursor:pointer;"><input type="checkbox" id="sub-vol-youth" style="width:15px;height:15px;"> Volunteering: youth programs</label>
-        <label style="display:flex;align-items:center;gap:8px;font-size:13px;margin-bottom:7px;cursor:pointer;"><input type="checkbox" id="sub-vol-events" style="width:15px;height:15px;"> Volunteering: fundraising &amp; events</label>
-        <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;"><input type="checkbox" id="sub-vol-grounds" style="width:15px;height:15px;"> Volunteering: maintenance &amp; grounds</label>
-      </div>
-      <button type="submit" style="width:100%;padding:12px;background:#03457D;color:#fff;border:none;border-radius:4px;font-family:'El Messiri',sans-serif;font-size:16px;font-weight:600;cursor:pointer;margin-top:8px;">Subscribe</button>
-    </form>
-    <div id="stn-sub-msg" style="display:none;margin-top:16px;padding:12px;border-radius:4px;font-size:14px;text-align:center;"></div>
-  </div>
-</div>
-<script>
-function openSubscribeModal(){var o=document.getElementById('stn-sub-overlay');o.style.display='flex';document.getElementById('stn-sub-form').reset();document.getElementById('stn-sub-form').style.display='';document.getElementById('stn-sub-msg').style.display='none';}
-function closeSubscribeModal(){document.getElementById('stn-sub-overlay').style.display='none';}
-document.getElementById('stn-sub-overlay').addEventListener('click',function(e){if(e.target===this)closeSubscribeModal();});
-document.getElementById('stn-sub-form').addEventListener('submit',function(e){
-  e.preventDefault();
-  var btn=this.querySelector('button[type=submit]');
-  btn.disabled=true;btn.textContent='Subscribing…';
-  var vol=[];
-  if(document.getElementById('sub-vol-liturgy').checked)vol.push('Liturgy & Chanting');
-  if(document.getElementById('sub-vol-kitchen').checked)vol.push('Kitchen & Food');
-  if(document.getElementById('sub-vol-youth').checked)vol.push('Youth Programs');
-  if(document.getElementById('sub-vol-events').checked)vol.push('Fundraising & Events');
-  if(document.getElementById('sub-vol-grounds').checked)vol.push('Maintenance & Grounds');
-  var cf=[];
-  var fam=document.getElementById('sub-family').value.trim();
-  var slava=document.getElementById('sub-slava').value.trim();
-  if(fam)cf.push({name:'Family',value:fam});
-  if(slava)cf.push({name:'Slava',value:slava});
-  if(document.getElementById('sub-school').checked)cf.push({name:'Serbian School Interest',value:'Yes'});
-  if(vol.length)cf.push({name:'Volunteer Interests',value:vol.join(', ')});
-  var data={email:document.getElementById('sub-email').value.trim(),first_name:document.getElementById('sub-first').value.trim(),last_name:document.getElementById('sub-last').value.trim(),utm_source:'newsletter_email_link',utm_medium:'email',send_welcome_email:true};
-  if(cf.length)data.custom_fields=cf;
-  fetch('https://stnicholas-subscribe-proxy.photoromano.workers.dev/',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})
-  .then(function(r){
-    if(r.ok){document.getElementById('stn-sub-msg').style.cssText='display:block;background:#e8f5e9;color:#2e7d32;border:1px solid #c8e6c9;padding:12px;border-radius:4px;';document.getElementById('stn-sub-msg').textContent='Welcome! You’re subscribed to our mailing list.';document.getElementById('stn-sub-form').style.display='none';}
-    else{document.getElementById('stn-sub-msg').style.cssText='display:block;background:#ffeef0;color:#c62828;border:1px solid #ffcdd2;padding:12px;border-radius:4px;';document.getElementById('stn-sub-msg').textContent='Something went wrong. Please try again.';btn.disabled=false;btn.textContent='Subscribe';}
-  }).catch(function(){document.getElementById('stn-sub-msg').style.cssText='display:block;background:#ffeef0;color:#c62828;border:1px solid #ffcdd2;padding:12px;border-radius:4px;';document.getElementById('stn-sub-msg').textContent='Connection error. Please try again.';btn.disabled=false;btn.textContent='Subscribe';});
-});
-openSubscribeModal();
-</script>
+<p>This page has moved. <a href="https://stnicholasphilly.org/join">Continue to https://stnicholasphilly.org/join</a></p>
+<script>window.location.replace("https://stnicholasphilly.org/join");</script>
 </body>
 </html>
