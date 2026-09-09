@@ -368,10 +368,13 @@ def main():
     from datetime import date as _date
     y, m, d = (int(x) for x in date_label.split("-"))
     date_label_readable = _date(y, m, d).strftime("%B %-d, %Y")
-    # Serbian date wording (day. month_genitive year.) -- Aug is fixed for now; extend if the
-    # generator is ever used outside August.
-    sr_months_gen = {8: "август"}
-    date_label_sr = f"{d}. {sr_months_gen.get(m, m)} {y}"
+    # Serbian date wording (day. month_genitive year.)
+    sr_months_gen = {
+        1: "јануара", 2: "фебруара", 3: "марта", 4: "априла",
+        5: "маја", 6: "јуна", 7: "јула", 8: "августа",
+        9: "септембра", 10: "октобра", 11: "новембра", 12: "децембра",
+    }
+    date_label_sr = f"{d}. {sr_months_gen[m]} {y}"
     week = {
         "date_label": date_label_readable,
         "date_label_sr": date_label_sr,
