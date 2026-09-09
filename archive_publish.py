@@ -31,6 +31,13 @@ def strip_draft_chrome(soup):
         if div.get("style") and "background:#1a1a1a" in div.get("style", ""):
             div.decompose()
             break
+    # "NEEDS BOARD INPUT" amber callout -- an internal editorial note (open
+    # questions, stale meeting references) that must never reach the public
+    # archive page, same class of leak as the DRAFT banner above.
+    for div in soup.find_all("div"):
+        if div.get("style") and "background:#fdf1e0" in div.get("style", "") and "border-bottom:2px solid #c9a227" in div.get("style", ""):
+            div.decompose()
+            break
     # language-preference bar row -- walk up from the link itself to its
     # immediate containing <tr>, not find_all("tr") (which matches the outer
     # wrapper row first, since it also contains this link as a descendant,
@@ -42,7 +49,7 @@ def strip_draft_chrome(soup):
             tr.decompose()
     # drop the now-orphaned HTML comment markers so the archive source stays tidy
     for c in soup.find_all(string=lambda s: isinstance(s, Comment)):
-        if "Language preference" in c or "DRAFT BANNER" in c:
+        if "Language preference" in c or "DRAFT BANNER" in c or "NEEDS BOARD INPUT" in c:
             c.extract()
 
 
