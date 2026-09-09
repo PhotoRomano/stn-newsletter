@@ -368,13 +368,13 @@ def main():
     from datetime import date as _date
     y, m, d = (int(x) for x in date_label.split("-"))
     date_label_readable = _date(y, m, d).strftime("%B %-d, %Y")
-    # Serbian date wording (day. month_genitive year.)
+    # Serbian date wording (day. month year.), matching the hand-authored masthead convention
+    # of the nominative month form (e.g. "3. септембар 2026."), not the grammatical genitive.
     sr_months_gen = {
-        1: "јануара", 2: "фебруара", 3: "марта", 4: "априла",
-        5: "маја", 6: "јуна", 7: "јула", 8: "августа",
-        9: "септембра", 10: "октобра", 11: "новембра", 12: "децембра",
+        1: "јануар", 2: "фебруар", 3: "март", 4: "април", 5: "мај", 6: "јун",
+        7: "јул", 8: "август", 9: "септембар", 10: "октобар", 11: "новембар", 12: "децембар",
     }
-    date_label_sr = f"{d}. {sr_months_gen[m]} {y}"
+    date_label_sr = f"{d}. {sr_months_gen.get(m, m)} {y}"
     week = {
         "date_label": date_label_readable,
         "date_label_sr": date_label_sr,
