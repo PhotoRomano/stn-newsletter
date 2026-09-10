@@ -25,6 +25,14 @@ Pull liturgical data from `stnicholasphilly.org/calendar.html` (its JS
 Gregorian) for service listings.
 
 Before moving on, check:
+- Run `python3 check_calendar.py <date>` — cross-checks the draft against
+  the site's own live `calendar.html` FEASTS data and prints anything
+  falling in this issue's week that the draft might have missed (a
+  fundraising lunch, a Great Feast, SerbFest). It's a checklist, not an
+  auto-populator — FEASTS is too sparse to give real liturgical service
+  times (it doesn't even cover every weekday feast), so it won't catch
+  everything, but it catches the "forgot this was happening" class of
+  miss for free.
 - Prayer-request names and Serbian phrasing confirmed with Max
 - SerbFest / school-enrollment / event dates are correct
 - No `[BOARD:]` placeholder text left anywhere, in any language — an
@@ -96,23 +104,17 @@ URL.
 
 The live site shows English and Serbian together with a client-side
 EN/СР toggle, so the CMS section needs both languages wrapped together,
-not either generated file as-is:
-```html
-<style>
-.stn-nl-wrap { background:#eef1f6; padding:16px 8px; }
-</style>
-<div class="stn-nl-wrap">
-<center>
-<div class="stn-en">[inner <table class="email-body">…</table> from <date>.html]</div>
-<div class="stn-sr">[same, from <date>.serbian.html]</div>
-</center>
-</div>
+not either generated file as-is. Build this with:
 ```
-Also strip the "Read this issue in" language-pref bar from each side
-first — it contains `{{email}}` Beehiiv merge tags that render as
-literal text on a static page (`archive_publish.py` already strips this
-for the GitHub Pages archive; do the same here). Save the result as
-`drafts/<date>.site.html` for the record.
+python3 build_site_html.py drafts/<date>.both.html
+```
+This wraps the `.html`/`.serbian.html` files' `<table class="email-body">`
+content in a `stn-nl-wrap`/`stn-en`/`stn-sr` shell and strips the "Read
+this issue in" language-pref bar from each side (it contains `{{email}}`
+Beehiiv merge tags that render as literal text on a static page —
+`archive_publish.py` strips the same thing for the GitHub Pages archive).
+Writes `drafts/<date>.site.html`, which is what actually gets pasted into
+the CMS below.
 
 Then in Site Manager (`stnicholasphilly.org/admin`, login may need a
 2FA code emailed to the admin address if the session expired):
@@ -132,6 +134,19 @@ Verify afterward: fetch the live URL
 week's real content and no literal `{{email}}` text anywhere.
 
 ### 5. Load the Beehiiv draft
+
+First, tag the brief's outbound links so Beehiiv's click data can
+actually attribute traffic to the newsletter instead of lumping it in
+with direct/social visits:
+```
+python3 add_utm_tags.py drafts/<date>.email.html <date>
+```
+Idempotent (safe to re-run) — adds `utm_source=newsletter&utm_medium=
+email&utm_campaign=<date>` to any link that doesn't already carry a
+`utm_source` (so it won't double-tag something like the Instagram flyer
+link's own share-tracking param). Only run this on `.email.html` — the
+full-issue variants and `.site.html` aren't sent as email, so
+email-attribution tags don't belong on their links.
 
 Beehiiv's "New Post" only offers **Blank draft post** or **Template
 post** — there is no separate "Custom HTML post type" to pick at
@@ -228,6 +243,14 @@ review.
 - `archive_publish.py` — publishes an approved master to `archive/`,
   stripping the draft-only banner, board-input callout, and
   Beehiiv-only language-pref bar.
+- `build_site_html.py` — assembles `drafts/<date>.site.html` (the
+  parish-website CMS content) from the already-generated `.html` /
+  `.serbian.html` files. Run after `build.py`. Requires `beautifulsoup4`.
+- `check_calendar.py` — cross-checks a draft's week against the site's
+  live `calendar.html` FEASTS data; prints anything the draft might have
+  missed. Checklist only, not an auto-populator (see Step 1).
+- `add_utm_tags.py` — tags `<date>.email.html`'s outbound links for
+  click attribution before loading into Beehiiv (see Step 5).
 - `*.html`, `*-sr.html` at the repo root — standalone sign-up/subscribe
   pages linked from newsletter CTAs (Church School, Serbian School,
   Teens/Young Adults, general mailing list).
