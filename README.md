@@ -43,7 +43,12 @@ Also hand-write **`drafts/<date>.email.html`** — the short Beehiiv brief.
 This is NOT the full newsletter: one highlight callout (usually whatever's
 most time-sensitive that week) plus a short "This Week" paragraph linking
 out to the full issue. There's no generator for this one — write it
-directly, matching the callout content in `<date>.both.html`.
+directly, matching the callout content in `<date>.both.html`. **Link out
+to `stnicholasphilly.org/newsletter-<date>`** (the live parish site, not
+the GitHub Pages archive) — that page doesn't exist yet at this point in
+the workflow (it's built in Step 4), but write the link now anyway so
+it's correct once that page goes live; just don't rely on it resolving
+before then.
 
 Then run the generator to produce the other three full-issue variants:
 ```
@@ -81,9 +86,11 @@ Strips the DRAFT banner, the "NEEDS BOARD INPUT" box, and the
 email-only language-preference bar; rebuilds `archive/index.html`.
 Commit and push. Live at
 `https://photoromano.github.io/stn-newsletter/archive/<date>.html` —
-this becomes both the "Read This Week's Issue" link target in the
-Beehiiv brief and the source content for the parish-website CMS page
-(next step).
+this feeds the parish-website CMS page (next step) and serves as a
+permanent public mirror/backlink target. **It is not what the Beehiiv
+brief links to** — that goes to the live parish site itself (see Step 5)
+so readers land on `stnicholasphilly.org`, not an unbranded GitHub Pages
+URL.
 
 ### 4. Post to the parish website (OWS Site Manager CMS)
 
