@@ -148,6 +148,22 @@ link's own share-tracking param). Only run this on `.email.html` — the
 full-issue variants and `.site.html` aren't sent as email, so
 email-attribution tags don't belong on their links.
 
+Then run the QA gate before pasting anything into Beehiiv:
+```
+python3 check_links.py drafts/<date>.email.html
+```
+Catches, automatically, the exact class of bug that slipped through
+twice on 2026-09-10 (the emailed brief's "Read This Week's Issue" links
+pointing at the GitHub Pages archive instead of the live parish site)
+plus leftover `[BOARD:]`/`[TODO`/`[PLACEHOLDER` text and any dead link
+(non-200). Exits non-zero on failure, so don't proceed to Beehiiv until
+it passes. Add `--no-fetch` for a fast offline pass (skips the live
+link-fetch step) — useful mid-edit, but always run the full version
+(with fetch) at least once before loading the Beehiiv draft. Also worth
+running against `<date>.both.html`, `<date>.site.html`, and
+`archive/<date>.html` at their respective steps — the placeholder and
+`{{email}}`-leak checks apply there too.
+
 Beehiiv's "New Post" only offers **Blank draft post** or **Template
 post** — there is no separate "Custom HTML post type" to pick at
 creation time (older instructions describing that are stale).
@@ -262,6 +278,10 @@ review.
   missed. Checklist only, not an auto-populator (see Step 1).
 - `add_utm_tags.py` — tags `<date>.email.html`'s outbound links for
   click attribution before loading into Beehiiv (see Step 5).
+- `check_links.py` — pre-send QA gate: wrong-link-target detection
+  (GitHub archive vs. live site), leftover placeholder text, unresolved
+  `{{email}}` leaks, and dead links. Run before loading the Beehiiv
+  draft (see Step 5); exits non-zero on failure.
 - `*.html`, `*-sr.html` at the repo root — standalone sign-up/subscribe
   pages linked from newsletter CTAs (Church School, Serbian School,
   Teens/Young Adults, general mailing list).
