@@ -200,6 +200,17 @@ always his.
   Beehiiv's Preview toggle on the HTML Snippet block, the CMS's Live
   Preview panel above the HTML Code field. A source view that "looks
   right" doesn't guarantee it rendered right.
+- **Editing `<date>.email.html` after Step 5 is already done does NOT
+  update the live Beehiiv draft.** Beehiiv only has whatever was pasted
+  in at load time — fixing the source file (a bad link, a typo) and
+  committing it is necessary but not sufficient. You have to go back
+  into the draft and redo the paste: delete the HTML Snippet block
+  entirely, insert a fresh one, `pbcopy` the corrected file, `Cmd+V`
+  once, then re-check Preview. This bit us for real once — a bad link
+  target got fixed in the repo but the already-loaded draft kept
+  serving the old version until it was manually re-synced. If you touch
+  `<date>.email.html` post-Step-5 for any reason, treat the Beehiiv
+  re-sync as part of that same fix, not optional follow-up.
 
 ## Why one master file
 
