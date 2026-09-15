@@ -63,7 +63,7 @@
 <div style="background:#fdf1e0; border-bottom:2px solid #c9a227; color:#5a3d00; text-align:left; padding:12px 20px; font-family:Arial,sans-serif; font-size:12.5px; line-height:1.6;">
   <strong>&#128204; Prepped 2026-09-10 (scaffold, before SerbFest happened), updated 2026-09-14 now that SerbFest is over — one real blocker left before this can send:</strong>
   <ul style="margin:6px 0 0; padding-left:20px;">
-    <li><strong>SerbFest recap block — narrowed, still THE remaining blocker.</strong> Real photo gallery link is now wired in (Max sent it 2026-09-14: <a href="https://photoromano.smugmug.com/FRIENDS/St-Nicholas-Elkins-Park-PA/2026/St-Nich-Festival-260912-13" style="color:#8c1419;">SmugMug gallery</a>). Still needs: an actual thank-you line from Fr. Milorad or the board, and attendance/highlight numbers if anyone has them. Headline/body text is still pure placeholder — <code>check_links.py</code> will keep failing on this file until that copy is replaced. Don't invent numbers to unblock it. <strong>Also moved</strong> from before "This Week at the Altar" to right after it (2026-09-14) — its original position was before <code>build.py</code>'s extraction start marker, so it was silently being dropped from every real send variant (<code>.html</code>/<code>.serbian.html</code>/<code>.other.html</code>) despite looking fine here in <code>.both.html</code>. Same class of bug documented in the repo's history; verified the fix by grepping the generated files for the SmugMug URL.</li>
+    <li><strong>SerbFest recap block — narrowed, still THE remaining blocker.</strong> "See the Photos" now links to <a href="https://stnicholasphilly.org/photos.html" style="color:#8c1419;">stnicholasphilly.org/photos.html</a> (the parish's own Photos page, which now has a Sep 12 SerbFest gallery card linking out to the real <a href="https://photoromano.smugmug.com/FRIENDS/St-Nicholas-Elkins-Park-PA/2026/St-Nich-Festival-260912-13" style="color:#8c1419;">SmugMug gallery</a>) rather than sending subscribers straight to SmugMug — keeps traffic on the parish site first. Still needs: an actual thank-you line from Fr. Milorad or the board, and attendance/highlight numbers if anyone has them. Headline/body text is still pure placeholder — <code>check_links.py</code> will keep failing on this file until that copy is replaced. Don't invent numbers to unblock it. <strong>Also moved</strong> from before "This Week at the Altar" to right after it (2026-09-14) — its original position was before <code>build.py</code>'s extraction start marker, so it was silently being dropped from every real send variant (<code>.html</code>/<code>.serbian.html</code>/<code>.other.html</code>) despite looking fine here in <code>.both.html</code>. Same class of bug documented in the repo's history; verified the fix by grepping the generated files.</li>
     <li><strong>This Week at the Altar:</strong> the Mon Sept 14 (Ecclesiastical New Year) line has been removed — that date is already in the past for a Sept 17 send. Re-verified against the site's own <code>calendar.html</code> (<code>check_calendar.py 2026-09-17</code>, run 2026-09-14): only Sept 21 Nativity of the Theotokos falls in this issue's window, already covered below.</li>
     <li><strong>Church &amp; Serbian School:</strong> classes are on track to start Sunday, Sept 20 — copy below assumes that's still true; confirm nothing changed.</li>
     <li><strong>Caring for Our Own:</strong> prayer list has now been carried forward unchanged since Sept 10 (Lacković / Rajšić families) — please actively reconfirm with the board rather than letting it carry forward again by default.</li>
@@ -165,7 +165,7 @@
               a genuine thank-you to the volunteers/cooks/bakers by name if possible. Do not invent specifics — leave this block out
               of the send entirely if nobody has written real recap copy by Wednesday.]
             </p>
-            <a href="https://photoromano.smugmug.com/FRIENDS/St-Nicholas-Elkins-Park-PA/2026/St-Nich-Festival-260912-13"
+            <a href="https://stnicholasphilly.org/photos.html"
                style="display:inline-block; background:#f6bb42; color:#3a2e00; text-decoration:none; padding:11px 18px; font-size:13.5px; font-weight:bold; border-radius:2px; margin:0 10px 8px 0;">
               See the Photos &rarr;
             </a>
@@ -183,7 +183,7 @@
               искрено хвала волонтерима/кувaрима/пекарима поименично ако је могуће. Не измишљати детаље — избацити овај блок из
               слања ако нико не напише прави текст до среде.]
             </p>
-            <a href="https://photoromano.smugmug.com/FRIENDS/St-Nicholas-Elkins-Park-PA/2026/St-Nich-Festival-260912-13"
+            <a href="https://stnicholasphilly.org/photos.html"
                style="display:inline-block; background:#f6bb42; color:#3a2e00; text-decoration:none; padding:11px 18px; font-size:13.5px; font-weight:bold; border-radius:2px; margin:0 10px 8px 0;">
               Погледајте фотографије &rarr;
             </a>
