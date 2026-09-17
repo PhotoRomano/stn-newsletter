@@ -206,12 +206,47 @@ always his.
   converted it into a plain-text paragraph (which then displayed the
   literal HTML source instead of rendering it). Delete the block
   entirely and insert a fresh, empty one, then paste into that.
+- **Beehiiv: even a genuinely fresh, empty HTML Snippet block isn't
+  automatically safe — any delay or extra click between creating the
+  block and pasting can let it silently fall back to a plain-text
+  paragraph too** (confirmed 2026-09-17 automating this step: the exact
+  same corruption happened on a block that had never been typed into,
+  just because a couple of clicks happened in between). The reliable
+  sequence is: create the block → click into it once → paste
+  immediately, with nothing else in between. If it corrupts anyway,
+  don't try to hand-select and delete the resulting wall of stray
+  paragraphs — hit **Undo** (repeatedly if needed) to cleanly unwind the
+  paste as one step, then retry.
 - **Beehiiv: paste large HTML via the clipboard, not by typing it.**
   Simulated keystrokes for anything over a couple hundred characters are
   unreliable — key-dispatch can time out partway through and silently
   drop the last few characters, and the whole browser tab can stall on
   script-injection calls for a minute or more while it processes a huge
   paste. `pbcopy` the file, then `Cmd+V` once into an empty block.
+- **If a human and an automated session share the same machine, the OS
+  clipboard is a shared, racy resource.** Automating a copy-then-paste
+  (e.g. `pbcopy`/`navigator.clipboard.writeText` immediately before
+  `Cmd+V`) can silently paste something else entirely if anyone else on
+  the machine copies something in the gap between the two steps — seen
+  for real 2026-09-17 (unrelated clipboard text landed in the HTML
+  Snippet block instead of the newsletter HTML). Always re-write the
+  clipboard right before the paste, as close together as the tooling
+  allows, and verify the pasted content afterward rather than trusting
+  that the copy step "should still be good."
+- **Beehiiv's full-post Preview modal can hang the browser tab for 30+
+  seconds** (and occasionally longer) rendering a full standalone HTML
+  document inside the HTML Snippet block — this is a rendering/perf
+  issue in the modal, not data loss. If a tab seems stuck after opening
+  Preview, don't assume the draft is corrupted: open the post's
+  read-only Overview page in a fresh tab (`/posts/<id>`, no `/edit`) to
+  confirm the saved content directly rather than fighting the stuck tab.
+- **GitHub Pages serves a CDN-cached copy for up to 10 minutes
+  (`cache-control: max-age=600`) after a push** — a script fetching a
+  just-pushed file (e.g. to load it into Beehiiv or the CMS) can silently
+  get the pre-push version even with `{cache: 'no-store'}` in the
+  request, since that only bypasses the browser's own cache, not the
+  CDN's. Append a cache-busting query param (`?cb=<timestamp>`) when
+  automating a fetch immediately after pushing.
 - **Verify with each platform's own Preview before saving/sending** —
   Beehiiv's Preview toggle on the HTML Snippet block, the CMS's Live
   Preview panel above the HTML Code field. A source view that "looks
