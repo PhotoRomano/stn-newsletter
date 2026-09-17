@@ -5,8 +5,8 @@ Church (Elkins Park, PA), sent every **Thursday**, covering the upcoming week
 (Sunday–Saturday). Three separate deliveries come out of one weekly draft:
 a bilingual page on GitHub Pages (this repo), a bilingual page on the parish
 website (`stnicholasphilly.org`, a separate CMS), and a short brief email via
-Beehiiv that links out to the full issue. Full pipeline below — six phases,
-roughly Sunday draft through Thursday send.
+Beehiiv that links out to the full issue. Full pipeline below — seven
+phases, roughly Sunday draft through the post-send archive update.
 
 ## Weekly workflow
 
@@ -190,6 +190,44 @@ Max reviews the Beehiiv draft (Preview, then the full Review step) and
 sends it himself. This is a deliberate two-gate process — board approves
 the content, Max approves the actual send — and the final click is
 always his.
+
+### 7. After send: add it to the live parish Newsletter Archive page
+
+**This is a separate, easy-to-forget page from the GitHub Pages archive
+in Step 3** — it's `stnicholasphilly.org/newsletter-archive`, a real page
+on the parish CMS (Site Manager) that visitors browsing the site can find,
+not just board members with the unlisted GitHub link. It went 2+ weeks
+stale before (missed Sept 10 and Sept 17 entirely) because nothing in
+this workflow pointed at it — do this every week, right after the issue
+is actually sent (not before — only sent issues belong on this public
+list).
+
+1. In Site Manager: **Pages** → **Newsletter Archive** (page id **127**,
+   its one **HTML Code** section is id **321** — both stable, this page
+   isn't reused/renamed weekly like page 129 is).
+2. Edit the section's HTML Code. The content is a plain, hand-maintained
+   list — find `<ul class="nl-arch-list">` and insert a new `<li>` for
+   the issue **immediately after the opening `<ul>` tag** (newest first,
+   matching the existing entries), following this exact pattern:
+   ```html
+   <li>
+     <a href="/newsletter-<date>">The Messenger &mdash; <Month D, YYYY></a>
+     <span class="meta">Sent Thursday, <Month D, YYYY></span>
+   </li>
+   ```
+3. Save, then verify at `stnicholasphilly.org/newsletter-archive` that
+   the new entry appears at the top and its link resolves (not a 404).
+
+This section's field is a genuine plain `<textarea>` (same as page 129's
+HTML Code section in Step 4) — setting `.value` directly via JS and
+dispatching `input`/`change` events works cleanly, same as documented for
+Step 4. No clipboard/paste needed here, and none of the Beehiiv gotchas
+below apply to this page.
+
+**A duplicate "Newsletter Archive" page exists in the CMS (page id 68,
+a leftover from an old page-cleanup pass)** — page **127** is the one
+that actually resolves at the live `/newsletter-archive` URL; don't
+confuse the two.
 
 ## Platform gotchas (learned the hard way — check here before re-learning them)
 
