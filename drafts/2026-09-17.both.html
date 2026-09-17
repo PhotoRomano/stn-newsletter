@@ -52,7 +52,7 @@
 <body style="margin:0; padding:0; background:#eef1f6; font-family:Georgia,'Times New Roman',serif; color:#2b2b2b;">
 
 <!-- preview text (hidden) -->
-<div style="display:none; max-height:0; overflow:hidden; opacity:0;">[PLACEHOLDER — rewrite once SerbFest turnout/highlights are known] Thank you for an incredible SerbFest! Plus: Church &amp; Serbian School classes begin THIS Sunday. / Хвала вам на изузетном Serbfest-у! И: настава у Црквеној и Српској школи почиње ОВЕ недеље.</div>
+<div style="display:none; max-height:0; overflow:hidden; opacity:0;">Thank you for a wonderful SerbFest! Plus: Church &amp; Serbian School classes begin THIS Sunday. / Хвала вам на дивном Serbfest-у! И: настава у Црквеној и Српској школи почиње ОВЕ недеље.</div>
 
 <!-- DRAFT BANNER -->
 <div style="background:#1a1a1a; color:#ffd700; text-align:center; padding:9px 16px; font-family:Arial,sans-serif; font-size:12.5px; letter-spacing:.5px;">
@@ -61,12 +61,12 @@
 
 <!-- NEEDS BOARD INPUT — remove this box before publish/send -->
 <div style="background:#fdf1e0; border-bottom:2px solid #c9a227; color:#5a3d00; text-align:left; padding:12px 20px; font-family:Arial,sans-serif; font-size:12.5px; line-height:1.6;">
-  <strong>&#128204; Prepped 2026-09-10 (scaffold, before SerbFest happened), updated 2026-09-14 now that SerbFest is over — one real blocker left before this can send:</strong>
+  <strong>&#128204; Prepped 2026-09-10, updated 2026-09-14, recap copy + prayer list resolved with Max 2026-09-17 — one open item left:</strong>
   <ul style="margin:6px 0 0; padding-left:20px;">
-    <li><strong>SerbFest recap block — narrowed, still THE remaining blocker.</strong> "See the Photos" now links to <a href="https://stnicholasphilly.org/photos.html" style="color:#8c1419;">stnicholasphilly.org/photos.html</a> (the parish's own Photos page, which now has a Sep 12 SerbFest gallery card linking out to the real <a href="https://photoromano.smugmug.com/FRIENDS/St-Nicholas-Elkins-Park-PA/2026/St-Nich-Festival-260912-13" style="color:#8c1419;">SmugMug gallery</a>) rather than sending subscribers straight to SmugMug — keeps traffic on the parish site first. Still needs: an actual thank-you line from Fr. Milorad or the board, and attendance/highlight numbers if anyone has them. Headline/body text is still pure placeholder — <code>check_links.py</code> will keep failing on this file until that copy is replaced. Don't invent numbers to unblock it. <strong>Also moved</strong> from before "This Week at the Altar" to right after it (2026-09-14) — its original position was before <code>build.py</code>'s extraction start marker, so it was silently being dropped from every real send variant (<code>.html</code>/<code>.serbian.html</code>/<code>.other.html</code>) despite looking fine here in <code>.both.html</code>. Same class of bug documented in the repo's history; verified the fix by grepping the generated files.</li>
-    <li><strong>This Week at the Altar:</strong> the Mon Sept 14 (Ecclesiastical New Year) line has been removed — that date is already in the past for a Sept 17 send. Re-verified against the site's own <code>calendar.html</code> (<code>check_calendar.py 2026-09-17</code>, run 2026-09-14): only Sept 21 Nativity of the Theotokos falls in this issue's window, already covered below.</li>
+    <li><strong>SerbFest recap block:</strong> resolved. Generic (non-fabricated) thank-you copy per Max — no invented attendance numbers or quotes. "See the Photos" links to <a href="https://stnicholasphilly.org/photos.html" style="color:#8c1419;">stnicholasphilly.org/photos.html</a>, which has a Sep 12 SerbFest gallery card linking to the real <a href="https://photoromano.smugmug.com/FRIENDS/St-Nicholas-Elkins-Park-PA/2026/St-Nich-Festival-260912-13" style="color:#8c1419;">SmugMug gallery</a>. Board should confirm the generic tone reads right before send.</li>
+    <li><strong>This Week at the Altar:</strong> the Mon Sept 14 (Ecclesiastical New Year) line has been removed — that date is already in the past for a Sept 17 send.</li>
     <li><strong>Church &amp; Serbian School:</strong> classes are on track to start Sunday, Sept 20 — copy below assumes that's still true; confirm nothing changed.</li>
-    <li><strong>Caring for Our Own:</strong> prayer list has now been carried forward unchanged since Sept 10 (Lacković / Rajšić families) — please actively reconfirm with the board rather than letting it carry forward again by default.</li>
+    <li><strong>Caring for Our Own:</strong> prayer list (Lacković / Rajšić families) reconfirmed current by Max 2026-09-17.</li>
     <li><strong>On the Horizon:</strong> filled in from the site's own <code>calendar.html</code> (Sep 27 Exaltation of the Holy Cross, Oct 26 Circle of Serbian Sisters Slava) — no further check needed before send.</li>
     <li><strong>Fall Retreat at St. George — date discrepancy, not resolved.</strong> The email subject/body from St. George's office says "October 17-18," but the actual attached flyer (twice, PDF + PNG) says "Oct. 16-17" with a Friday-evening/Saturday-morning schedule that only lines up with 16-17 (Oct 16 2026 is a Friday, Oct 17 a Saturday — the 17-18 pairing would be Sat/Sun, which doesn't match "Friday 6:30-9pm / Saturday 9:30am"). Went with the flyer's Oct 16-17 here and on the Announcements page as the more internally-consistent source, but this is worth a quick confirm with St. George's office (office@saintgeorgeupperdarby.org) before send, not just trusting my read.</li>
   </ul>
@@ -160,11 +160,11 @@
                 <span style="display:inline-block; background:#f6bb42; color:#3a2e00; font-family:Arial,sans-serif; font-size:11px; font-weight:bold; letter-spacing:.4px; padding:3px 8px; border-radius:10px;">THANK YOU</span>
               </td>
             </tr></table>
-            <h2 style="font-size:19px; color:#ffffff; font-family:'El Messiri',Georgia,serif; font-weight:700; margin:0 0 8px;">[PLACEHOLDER] What a SerbFest!</h2>
+            <h2 style="font-size:19px; color:#ffffff; font-family:'El Messiri',Georgia,serif; font-weight:700; margin:0 0 8px;">What a SerbFest!</h2>
             <p style="font-size:14px; line-height:1.6; color:#f5dcd6; margin:0 0 14px;">
-              [PLACEHOLDER — replace with a real recap once the weekend is over: how many came, what the weather/music/food were like,
-              a genuine thank-you to the volunteers/cooks/bakers by name if possible. Do not invent specifics — leave this block out
-              of the send entirely if nobody has written real recap copy by Wednesday.]
+              Thank you to everyone who came out to celebrate with us this year, and to every volunteer, cook,
+              and baker who gave their time to make the weekend possible. It's moments like these that make
+              St. Nicholas feel like family — see you at the next one!
             </p>
             <a href="https://stnicholasphilly.org/photos.html"
                style="display:inline-block; background:#f6bb42; color:#3a2e00; text-decoration:none; padding:11px 18px; font-size:13.5px; font-weight:bold; border-radius:2px; margin:0 10px 8px 0;">
@@ -178,11 +178,11 @@
                 <span style="display:inline-block; background:#f6bb42; color:#3a2e00; font-family:Arial,sans-serif; font-size:11px; font-weight:bold; letter-spacing:.4px; padding:3px 8px; border-radius:10px;">ХВАЛА ВАМ</span>
               </td>
             </tr></table>
-            <h2 style="font-size:19px; color:#ffffff; font-family:'El Messiri',Georgia,serif; font-weight:700; margin:0 0 8px;">[МЕСТО ЗА ТЕКСТ] Какав Serbfest!</h2>
+            <h2 style="font-size:19px; color:#ffffff; font-family:'El Messiri',Georgia,serif; font-weight:700; margin:0 0 8px;">Какав Serbfest!</h2>
             <p style="font-size:14px; line-height:1.6; color:#f5dcd6; margin:0 0 14px;">
-              [МЕСТО ЗА ТЕКСТ — замените стварним резимеом након викенда: колико је људи дошло, како је било време/музика/храна,
-              искрено хвала волонтерима/кувaрима/пекарима поименично ако је могуће. Не измишљати детаље — избацити овај блок из
-              слања ако нико не напише прави текст до среде.]
+              Хвала свима који су дошли да прославе са нама ове године, и сваком волонтеру, кувару и пекару
+              који су уложили своје време да овај викенд буде могућ. Управо овакви тренуци чине да се у
+              Светом Николи осећамо као породица — видимо се на следећем!
             </p>
             <a href="https://stnicholasphilly.org/photos.html"
                style="display:inline-block; background:#f6bb42; color:#3a2e00; text-decoration:none; padding:11px 18px; font-size:13.5px; font-weight:bold; border-radius:2px; margin:0 10px 8px 0;">
@@ -459,7 +459,7 @@
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
       <td class="bl-col bl-en" valign="top" style="display:block; width:100%; box-sizing:border-box;">
         <h2 style="font-size:18px; color:#02306e; font-family:'El Messiri',Georgia,serif; font-weight:700; border-bottom:2px solid #c9a227; padding-bottom:7px; margin:18px 0 14px;"><img src="https://photoromano.github.io/stn-newsletter/assets/icons/heart.png" width="24" height="24" style="vertical-align:middle; margin-right:8px; border:0;" alt=""> Caring for Our Own</h2>
-        <p style="font-size:14px; color:#8c1419; margin:0 0 8px;"><strong>[CARRIED FORWARD, RECONFIRM] Please keep Ilija and Stojana Lacković, and Djordje (George) and Nada Rajšić, in your prayers this week.</strong></p>
+        <p style="font-size:14px; color:#8c1419; margin:0 0 8px;"><strong>Please keep Ilija and Stojana Lacković, and Djordje (George) and Nada Rajšić, in your prayers this week.</strong></p>
         <p style="font-size:13px; line-height:1.6; color:#6a7d96; font-style:italic; margin:0;">
           &ldquo;Pray for one another, that you may be healed.&rdquo; (James 5:16) — to add a name or request a
           pastoral visit, reply or write
@@ -468,7 +468,7 @@
       </td>
       <td class="bl-col bl-sr" valign="top" style="display:block; width:100%; box-sizing:border-box;">
         <h2 style="font-size:18px; color:#02306e; font-family:'El Messiri',Georgia,serif; font-weight:700; border-bottom:2px solid #c9a227; padding-bottom:7px; margin:18px 0 14px;"><img src="https://photoromano.github.io/stn-newsletter/assets/icons/heart.png" width="24" height="24" style="vertical-align:middle; margin-right:8px; border:0;" alt=""> Брига о нашима</h2>
-        <p style="font-size:14px; color:#8c1419; margin:0 0 8px;"><strong>[ПРЕНЕТО, ПОТВРДИТИ] Молимо вас да ове недеље у молитвама држите Илију и Стојану Лаковић, и Ђорђа и Наду Рајшић.</strong></p>
+        <p style="font-size:14px; color:#8c1419; margin:0 0 8px;"><strong>Молимо вас да ове недеље у молитвама држите Илију и Стојану Лаковић, и Ђорђа и Наду Рајшић.</strong></p>
         <p style="font-size:13px; line-height:1.6; color:#6a7d96; font-style:italic; margin:0;">
           „Молите се једни за друге, да оздравите.” (Јаков 5:16) — да бисте додали име или затражили пастирску
           посету, одговорите или пишите на
