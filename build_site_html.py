@@ -32,11 +32,14 @@ from pathlib import Path
 
 from bs4 import BeautifulSoup
 
+from build import STYLE_SINGLE
+
 ROOT = Path(__file__).parent
 DRAFTS_DIR = ROOT / "drafts"
 
-WRAP_STYLE = """<style>
-.stn-nl-wrap { background:#eef1f6; padding:16px 8px; }
+WRAP_STYLE = f"""<style>
+{STYLE_SINGLE}
+.stn-nl-wrap {{ background:#eef1f6; padding:16px 8px; }}
 </style>
 """
 

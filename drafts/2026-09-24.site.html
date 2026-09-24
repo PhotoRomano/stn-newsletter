@@ -1,4 +1,38 @@
 <style>
+
+  /* ── Mobile responsive overrides ─────────────────── */
+  @media only screen and (max-width: 620px) {
+    .email-body { width: 100% !important; }
+    .pad  { padding-left: 16px !important; padding-right: 16px !important; }
+    .ql-table { display: block !important; }
+    .ql-row   { display: block !important; font-size: 0; }
+    .ql-cell  { display: inline-block !important; width: 50% !important;
+                box-sizing: border-box !important; vertical-align: top !important;
+                font-size: 13px !important; padding: 13px 8px !important; }
+    .ql-cell.r2 { border-top: 1px solid #c8d5e8 !important; }
+    .ql-cell.left { border-left: none !important; }
+    .svc-date { width: auto !important; white-space: normal !important; font-size: 13px !important; }
+    .pad h2 { font-size: 17px !important; }
+    .give-cell { display: block !important; width: 100% !important;
+                 padding: 0 0 10px 0 !important; box-sizing: border-box !important; }
+    .give-cell a { padding-top: 14px !important; padding-bottom: 14px !important;
+                   font-size: 15px !important; }
+    .issue-title { font-size: 22px !important; }
+    .footer-links a { display: inline-block !important; padding: 4px 0 !important; }
+  }
+
+  /* ── Wide-browser treatment (a full browser window, not Outlook/Gmail's
+       reading pane, which stays under 620px anyway) ── */
+  @media only screen and (min-width: 820px) {
+    .shell        { padding: 40px 8px !important; }
+    .email-body   { width: 680px !important; max-width: 680px !important; }
+    .pad          { padding-left: 46px !important; padding-right: 46px !important; }
+    .masthead-img { max-width: 620px !important; }
+    .pad > p, .pad td p { font-size: 16.5px !important; line-height: 1.8 !important; }
+    .pad h2       { font-size: 22px !important; }
+    .issue-title  { font-size: 30px !important; }
+  }
+
 .stn-nl-wrap { background:#eef1f6; padding:16px 8px; }
 </style>
 <div class="stn-nl-wrap">
