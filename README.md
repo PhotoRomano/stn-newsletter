@@ -128,10 +128,29 @@ Then in Site Manager (`stnicholasphilly.org/admin`, login may need a
    `<textarea>`, so clipboard paste (copy the file, `Cmd+V`) works
    cleanly every time — no special handling needed here, unlike Beehiiv
    (see gotchas below).
+4. **Reset the "Responsive" dropdown, every single time.** Saving the
+   HTML Code section auto-runs Site Manager's embed detector — something
+   in the pasted content (confirmed: a plain `youtube.com` link in an
+   `<a href>`, not just a literal `<script>` tag as first documented) gets
+   misread as a video embed and silently flips a `<select id="version">`
+   sitting right below the textarea from **"Not Responsive"** to
+   **"Responsive: 16:9 aspect ratio"**. That wraps the entire section in a
+   fixed-aspect-ratio `overflow:hidden` box, which is invisible on desktop
+   (the box is tall enough there) but clips ~95% of the newsletter off
+   mobile screens — this is almost certainly what "mobile doesn't scale"
+   reports are actually seeing, not a CSS bug. On
+   `section_html_edit.php?pageid=129&id=316`, after saving:
+   `document.getElementById('version').value` should read `"0"`
+   ("Not Responsive"); if it's back to a nonzero aspect-ratio value, reset
+   it (`sel.value = "0"; sel.dispatchEvent(new Event('change',{bubbles:true}))`)
+   and click **Save changes** again. Confirmed automatable via
+   `javascript_tool` on this exact page — no need to hand this off to Max.
 
 Verify afterward: fetch the live URL
 (`stnicholasphilly.org/newsletter-<date>`) and confirm it contains this
-week's real content and no literal `{{email}}` text anywhere.
+week's real content, no literal `{{email}}` text anywhere, and — check
+this every week — no `overflow:hidden` clipping on a real mobile
+viewport (`document.body.scrollHeight` should be 3000px+, not ~800px).
 
 ### 5. Load the Beehiiv draft
 
