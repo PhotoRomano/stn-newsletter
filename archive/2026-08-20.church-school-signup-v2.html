@@ -1,0 +1,148 @@
+<style>
+.SECTION_TITLE{display:none !important;}
+.csu-wrap{max-width:640px;margin:0 auto;}
+.csu-body{padding:36px 22px 60px;}
+.csu-row{display:flex;gap:14px;}
+.csu-row>div{flex:1;}
+.csu-field{margin-bottom:18px;}
+.csu-field label{display:block;font-size:13px;font-weight:bold;color:#03457d;margin-bottom:4px;font-family:'El Messiri',Georgia,serif;}
+.csu-field input[type=text],.csu-field input[type=email],.csu-field input[type=tel],.csu-field select,.csu-field textarea{
+  width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid #c8d5e8;border-radius:4px;
+  font-size:15px;font-family:Merriweather,Georgia,"Times New Roman",serif;background:#f8fafc;
+}
+.csu-field textarea{resize:vertical;min-height:80px;}
+.csu-field input:focus,.csu-field select:focus,.csu-field textarea:focus{outline:none;border-color:#03457d;}
+.csu-section-label{font-size:11px;font-weight:bold;letter-spacing:.6px;color:#03457d;text-transform:uppercase;margin:28px 0 16px;border-top:1px solid #e2e8ee;padding-top:18px;}
+.csu-opt-note{font-size:12px;color:#888;font-weight:normal;margin-left:4px;font-style:italic;}
+.csu-req{color:#c31f27;}
+#csu-submit-btn{
+  width:100%;padding:14px;background:#03457d;color:#fff;border:none;border-radius:4px;
+  font-size:16px;font-family:'El Messiri',Georgia,serif;font-weight:700;cursor:pointer;margin-top:8px;letter-spacing:.3px;
+}
+#csu-submit-btn:hover{background:#022a4d;}
+#csu-submit-btn:disabled{opacity:.6;cursor:default;}
+#csu-msg{display:none;margin-top:20px;padding:16px;border-radius:4px;font-size:15px;text-align:center;}
+@media(max-width:480px){ .csu-row { flex-direction: column; gap: 0; } }
+</style>
+
+<div class="stn-pagehero" style="background: linear-gradient(120deg, #03457d 0%, #022a4d 100%);">
+  <div class="stn-wrap">
+    <div class="krest" style="color:#f6bb42; font-size:24px;">&#10013;&#65038;</div>
+    <h1 style="color:#fff; font-family:'El Messiri', Georgia, serif; font-size:36px; font-weight:700; text-align:center;">
+      <span class="stn-en">Church School Sign-Up</span><span class="stn-sr">Пријава — Црквена школа</span>
+    </h1>
+    <p style="color:#bcd4ea; font-size:16px; text-align:center;">
+      <span class="stn-en">Registration for the upcoming school year.</span><span class="stn-sr">Упис за наредну школску годину.</span>
+    </p>
+  </div>
+</div>
+
+<div class="stn-wrap csu-wrap">
+<div class="csu-body">
+
+  <p style="margin:0 0 24px;font-size:15px;color:#333;">
+    <span class="stn-en">Thank you for your interest in our Church School. Please fill out the form below and we will be in touch with enrollment details.</span><span class="stn-sr">Хвала на интересовању за нашу Црквену школу. Молимо вас да попуните формулар испод и јавићемо вам се са детаљима о упису.</span>
+  </p>
+
+  <form id="csu-form">
+    <input type="hidden" name="_form" value="Church School">
+
+    <div class="csu-section-label"><span class="stn-en">Student Information</span><span class="stn-sr">Информације о ученику</span></div>
+
+    <div class="csu-row">
+      <div class="csu-field">
+        <label><span class="stn-en">Student First Name</span><span class="stn-sr">Име ученика</span> <span class="csu-req">*</span></label>
+        <input type="text" name="Student First Name" required>
+      </div>
+      <div class="csu-field">
+        <label><span class="stn-en">Student Last Name</span><span class="stn-sr">Презиме ученика</span> <span class="csu-req">*</span></label>
+        <input type="text" name="Student Last Name" required>
+      </div>
+    </div>
+    <div class="csu-row">
+      <div class="csu-field">
+        <label><span class="stn-en">Age</span><span class="stn-sr">Узраст</span> <span class="csu-req">*</span></label>
+        <select name="Student Age" required>
+          <option value="">Select age…</option>
+          <option>4</option><option>5</option><option>6</option><option>7</option>
+          <option>8</option><option>9</option><option>10</option><option>11</option>
+          <option>12</option><option>13</option><option>14</option><option>15+</option>
+        </select>
+      </div>
+      <div class="csu-field">
+        <label><span class="stn-en">Grade</span><span class="stn-sr">Разред</span></label>
+        <input type="text" name="Grade" placeholder="e.g. 3rd grade">
+      </div>
+    </div>
+
+    <div class="csu-section-label"><span class="stn-en">Parent / Guardian Information</span><span class="stn-sr">Информације о родитељу/старатељу</span></div>
+
+    <div class="csu-row">
+      <div class="csu-field">
+        <label><span class="stn-en">Parent First Name</span><span class="stn-sr">Име родитеља</span> <span class="csu-req">*</span></label>
+        <input type="text" name="Parent First Name" required>
+      </div>
+      <div class="csu-field">
+        <label><span class="stn-en">Parent Last Name</span><span class="stn-sr">Презиме родитеља</span> <span class="csu-req">*</span></label>
+        <input type="text" name="Parent Last Name" required>
+      </div>
+    </div>
+    <div class="csu-row">
+      <div class="csu-field">
+        <label><span class="stn-en">Email</span><span class="stn-sr">Имејл</span> <span class="csu-req">*</span></label>
+        <input type="email" name="Parent Email" required placeholder="you@example.com">
+      </div>
+      <div class="csu-field">
+        <label><span class="stn-en">Phone</span><span class="stn-sr">Телефон</span> <span class="csu-req">*</span></label>
+        <input type="tel" name="Parent Phone" required placeholder="(215) 555-0100">
+      </div>
+    </div>
+
+    <div class="csu-section-label">
+      <span class="stn-en">Additional Information</span><span class="stn-sr">Додатне информације</span>
+      <span class="csu-opt-note"><span class="stn-en">optional</span><span class="stn-sr">необавезно</span></span>
+    </div>
+
+    <div class="csu-field">
+      <label><span class="stn-en">Enrolling siblings?</span><span class="stn-sr">Уписујете и браћу/сестре?</span></label>
+        <input type="text" name="Siblings" placeholder="e.g. Also enrolling Maria, age 7">
+    </div>
+    <div class="csu-field">
+      <label><span class="stn-en">Questions or notes for the teacher</span><span class="stn-sr">Питања или напомене за наставника</span></label>
+      <textarea name="Notes" placeholder="Anything you'd like us to know…"></textarea>
+    </div>
+
+    <button type="submit" id="csu-submit-btn"><span class="stn-en">Submit Sign-Up</span><span class="stn-sr">Пошаљи пријаву</span></button>
+  </form>
+
+  <div id="csu-msg"></div>
+
+</div>
+</div>
+
+<script>
+(function(){
+  var form = document.getElementById('csu-form');
+  var btn = document.getElementById('csu-submit-btn');
+  var msg = document.getElementById('csu-msg');
+  form.addEventListener('submit', function(ev){
+    ev.preventDefault();
+    btn.disabled = true;
+    fetch('https://script.google.com/macros/s/AKfycbwS-OlZuyW6TTYo52ErSkl1GuJJxoWEpscBGycpyo8sqmNdJjWgF38ZDfHJx7N8Tyalhg/exec', {
+      method: 'POST',
+      body: new FormData(form)
+    }).then(function(r){
+      if (!r.ok) throw new Error('bad status');
+      return r.json();
+    }).then(function(){
+      form.style.display = 'none';
+      msg.style.cssText = 'display:block;background:#f0f7ee;color:#2e6b2e;border:1px solid #b8d8b8;';
+      msg.innerHTML = '<span class="stn-en">Thank you! We received your sign-up and will be in touch soon.</span><span class="stn-sr">Хвала! Примили смо вашу пријаву и јавићемо вам се ускоро.</span>';
+    }).catch(function(){
+      btn.disabled = false;
+      msg.style.cssText = 'display:block;background:#fdeceb;color:#a4271f;border:1px solid #f3c6c2;';
+      msg.innerHTML = '<span class="stn-en">Connection error — please try again, or email hello@stnicholasphilly.org.</span><span class="stn-sr">Грешка у вези — покушајте поново или пошаљите имејл на hello@stnicholasphilly.org.</span>';
+    });
+  });
+})();
+</script>
