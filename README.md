@@ -118,17 +118,35 @@ the CMS below.
 
 Then in Site Manager (`stnicholasphilly.org/admin`, login may need a
 2FA code emailed to the admin address if the session expired):
-1. **Pages** → the newsletter page (reused weekly, currently page id
+1. **Before renaming anything: fix last week's archive link first.**
+   Page 129 is reused/renamed every week (next step), which means
+   *last* week's `stnicholasphilly.org/newsletter-<date>` URL is about
+   to stop existing — Site Manager doesn't redirect the old slug
+   anywhere, it just 404s. Go to the Newsletter Archive page (page id
+   **127**, section id **321** — see Step 7) and change *last* week's
+   `<li>` entry's `href` from `/newsletter-<last-date>` to
+   `https://photoromano.github.io/stn-newsletter/archive/<last-date>.html`
+   (the permanent GitHub Pages copy, which never moves). This is what
+   went wrong 2026-09-24: three weeks (09-03, 09-10, 09-17) had their
+   parish-site pages silently pulled out from under their archive links
+   when page 129 moved on, and nothing in this workflow ever re-pointed
+   them — found and fixed retroactively via
+   `photoromano.github.io/stn-newsletter/archive/<date>.html` for all
+   three, but do this step *every* week going forward so it doesn't
+   recur. Only the current (just-published) issue should ever point at
+   a live `/newsletter-<date>` parish-site slug; every older entry
+   should point at its GitHub Pages URL.
+2. **Pages** → the newsletter page (reused weekly, currently page id
    **129** — rename its title/slug each week, don't create a new page)
-2. **Page Properties** → update Title (`The Messenger — Week of
+3. **Page Properties** → update Title (`The Messenger — Week of
    [Month D, YYYY]`) and Page Name/slug (`newsletter-<date>`) → Save
-3. **Edit Page** → the page's one **HTML Code** section (currently
+4. **Edit Page** → the page's one **HTML Code** section (currently
    section id **316**) → pencil icon to open it → select all, paste in
    `<date>.site.html`'s content → Save changes. This field is a plain
    `<textarea>`, so clipboard paste (copy the file, `Cmd+V`) works
    cleanly every time — no special handling needed here, unlike Beehiiv
    (see gotchas below).
-4. **Reset the "Responsive" dropdown, every single time.** Saving the
+5. **Reset the "Responsive" dropdown, every single time.** Saving the
    HTML Code section auto-runs Site Manager's embed detector — something
    in the pasted content (confirmed: a plain `youtube.com` link in an
    `<a href>`, not just a literal `<script>` tag as first documented) gets
@@ -236,6 +254,14 @@ list).
    ```
 3. Save, then verify at `stnicholasphilly.org/newsletter-archive` that
    the new entry appears at the top and its link resolves (not a 404).
+
+**Don't forget the flip side — see Step 4.1.** Adding this week's entry
+here is only half the job; *before* next week's page-129 rename, the
+entry you're adding right now needs its `href` swapped from
+`/newsletter-<date>` to the GitHub Pages URL, or it 404s the moment page
+129 moves on. Easiest to just do both in the same textarea edit next
+week: add the new entry per this step, and re-point last week's in the
+same pass.
 
 This section's field is a genuine plain `<textarea>` (same as page 129's
 HTML Code section in Step 4) — setting `.value` directly via JS and
