@@ -116,53 +116,71 @@ Beehiiv merge tags that render as literal text on a static page —
 Writes `drafts/<date>.site.html`, which is what actually gets pasted into
 the CMS below.
 
+**2026-09-24: page 129 is no longer reused/renamed weekly — every issue
+now gets its own permanent CMS page.** The old "rename page 129 each
+week" shortcut silently broke every past issue's archive link the moment
+the *next* week's rename happened (Site Manager doesn't redirect old
+slugs, it just 404s) — three weeks (09-03, 09-10, 09-17) went dark this
+way before it was caught. Recreating each as its own permanent page (135,
+136, 137) also surfaced a second, independent bug: their `/newsletter-<date>`
+URLs briefly showed **both languages simultaneously instead of respecting
+the EN/СР toggle** when they'd been pointed at the GitHub Pages archive
+copy as a stopgap — that copy is intentionally a flat bilingual page (see
+`archive_publish.py`'s docstring), so it never had toggle behavior. Real
+past issues need a real permanent parish-site page, not a redirect to
+GitHub Pages. Page 129 (currently `newsletter-2026-09-24`) is now also
+permanent — it stays put and does **not** get renamed for the next issue;
+follow Step 1 below to create a genuinely new page each week from now on.
+
 Then in Site Manager (`stnicholasphilly.org/admin`, login may need a
 2FA code emailed to the admin address if the session expired):
-1. **Before renaming anything: fix last week's archive link first.**
-   Page 129 is reused/renamed every week (next step), which means
-   *last* week's `stnicholasphilly.org/newsletter-<date>` URL is about
-   to stop existing — Site Manager doesn't redirect the old slug
-   anywhere, it just 404s. Go to the Newsletter Archive page (page id
-   **127**, section id **321** — see Step 7) and change *last* week's
-   `<li>` entry's `href` from `/newsletter-<last-date>` to
-   `https://photoromano.github.io/stn-newsletter/archive/<last-date>.html`
-   (the permanent GitHub Pages copy, which never moves). This is what
-   went wrong 2026-09-24: three weeks (09-03, 09-10, 09-17) had their
-   parish-site pages silently pulled out from under their archive links
-   when page 129 moved on, and nothing in this workflow ever re-pointed
-   them — found and fixed retroactively via
-   `photoromano.github.io/stn-newsletter/archive/<date>.html` for all
-   three, but do this step *every* week going forward so it doesn't
-   recur. Only the current (just-published) issue should ever point at
-   a live `/newsletter-<date>` parish-site slug; every older entry
-   should point at its GitHub Pages URL.
-2. **Pages** → the newsletter page (reused weekly, currently page id
-   **129** — rename its title/slug each week, don't create a new page)
-3. **Page Properties** → update Title (`The Messenger — Week of
-   [Month D, YYYY]`) and Page Name/slug (`newsletter-<date>`) → Save
-4. **Edit Page** → the page's one **HTML Code** section (currently
-   section id **316**) → pencil icon to open it → select all, paste in
-   `<date>.site.html`'s content → Save changes. This field is a plain
-   `<textarea>`, so clipboard paste (copy the file, `Cmd+V`) works
-   cleanly every time — no special handling needed here, unlike Beehiiv
-   (see gotchas below).
-5. **Reset the "Responsive" dropdown, every single time.** Saving the
-   HTML Code section auto-runs Site Manager's embed detector — something
-   in the pasted content (confirmed: a plain `youtube.com` link in an
-   `<a href>`, not just a literal `<script>` tag as first documented) gets
+1. **Create a new page**, don't reuse/rename an old one: go to
+   `/admin/page_edit.php?pageid=0&parent=0` ("Create Page"), set
+   **Title** (`The Messenger — Week of [Month D, YYYY]`) and **Page
+   Name/slug** (`newsletter-<date>`), uncheck **nav_shown** (these
+   issue pages aren't in the nav menu), Save. Note the new pageid Site
+   Manager redirects to (`pages_list.php?highlight=<pageid>`).
+2. **Add the HTML Code section via copy, not the "+" button** — clicking
+   page.php's own "+" add-section control triggered a stuck
+   cross-extension state during this session (recoverable only by
+   navigating away, and it never got the section added). The reliable
+   path: `/admin/page_sections_transfer.php?pageid=<any other permanent
+   issue page, e.g. 126>`, choose the new page from "Other page", click
+   **Copy them there** — copy leaves the source page untouched and adds
+   a duplicate of its one HTML Code section to the new page. Then open
+   that new section (`page.php?pageid=<new id>` will show its
+   `section_html_edit.php` link) and overwrite its content per the next
+   step — the copy just gives you a correctly-typed, correctly-structured
+   section to paste into, since the source page is already a working
+   toggle-enabled issue.
+3. **Edit that section**: select all, paste in `<date>.site.html`'s
+   content → Save changes. This field is a plain `<textarea>`, so
+   clipboard paste (copy the file, `Cmd+V`) works cleanly every time —
+   no special handling needed here, unlike Beehiiv (see gotchas below).
+4. **Reset the "Responsive" dropdown, every single time — and verify
+   against the LIVE page, not the admin form.** Saving the HTML Code
+   section auto-runs Site Manager's embed detector — something in the
+   pasted content (confirmed: a plain `youtube.com` link in an `<a
+   href>`, not just a literal `<script>` tag as first documented) gets
    misread as a video embed and silently flips a `<select id="version">`
    sitting right below the textarea from **"Not Responsive"** to
-   **"Responsive: 16:9 aspect ratio"**. That wraps the entire section in a
-   fixed-aspect-ratio `overflow:hidden` box, which is invisible on desktop
-   (the box is tall enough there) but clips ~95% of the newsletter off
-   mobile screens — this is almost certainly what "mobile doesn't scale"
-   reports are actually seeing, not a CSS bug. On
-   `section_html_edit.php?pageid=129&id=316`, after saving:
-   `document.getElementById('version').value` should read `"0"`
-   ("Not Responsive"); if it's back to a nonzero aspect-ratio value, reset
-   it (`sel.value = "0"; sel.dispatchEvent(new Event('change',{bubbles:true}))`)
-   and click **Save changes** again. Confirmed automatable via
-   `javascript_tool` on this exact page — no need to hand this off to Max.
+   **"Responsive: 16:9 aspect ratio"**. That wraps the section in a
+   fixed-aspect-ratio `overflow:hidden` box (a `<div class="embed-container">`
+   around the content, invisible on desktop, clips ~95% of the newsletter
+   off mobile screens). Reset via
+   `sel.value = "0"; sel.dispatchEvent(new Event('change',{bubbles:true}))`
+   then click **Save changes** again. **2026-09-24 gotcha: on a
+   freshly-created/copied section, re-fetching `section_html_edit.php`
+   afterward and reading `#version` can show a stale/wrong value even
+   though the reset genuinely took — don't trust that read.** The
+   authoritative check is the live public page: `document.querySelector(
+   '.embed-container')` should be `null` and `document.body.scrollHeight`
+   at a 390×844 mobile viewport should be 3000px+, not ~800px. Confirmed
+   this discrepancy directly — one section's admin form kept reading
+   `56` after multiple resets while the live page had already been
+   correctly unclipped the whole time; a sibling section reset the exact
+   same way was still genuinely clipped live despite an identical-looking
+   admin reset. Always verify against the real rendered page.
 
 Verify afterward: fetch the live URL
 (`stnicholasphilly.org/newsletter-<date>`) and confirm it contains this
@@ -241,7 +259,7 @@ list).
 
 1. In Site Manager: **Pages** → **Newsletter Archive** (page id **127**,
    its one **HTML Code** section is id **321** — both stable, this page
-   isn't reused/renamed weekly like page 129 is).
+   never gets renamed).
 2. Edit the section's HTML Code. The content is a plain, hand-maintained
    list — find `<ul class="nl-arch-list">` and insert a new `<li>` for
    the issue **immediately after the opening `<ul>` tag** (newest first,
@@ -255,13 +273,11 @@ list).
 3. Save, then verify at `stnicholasphilly.org/newsletter-archive` that
    the new entry appears at the top and its link resolves (not a 404).
 
-**Don't forget the flip side — see Step 4.1.** Adding this week's entry
-here is only half the job; *before* next week's page-129 rename, the
-entry you're adding right now needs its `href` swapped from
-`/newsletter-<date>` to the GitHub Pages URL, or it 404s the moment page
-129 moves on. Easiest to just do both in the same textarea edit next
-week: add the new entry per this step, and re-point last week's in the
-same pass.
+Since each issue now gets its own permanent page (Step 4), this link
+never needs to be re-pointed later — it stays live at `/newsletter-<date>`
+indefinitely. (That wasn't true before 2026-09-24, when page 129 got
+renamed to a new slug every week and silently broke every older archive
+link — see Step 4's note.)
 
 This section's field is a genuine plain `<textarea>` (same as page 129's
 HTML Code section in Step 4) — setting `.value` directly via JS and
