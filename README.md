@@ -58,6 +58,26 @@ the workflow (it's built in Step 4), but write the link now anyway so
 it's correct once that page goes live; just don't rely on it resolving
 before then.
 
+Before building, generate this week's section banners (2026-09-29 addition
+— small horizontal watercolor illustrations above the Church School,
+Serbian Language School, and Young Adults boxes):
+```
+python3 generate_banners.py <date>
+```
+Reads `banner_prompts.json` (shared style + one prompt per section), calls
+Higgsfield (`gpt_image_2_5`, 16:9) once per section, and saves each under
+`assets/banners/<slug>/<date>.png` — **never overwrites a prior week's
+image**, so the full weekly history stays in the repo. Idempotent: skips a
+section if that date's file already exists (`--force` to regenerate). The
+Higgsfield CLI's status/response layer is intermittently flaky (HTTP 503s,
+dropped responses after a job actually completed server-side) — the script
+retries and falls back to matching against `higgsfield generate list` before
+giving up, so a transient error usually self-resolves without wasting a
+credit. Then reference each week's three new files in `<date>.both.html`
+(one `<img>` row spanning the top of each of the three section boxes,
+before the bilingual columns — see any recent draft for the pattern) before
+running the builder below.
+
 Then run the generator to produce the other three full-issue variants:
 ```
 python3 build.py drafts/<date>.both.html
