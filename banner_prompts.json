@@ -1,8 +1,10 @@
 {
-  "_comment": "Weekly watercolor banner illustrations for recurring newsletter sections. Run generate_banners.py to produce this week's set -- it archives every week's images under assets/banners/<slug>/<date>.png and never overwrites a prior week. Edit 'prompt' per section to steer content; 'style' is shared so all three read as one cohesive set.",
-  "aspect_ratio": "16:9",
+  "_comment": "Weekly watercolor banner illustrations for recurring newsletter sections. Run generate_banners.py to produce this week's set -- it archives every week's images under assets/banners/<slug>/<date>.png and never overwrites a prior week. Edit 'prompt' per section to steer content; 'style' is shared so all three read as one cohesive set. Generated wide (aspect_ratio, the widest the model supports) then center-cropped down to crop_aspect_ratio -- a skinny letterbox banner, about 4 text-lines tall, sized to roughly one language column's width (display_max_width_px) since the .both.html draft shows English and Serbian side by side and the banner should not span both.",
+  "aspect_ratio": "21:9",
+  "crop_aspect_ratio": "4:1",
+  "display_max_width_px": 320,
   "model": "gpt_image_2_5",
-  "style": "Soft watercolor illustration, horizontal banner composition, warm muted palette of navy blue, antique gold, and deep red accents on a warm cream background, loose expressive brushstrokes, visible paper texture, gentle diffused natural light, tasteful and warm, evocative of a small close-knit parish community. No text, no legible words or letters, no logos, no photorealistic faces -- soft impressionistic figures only.",
+  "style": "Soft watercolor illustration, horizontal banner composition, warm muted palette of navy blue, antique gold, and deep red accents on a warm cream background, loose expressive brushstrokes, visible paper texture, gentle diffused natural light, tasteful and warm, evocative of a small close-knit parish community. Compose the main subjects within a horizontal band across the vertical middle third of the frame, since the image will be cropped into a very wide, short letterbox strip. No text, no legible words or letters, no logos, no photorealistic faces -- soft impressionistic figures only.",
   "negative_prompt": "text, letters, words, captions, watermark, logo, photorealistic faces, distorted hands, harsh saturated colors, clip art, cartoon outlines, modern branding",
   "sections": [
     {

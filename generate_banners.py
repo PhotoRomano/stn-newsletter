@@ -4,11 +4,14 @@
 Usage: python3 generate_banners.py <issue-date, e.g. 2026-10-01> [--force]
 
 Reads banner_prompts.json for style + per-section prompts, generates one
-horizontal watercolor banner per section via the `higgsfield` CLI, and
-saves each under assets/banners/<slug>/<date>.png. Never overwrites a
-prior week's image unless --force is passed -- every week's set is kept,
-matching the "each issue gets a permanent page" archival policy this repo
-already follows for the newsletter pages themselves.
+banner per section via the `higgsfield` CLI at the widest aspect ratio the
+model supports, center-crops it down to a skinny letterbox strip
+(crop_aspect_ratio in the config -- the model can't natively produce
+anything that wide), and saves each under assets/banners/<slug>/<date>.png.
+Never overwrites a prior week's image unless --force is passed -- every
+week's set is kept, matching the "each issue gets a permanent page"
+archival policy this repo already follows for the newsletter pages
+themselves.
 """
 import json
 import subprocess
@@ -16,6 +19,8 @@ import sys
 import time
 import urllib.request
 from pathlib import Path
+
+from PIL import Image
 
 REPO = Path(__file__).resolve().parent
 CONFIG_PATH = REPO / "banner_prompts.json"
@@ -116,6 +121,30 @@ def generate_one(model, aspect_ratio, prompt):
     raise RuntimeError(f"gave up after {MAX_ATTEMPTS} attempts: {last_error}")
 
 
+def parse_ratio(ratio_str):
+    w, h = ratio_str.split(":")
+    return float(w) / float(h)
+
+
+def center_crop_to_ratio(path, target_ratio):
+    """Crop the image in place to target_ratio (width/height), keeping the
+    vertical center (the prompt asks the model to keep subjects in the
+    middle third of the frame for exactly this crop)."""
+    with Image.open(path) as img:
+        w, h = img.size
+        current_ratio = w / h
+        if current_ratio > target_ratio:
+            # too wide already (shouldn't happen given source ratios) -- crop width
+            new_w = round(h * target_ratio)
+            left = (w - new_w) // 2
+            box = (left, 0, left + new_w, h)
+        else:
+            new_h = round(w / target_ratio)
+            top = (h - new_h) // 2
+            box = (0, top, w, top + new_h)
+        img.crop(box).save(path)
+
+
 def main():
     if len(sys.argv) < 2:
         print(__doc__)
@@ -126,6 +155,7 @@ def main():
     config = load_config()
     model = config["model"]
     aspect_ratio = config["aspect_ratio"]
+    crop_ratio = parse_ratio(config["crop_aspect_ratio"])
     style = config["style"]
     negative = config.get("negative_prompt", "")
 
@@ -148,7 +178,8 @@ def main():
         print(f"[gen]  {slug}: submitting to {model} ({aspect_ratio})...")
         url = generate_one(model, aspect_ratio, full_prompt)
         urllib.request.urlretrieve(url, out_path)
-        print(f"[done] {slug}: saved {out_path}")
+        center_crop_to_ratio(out_path, crop_ratio)
+        print(f"[done] {slug}: saved {out_path} (cropped to {config['crop_aspect_ratio']})")
         results[slug] = str(out_path)
 
     print("\nGenerated banners:")
