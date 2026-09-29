@@ -1,0 +1,27 @@
+{
+  "_comment": "Weekly watercolor banner illustrations for recurring newsletter sections. Run generate_banners.py to produce this week's set -- it archives every week's images under assets/banners/<slug>/<date>.png and never overwrites a prior week. Edit 'prompt' per section to steer content; 'style' is shared so all three read as one cohesive set.",
+  "aspect_ratio": "16:9",
+  "model": "gpt_image_2_5",
+  "style": "Soft watercolor illustration, horizontal banner composition, warm muted palette of navy blue, antique gold, and deep red accents on a warm cream background, loose expressive brushstrokes, visible paper texture, gentle diffused natural light, tasteful and warm, evocative of a small close-knit parish community. No text, no legible words or letters, no logos, no photorealistic faces -- soft impressionistic figures only.",
+  "negative_prompt": "text, letters, words, captions, watermark, logo, photorealistic faces, distorted hands, harsh saturated colors, clip art, cartoon outlines, modern branding",
+  "sections": [
+    {
+      "slug": "church-school",
+      "label_en": "Church School",
+      "label_sr": "Црквена школа",
+      "prompt": "Watercolor scene of a small church school: young children seated around a low wooden table with open picture-books and a lit beeswax candle, a small icon corner glowing warmly in the background, soft autumn light through a tall arched window, gentle golden and navy tones, joyful and unhurried mood."
+    },
+    {
+      "slug": "serbian-language-school",
+      "label_en": "Serbian Language School",
+      "label_sr": "Српска школа језика",
+      "prompt": "Watercolor scene of a Serbian language classroom: a grandmother figure and a child reading together from an open book, loose brushwork suggesting handwriting without legible letters, a wooden desk, a small Serbian tricolor ribbon and a tamburica resting nearby, warm cream and gold tones, tender intergenerational mood."
+    },
+    {
+      "slug": "young-adults",
+      "label_en": "Young Adults",
+      "label_sr": "Млади",
+      "prompt": "Watercolor scene of young adults gathered warmly around a table with coffee cups and an open board game, soft string lights overhead, a hint of a church courtyard visible through a window behind them, relaxed navy and green accents, candlelit evening mood, easy conversation."
+    }
+  ]
+}
