@@ -91,6 +91,15 @@ body { font-family: Arial, Helvetica, sans-serif; background: var(--light); colo
 .modal-close:hover { color: #fff; }
 .modal-body { padding: 20px; display: flex; flex-direction: column; gap: 14px; }
 
+/* ── Verify gate ── */
+.verify-note {
+  font-size: 13.5px; color: #444; line-height: 1.5;
+  background: var(--light); border-left: 3px solid var(--gold);
+  padding: 10px 12px; border-radius: 0 2px 2px 0;
+}
+.signup-link { font-size: 12.5px; color: var(--muted); text-align: center; }
+.signup-link a { color: var(--navy); font-weight: 600; }
+
 label { display: block; font-size: 13px; font-weight: 600; color: var(--navy); margin-bottom: 4px; }
 input, select, textarea {
   width: 100%; padding: 9px 11px; border: 1px solid var(--border); font-size: 14px;
@@ -141,7 +150,29 @@ textarea { resize: vertical; min-height: 100px; }
   <div id="listingArea" class="spinner">Loading listings&hellip;</div>
 </div>
 
-<!-- Submit modal -->
+<!-- Step 1: Verify modal -->
+<div class="modal-bg" id="verifyBg" onclick="maybeCloseVerify(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>Parish Members Only</h2>
+      <button class="modal-close" onclick="closeVerify()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="verify-note">
+        Classifieds is a parish service. To keep it spam-free, enter the email you receive <em>The Messenger</em> newsletter at to continue.
+      </div>
+      <div class="form-msg" id="verifyMsg"></div>
+      <div>
+        <label for="vEmail">Newsletter email *</label>
+        <input id="vEmail" type="email" placeholder="you@example.com" onkeydown="if(event.key==='Enter')verifyEmail()">
+      </div>
+      <button class="btn-submit" id="verifyBtn" onclick="verifyEmail()">Continue</button>
+      <p class="signup-link">Not subscribed? <a href="https://stnicholasphilly.org/newsletter" target="_blank">Sign up for The Messenger &rarr;</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- Step 2: Submit modal -->
 <div class="modal-bg" id="modalBg" onclick="maybeClose(event)">
   <div class="modal">
     <div class="modal-header">
@@ -266,7 +297,67 @@ function esc(s) {
     .replace(/"/g,'&quot;');
 }
 
-function openModal()  { document.getElementById('modalBg').classList.add('open'); }
+// ── Verify flow ───────────────────────────────────────────────────────────
+function openModal() {
+  // Reset verify state and open the gate first
+  document.getElementById('vEmail').value = '';
+  document.getElementById('verifyMsg').className = 'form-msg';
+  document.getElementById('verifyMsg').textContent = '';
+  document.getElementById('verifyBtn').disabled = false;
+  document.getElementById('verifyBtn').textContent = 'Continue';
+  document.getElementById('verifyBg').classList.add('open');
+  setTimeout(() => document.getElementById('vEmail').focus(), 50);
+}
+
+function closeVerify() { document.getElementById('verifyBg').classList.remove('open'); }
+function maybeCloseVerify(e) { if (e.target === document.getElementById('verifyBg')) closeVerify(); }
+
+async function verifyEmail() {
+  const btn = document.getElementById('verifyBtn');
+  const msg = document.getElementById('verifyMsg');
+  const email = document.getElementById('vEmail').value.trim();
+
+  if (!email) {
+    msg.className = 'form-msg error';
+    msg.textContent = 'Please enter your newsletter email.';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Checking…';
+
+  try {
+    const res  = await fetch(`${API}/api/verify`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
+    });
+    const data = await res.json();
+
+    if (data.ok && data.subscribed) {
+      closeVerify();
+      // Pre-fill contact with verified email and open submission form
+      document.getElementById('fContact').value = email;
+      document.getElementById('formMsg').className = 'form-msg';
+      document.getElementById('formMsg').textContent = '';
+      document.getElementById('submitBtn').disabled = false;
+      document.getElementById('submitBtn').textContent = 'Submit for Review';
+      document.getElementById('modalBg').classList.add('open');
+    } else {
+      msg.className = 'form-msg error';
+      msg.innerHTML = 'That email isn\'t on our mailing list. <a href="https://stnicholasphilly.org/newsletter" target="_blank" style="color:#991b1b;font-weight:bold;">Sign up for The Messenger</a> and try again.';
+      btn.disabled = false;
+      btn.textContent = 'Continue';
+    }
+  } catch {
+    msg.className = 'form-msg error';
+    msg.textContent = 'Network error. Please try again.';
+    btn.disabled = false;
+    btn.textContent = 'Continue';
+  }
+}
+
+// ── Submit flow ────────────────────────────────────────────────────────────
 function closeModal() {
   document.getElementById('modalBg').classList.remove('open');
   document.getElementById('formMsg').className = 'form-msg';
