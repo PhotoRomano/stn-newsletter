@@ -297,9 +297,30 @@ function esc(s) {
     .replace(/"/g,'&quot;');
 }
 
+// ── Cookie helpers ────────────────────────────────────────────────────────
+function setCookie(name, value, days) {
+  const expires = new Date(Date.now() + days * 864e5).toUTCString();
+  document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/; SameSite=Lax`;
+}
+function getCookie(name) {
+  const match = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
+  return match ? decodeURIComponent(match[1]) : null;
+}
+
 // ── Verify flow ───────────────────────────────────────────────────────────
 function openModal() {
-  // Reset verify state and open the gate first
+  const saved = getCookie('cl_verified_email');
+  if (saved) {
+    // Already verified on this device — skip straight to submission form
+    document.getElementById('fContact').value = saved;
+    document.getElementById('formMsg').className = 'form-msg';
+    document.getElementById('formMsg').textContent = '';
+    document.getElementById('submitBtn').disabled = false;
+    document.getElementById('submitBtn').textContent = 'Submit for Review';
+    document.getElementById('modalBg').classList.add('open');
+    return;
+  }
+  // First time — show verification gate
   document.getElementById('vEmail').value = '';
   document.getElementById('verifyMsg').className = 'form-msg';
   document.getElementById('verifyMsg').textContent = '';
@@ -335,6 +356,7 @@ async function verifyEmail() {
     const data = await res.json();
 
     if (data.ok && data.subscribed) {
+      setCookie('cl_verified_email', email, 90);
       closeVerify();
       // Pre-fill contact with verified email and open submission form
       document.getElementById('fContact').value = email;
