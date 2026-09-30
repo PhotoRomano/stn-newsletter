@@ -154,6 +154,7 @@ body.lang-sr .lang-en { display: none; }
 <script>
 const API = 'https://stnicholas-classifieds.photoromano.workers.dev';
 const FALLBACK_HERO = 'https://photoromano.github.io/stn-newsletter/st_nicholas_banner.png';
+let currentBusiness = null;
 
 // Site-wide language preference, same stn_lang cookie the header EN/СР
 // toggle sets everywhere else on stnicholasphilly.org (data-l="en"/"sr").
@@ -176,6 +177,21 @@ function setSiteLang(lang) {
   applySiteLang();
 }
 
+// Fixed, short UI-chrome strings -- safe to translate directly (same tier as
+// the site's own nav-label OVR dictionary). Free-form business copy (name,
+// tagline) is NOT translated here -- that needs a real Serbian speaker's
+// review, same standard as the newsletter's own bilingual content.
+const CATEGORY_SR = {
+  'Food & Catering': 'Храна и кетеринг',
+  'Retail & Shops': 'Продавнице',
+  'Professional Services': 'Професионалне услуге',
+  'Home & Trade Services': 'Услуге за дом',
+  'Health & Wellness': 'Здравље и велнес',
+  'Other': 'Остало',
+};
+function categoryLabel(cat) { return siteLang() === 'sr' ? (CATEGORY_SR[cat] || cat) : cat; }
+function featuredLabel() { return siteLang() === 'sr' ? 'Истакнути посао' : 'Featured Business'; }
+
 function applySiteLang() {
   const lang = siteLang();
   document.body.classList.remove('lang-en', 'lang-sr');
@@ -183,6 +199,10 @@ function applySiteLang() {
   document.querySelectorAll('.stn-lang-btn[data-l]').forEach(btn => {
     btn.classList.toggle('stn-lang-active', btn.dataset.l === lang);
   });
+  const catPill = document.querySelector('.bd-cat-pill');
+  if (catPill && currentBusiness) catPill.textContent = categoryLabel(currentBusiness.category);
+  const featuredPill = document.querySelector('.bd-featured-pill');
+  if (featuredPill) featuredPill.textContent = featuredLabel();
 }
 
 // The site's own header EN/СР buttons (.stn-lang-btn[data-l="en"/"sr"])
@@ -227,6 +247,7 @@ async function loadBusiness() {
     const data = await res.json();
     if (!data.ok) throw new Error(data.error || 'Not found');
     const b = data.business;
+    currentBusiness = b;
 
     document.title = `${b.name} — Parishioner Businesses — St. Nicholas Serbian Orthodox Church`;
 
@@ -234,8 +255,8 @@ async function loadBusiness() {
     document.getElementById('bdHero').style.backgroundImage = `url('${esc(heroUrl)}')`;
 
     document.querySelector('.bd-hero-bottom').innerHTML = `
-      ${b.featured ? '<span class="bd-featured-pill">Featured Business</span>' : ''}
-      <span class="bd-cat-pill">${esc(b.category)}</span>
+      ${b.featured ? `<span class="bd-featured-pill">${featuredLabel()}</span>` : ''}
+      <span class="bd-cat-pill">${esc(categoryLabel(b.category))}</span>
       <h1 class="heading-font">${esc(b.name)}</h1>
       ${b.tagline ? `<div class="bd-hero-tagline">${esc(b.tagline)}</div>` : ''}
     `;

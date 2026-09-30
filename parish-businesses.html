@@ -128,6 +128,8 @@ function applySiteLang() {
   document.querySelectorAll('.stn-lang-btn[data-l]').forEach(btn => {
     btn.classList.toggle('stn-lang-active', btn.dataset.l === lang);
   });
+  const searchInput = document.getElementById('searchInput');
+  if (searchInput) searchInput.placeholder = uiText('searchPlaceholder', 'Search businesses…');
 }
 
 // The site's own header EN/СР buttons (.stn-lang-btn[data-l="en"/"sr"])
@@ -143,6 +145,28 @@ document.addEventListener('click', (e) => {
 });
 
 const CATEGORIES = ['Food & Catering','Retail & Shops','Professional Services','Home & Trade Services','Health & Wellness','Other'];
+// Fixed, short UI-chrome strings -- safe to translate directly (same tier as
+// the site's own nav-label OVR dictionary). Free-form business copy (name,
+// tagline) is NOT translated here -- that needs a real Serbian speaker's
+// review, same standard as the newsletter's own bilingual content.
+const CATEGORY_SR = {
+  'Food & Catering': 'Храна и кетеринг',
+  'Retail & Shops': 'Продавнице',
+  'Professional Services': 'Професионалне услуге',
+  'Home & Trade Services': 'Услуге за дом',
+  'Health & Wellness': 'Здравље и велнес',
+  'Other': 'Остало',
+};
+const UI_SR = {
+  all: 'Све',
+  featured: 'Истакнуто',
+  clickForDetails: 'Кликните за детаље →',
+  emptyState: 'Тренутно нема резултата претраге.',
+  searchPlaceholder: 'Претражите послове…',
+};
+function categoryLabel(cat) { return siteLang() === 'sr' ? (CATEGORY_SR[cat] || cat) : cat; }
+function uiText(key, en) { return siteLang() === 'sr' ? UI_SR[key] : en; }
+
 let allBusinesses = [];
 let activeCategory = null;
 
@@ -153,13 +177,13 @@ function renderCatBar() {
   bar.innerHTML = '';
   const allChip = document.createElement('button');
   allChip.className = 'cat-chip' + (activeCategory === null ? ' active' : '');
-  allChip.textContent = 'All';
+  allChip.textContent = uiText('all', 'All');
   allChip.onclick = () => { activeCategory = null; renderCatBar(); renderGrid(); };
   bar.appendChild(allChip);
   CATEGORIES.forEach(cat => {
     const chip = document.createElement('button');
     chip.className = 'cat-chip' + (activeCategory === cat ? ' active' : '');
-    chip.textContent = cat;
+    chip.textContent = categoryLabel(cat);
     chip.onclick = () => { activeCategory = cat; renderCatBar(); renderGrid(); };
     bar.appendChild(chip);
   });
@@ -177,6 +201,7 @@ function renderGrid() {
     return true;
   });
 
+  empty.textContent = uiText('emptyState', 'No businesses match your search yet.');
   empty.style.display = filtered.length ? 'none' : 'block';
 
   filtered.forEach(b => {
@@ -186,14 +211,14 @@ function renderGrid() {
     const img = (siteLang() === 'sr' && b.card_image_url_sr) || b.card_image_url || 'https://placehold.co/400x800/eef1f6/6a7d96?text=' + encodeURIComponent(b.name);
     a.innerHTML = `
       <div class="biz-card-img-wrap">
-        ${b.featured ? '<span class="biz-featured-badge">Featured</span>' : ''}
+        ${b.featured ? `<span class="biz-featured-badge">${uiText('featured', 'Featured')}</span>` : ''}
         <img class="biz-card-img" src="${img}" alt="${b.name}" loading="lazy">
       </div>
       <div class="biz-card-body">
-        <span class="biz-cat-badge">${b.category}</span>
+        <span class="biz-cat-badge">${categoryLabel(b.category)}</span>
         <div class="biz-name">${b.name}</div>
         <div class="biz-tagline">${b.tagline || ''}</div>
-        <div class="biz-cta">Click for details &rarr;</div>
+        <div class="biz-cta">${uiText('clickForDetails', 'Click for details &rarr;')}</div>
       </div>
     `;
     grid.appendChild(a);
