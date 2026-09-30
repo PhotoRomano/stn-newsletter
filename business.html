@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Parish Businesses — St. Nicholas Serbian Orthodox Church</title>
+<title>Parishioner Businesses — St. Nicholas Serbian Orthodox Church</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@600;700&family=Arial&display=swap" rel="stylesheet">
@@ -35,12 +35,6 @@ body { font-family: Arial, Helvetica, sans-serif; background: var(--light); colo
 .bd-hero-top { position: relative; z-index: 1; padding: 18px 24px; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
 .bd-back { color: rgba(255,255,255,.85); font-size: 13px; text-decoration: none; font-weight: 600; }
 .bd-back:hover { color: #fff; text-decoration: underline; }
-.bd-lang-toggle { display: flex; gap: 4px; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.3); border-radius: 20px; padding: 3px; }
-.bd-lang-btn {
-  background: none; border: none; color: rgba(255,255,255,.85); font-size: 11.5px; font-weight: 700;
-  padding: 4px 11px; border-radius: 16px; cursor: pointer; letter-spacing: .3px;
-}
-.bd-lang-btn.active { background: #fff; color: var(--navy); }
 .bd-hero-bottom { position: relative; z-index: 1; padding: 0 24px 56px; max-width: 900px; }
 .bd-featured-pill {
   display: inline-block; background: var(--gold); color: #3a2e00; font-size: 11px; font-weight: 700;
@@ -122,11 +116,7 @@ body.lang-sr .lang-en { display: none; }
 
 <div class="bd-hero" id="bdHero">
   <div class="bd-hero-top">
-    <a class="bd-back" href="https://stnicholasphilly.org/parish-businesses">&larr; All Parish Businesses</a>
-    <div class="bd-lang-toggle" id="bdLangToggle">
-      <button type="button" class="bd-lang-btn" id="bdLangBtnEn" onclick="setSiteLang('en')">EN</button>
-      <button type="button" class="bd-lang-btn" id="bdLangBtnSr" onclick="setSiteLang('sr')">СР</button>
-    </div>
+    <a class="bd-back" href="https://stnicholasphilly.org/parish-businesses">&larr; All Parishioner Businesses</a>
   </div>
   <div class="bd-hero-bottom" id="bdLoadingHero">
     <div style="color:#fff; font-size:16px;">Loading business…</div>
@@ -146,7 +136,7 @@ body.lang-sr .lang-en { display: none; }
         <div class="bd-connect-list" id="bdConnectList"></div>
       </div>
       <div class="bd-card bd-promo-card">
-        <p>Own a parish business? Get featured right here, with a full page just like this one.</p>
+        <p>Parishioners and friends of the parish can get featured right here, with a full page just like this one.</p>
         <a href="https://stnicholasphilly.org/parish-businesses">Learn More &rarr;</a>
       </div>
     </div>
@@ -156,7 +146,7 @@ body.lang-sr .lang-en { display: none; }
 
 <div class="bd-footer">
   <div style="margin-bottom:6px;">
-    <a href="https://stnicholasphilly.org/parish-businesses">&larr; Browse All Parish Businesses</a>
+    <a href="https://stnicholasphilly.org/parish-businesses">&larr; Browse All Parishioner Businesses</a>
   </div>
   St. Nicholas Serbian Orthodox Church &middot; 506 Stahr Road, Elkins Park, PA 19027
 </div>
@@ -168,9 +158,7 @@ const FALLBACK_HERO = 'https://photoromano.github.io/stn-newsletter/st_nicholas_
 // Site-wide language preference, same stn_lang cookie the header EN/СР
 // toggle sets everywhere else on stnicholasphilly.org (data-l="en"/"sr").
 // detail_html content should mark bilingual blocks with class="lang-en" /
-// class="lang-sr" (see .lang-en/.lang-sr CSS rules above) rather than
-// building its own toggle -- this page follows the site's global choice,
-// it doesn't offer a separate local one.
+// class="lang-sr" (see .lang-en/.lang-sr CSS rules above).
 function siteLang() {
   // The site sets stn_lang at more than one cookie scope (confirmed live
   // 2026-09-30 -- two distinct stn_lang cookies coexist after toggling).
@@ -183,11 +171,6 @@ function siteLang() {
   return last === 'stn_lang=sr' ? 'sr' : 'en';
 }
 
-// The site's own header EN/СР toggle doesn't reliably update stn_lang
-// (confirmed live 2026-09-30 -- clicking it changes nothing, on this page
-// and on /home). Setting the cookie directly at path=/ DOES work and is
-// respected by the server elsewhere on the site, so this page carries its
-// own small, working toggle rather than depending on the broken one.
 function setSiteLang(lang) {
   document.cookie = `stn_lang=${lang}; path=/; max-age=31536000`;
   applySiteLang();
@@ -197,11 +180,22 @@ function applySiteLang() {
   const lang = siteLang();
   document.body.classList.remove('lang-en', 'lang-sr');
   document.body.classList.add('lang-' + lang);
-  const enBtn = document.getElementById('bdLangBtnEn');
-  const srBtn = document.getElementById('bdLangBtnSr');
-  if (enBtn) enBtn.classList.toggle('active', lang === 'en');
-  if (srBtn) srBtn.classList.toggle('active', lang === 'sr');
+  document.querySelectorAll('.stn-lang-btn[data-l]').forEach(btn => {
+    btn.classList.toggle('stn-lang-active', btn.dataset.l === lang);
+  });
 }
+
+// The site's own header EN/СР buttons (.stn-lang-btn[data-l="en"/"sr"])
+// don't reliably update stn_lang themselves (confirmed live 2026-09-30 --
+// clicking them fires zero network requests and touches no cookie, on this
+// page and on /home). Rather than build a second, redundant toggle, this
+// page attaches its own working handler directly onto those SAME existing
+// buttons -- via delegation on document, since the header bar they live in
+// may not exist in the DOM yet when this section's script runs.
+document.addEventListener('click', (e) => {
+  const btn = e.target.closest('.stn-lang-btn[data-l]');
+  if (btn) setSiteLang(btn.dataset.l);
+});
 
 function esc(s) {
   const d = document.createElement('div');
@@ -214,7 +208,7 @@ function showNotFound(message) {
   document.getElementById('bdHero').style.backgroundImage = `url('${FALLBACK_HERO}')`;
   document.querySelector('.bd-hero-bottom').innerHTML = '<h1 class="heading-font">Business Not Found</h1>';
   document.getElementById('bdNotFoundWrap').innerHTML =
-    `<div class="bd-card bd-not-found" style="margin-top:20px;">${message} <a href="https://stnicholasphilly.org/parish-businesses">Browse all parish businesses &rarr;</a></div>`;
+    `<div class="bd-card bd-not-found" style="margin-top:20px;">${message} <a href="https://stnicholasphilly.org/parish-businesses">Browse all parishioner businesses &rarr;</a></div>`;
 }
 
 async function loadBusiness() {
@@ -234,7 +228,7 @@ async function loadBusiness() {
     if (!data.ok) throw new Error(data.error || 'Not found');
     const b = data.business;
 
-    document.title = `${b.name} — Parish Businesses — St. Nicholas Serbian Orthodox Church`;
+    document.title = `${b.name} — Parishioner Businesses — St. Nicholas Serbian Orthodox Church`;
 
     const heroUrl = b.hero_image_url || b.card_image_url || FALLBACK_HERO;
     document.getElementById('bdHero').style.backgroundImage = `url('${esc(heroUrl)}')`;

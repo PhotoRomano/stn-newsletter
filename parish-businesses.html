@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Parish Businesses — St. Nicholas Serbian Orthodox Church</title>
+<title>Parishioner Businesses — St. Nicholas Serbian Orthodox Church</title>
 <style>
 :root {
   --navy:  #02306e;
@@ -23,17 +23,11 @@ body { font-family: Arial, Helvetica, sans-serif; background: var(--light); colo
 .pb-header p  { color: #a8c4e0; font-size: 13px; margin-top: 4px; }
 
 .btn-advertise {
-  background: var(--gold); color: #3a2e00; border: none; padding: 10px 20px;
+  display: inline-block; background: var(--gold); color: #3a2e00; border: none; padding: 10px 20px;
   font-size: 13.5px; font-weight: 700; cursor: pointer; border-radius: 2px; white-space: nowrap;
+  text-decoration: none;
 }
 .btn-advertise:hover { background: #b8911f; }
-
-.pb-lang-toggle { display: flex; gap: 4px; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.3); border-radius: 20px; padding: 3px; margin-bottom: 6px; }
-.pb-lang-btn {
-  background: none; border: none; color: rgba(255,255,255,.85); font-size: 11.5px; font-weight: 700;
-  padding: 4px 11px; border-radius: 16px; cursor: pointer; letter-spacing: .3px;
-}
-.pb-lang-btn.active { background: #fff; color: var(--navy); }
 
 .pb-toolbar { background: #fff; border-bottom: 1px solid var(--border); padding: 12px 24px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
 .search-input {
@@ -79,28 +73,6 @@ body { font-family: Arial, Helvetica, sans-serif; background: var(--light); colo
 
 .empty-state { text-align: center; color: var(--muted); font-size: 14px; padding: 40px 16px; }
 
-/* ── Modal ── */
-.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 100; align-items: center; justify-content: center; padding: 16px; }
-.modal-overlay.visible { display: flex; }
-.modal-box { background: #fff; border-radius: 4px; max-width: 440px; width: 100%; max-height: 90vh; overflow-y: auto; }
-.modal-header { background: var(--navy); color: #fff; padding: 16px 20px; font-size: 16px; font-weight: 700; display: flex; justify-content: space-between; align-items: center; }
-.modal-close { background: none; border: none; color: #a8c4e0; font-size: 20px; cursor: pointer; line-height: 1; }
-.modal-body { padding: 18px 20px; }
-.form-row { margin-bottom: 12px; }
-.form-row label { display: block; font-size: 12.5px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
-.form-row input, .form-row textarea, .form-row select {
-  width: 100%; padding: 8px 10px; font-size: 14px; font-family: inherit;
-  border: 1px solid var(--border); border-radius: 2px; color: #2b2b2b;
-}
-.form-row textarea { resize: vertical; min-height: 70px; }
-.form-hint { font-size: 11.5px; color: var(--muted); margin-top: 3px; }
-.btn-submit { width: 100%; background: var(--navy); color: #fff; border: none; padding: 11px; font-size: 14px; font-weight: 700; cursor: pointer; border-radius: 2px; }
-.btn-submit:hover { background: #01245a; }
-.btn-submit:disabled { opacity: .6; cursor: default; }
-.form-msg { font-size: 13px; margin-top: 10px; padding: 8px 10px; border-radius: 2px; display: none; }
-.form-msg.success { display: block; background: #dcfce7; color: #166534; }
-.form-msg.error   { display: block; background: #fee2e2; color: #991b1b; }
-.modal-intro { font-size: 13px; color: #555; line-height: 1.55; margin-bottom: 14px; }
 </style>
 </head>
 <body>
@@ -108,15 +80,11 @@ body { font-family: Arial, Helvetica, sans-serif; background: var(--light); colo
 <div class="pb-header">
   <div class="pb-header-row">
     <div>
-      <h1>Parish Businesses</h1>
-      <p>Parishioner-owned businesses, supported by our community.</p>
+      <h1>Parishioner Businesses</h1>
+      <p>Parishioners and friends of the parish can advertise their business here.</p>
     </div>
     <div style="display:flex; flex-direction:column; align-items:flex-end; gap:8px;">
-      <div class="pb-lang-toggle" id="pbLangToggle">
-        <button type="button" class="pb-lang-btn" id="pbLangBtnEn" onclick="setSiteLang('en')">EN</button>
-        <button type="button" class="pb-lang-btn" id="pbLangBtnSr" onclick="setSiteLang('sr')">СР</button>
-      </div>
-      <button class="btn-advertise" onclick="openModal()">Contact Us to Advertise</button>
+      <a class="btn-advertise" href="https://stnicholasphilly.org/advertise-with-us-5">Contact Us to Advertise</a>
     </div>
   </div>
 </div>
@@ -129,55 +97,6 @@ body { font-family: Arial, Helvetica, sans-serif; background: var(--light); colo
 <div class="pb-body">
   <div class="biz-grid" id="bizGrid"></div>
   <div class="empty-state" id="emptyState" style="display:none;">No businesses match your search yet.</div>
-</div>
-
-<!-- ══ Contact-to-advertise modal ══ -->
-<div class="modal-overlay" id="modalOverlay">
-  <div class="modal-box">
-    <div class="modal-header">
-      <span>Advertise Your Business</span>
-      <button class="modal-close" onclick="closeModal()">&times;</button>
-    </div>
-    <div class="modal-body">
-      <p class="modal-intro">
-        Tell us about your business and we'll follow up about advertising on this page —
-        free for parishioners in good standing (paid annual membership), paid placement for everyone else.
-      </p>
-      <form id="leadForm" onsubmit="submitLead(event)">
-        <div class="form-row">
-          <label for="leadBusinessName">Business name</label>
-          <input type="text" id="leadBusinessName" required maxlength="120">
-        </div>
-        <div class="form-row">
-          <label for="leadContactName">Your name</label>
-          <input type="text" id="leadContactName" required maxlength="80">
-        </div>
-        <div class="form-row">
-          <label for="leadEmail">Email</label>
-          <input type="email" id="leadEmail" required>
-        </div>
-        <div class="form-row">
-          <label for="leadPhone">Phone (optional)</label>
-          <input type="tel" id="leadPhone" maxlength="40">
-        </div>
-        <div class="form-row">
-          <label for="leadMember">Are you a paying church member?</label>
-          <select id="leadMember">
-            <option value="unsure">Not sure</option>
-            <option value="yes">Yes</option>
-            <option value="no">No</option>
-          </select>
-          <div class="form-hint">Members advertise free — this just helps us quote the right rate.</div>
-        </div>
-        <div class="form-row">
-          <label for="leadMessage">Tell us about your business (optional)</label>
-          <textarea id="leadMessage" maxlength="1000"></textarea>
-        </div>
-        <button type="submit" class="btn-submit" id="leadSubmitBtn">Send</button>
-        <div class="form-msg" id="leadMsg"></div>
-      </form>
-    </div>
-  </div>
 </div>
 
 <script>
@@ -198,11 +117,6 @@ function siteLang() {
   return last === 'stn_lang=sr' ? 'sr' : 'en';
 }
 
-// The site's own header EN/СР toggle doesn't reliably update stn_lang
-// (confirmed live 2026-09-30). Setting the cookie directly at path=/ DOES
-// work and is respected server-side elsewhere on the site, so this page
-// carries its own small, working toggle rather than depending on the
-// broken one.
 function setSiteLang(lang) {
   document.cookie = `stn_lang=${lang}; path=/; max-age=31536000`;
   applySiteLang();
@@ -211,11 +125,22 @@ function setSiteLang(lang) {
 
 function applySiteLang() {
   const lang = siteLang();
-  const enBtn = document.getElementById('pbLangBtnEn');
-  const srBtn = document.getElementById('pbLangBtnSr');
-  if (enBtn) enBtn.classList.toggle('active', lang === 'en');
-  if (srBtn) srBtn.classList.toggle('active', lang === 'sr');
+  document.querySelectorAll('.stn-lang-btn[data-l]').forEach(btn => {
+    btn.classList.toggle('stn-lang-active', btn.dataset.l === lang);
+  });
 }
+
+// The site's own header EN/СР buttons (.stn-lang-btn[data-l="en"/"sr"])
+// don't reliably update stn_lang themselves (confirmed live 2026-09-30 --
+// clicking them fires zero network requests and touches no cookie).
+// Rather than build a second, redundant toggle, this page attaches its
+// own working handler directly onto those SAME existing buttons -- via
+// delegation on document, since the header bar they live in may not
+// exist in the DOM yet when this section's script runs.
+document.addEventListener('click', (e) => {
+  const btn = e.target.closest('.stn-lang-btn[data-l]');
+  if (btn) setSiteLang(btn.dataset.l);
+});
 
 const CATEGORIES = ['Food & Catering','Retail & Shops','Professional Services','Home & Trade Services','Health & Wellness','Other'];
 let allBusinesses = [];
@@ -287,53 +212,6 @@ async function loadBusinesses() {
   renderCatBar();
   renderGrid();
 }
-
-function openModal()  { document.getElementById('modalOverlay').classList.add('visible'); }
-function closeModal() { document.getElementById('modalOverlay').classList.remove('visible'); }
-
-async function submitLead(e) {
-  e.preventDefault();
-  const btn = document.getElementById('leadSubmitBtn');
-  const msg = document.getElementById('leadMsg');
-  msg.className = 'form-msg';
-  btn.disabled = true;
-  btn.textContent = 'Sending…';
-
-  try {
-    const res = await fetch(`${API}/api/leads`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        business_name: document.getElementById('leadBusinessName').value,
-        contact_name:  document.getElementById('leadContactName').value,
-        contact_email: document.getElementById('leadEmail').value,
-        contact_phone: document.getElementById('leadPhone').value,
-        is_member:     document.getElementById('leadMember').value,
-        message:       document.getElementById('leadMessage').value,
-      }),
-    });
-    const data = await res.json();
-    if (data.ok) {
-      msg.textContent = data.message || 'Thanks! We’ll be in touch.';
-      msg.className = 'form-msg success';
-      document.getElementById('leadForm').reset();
-      setTimeout(closeModal, 2500);
-    } else {
-      msg.textContent = data.error || 'Something went wrong. Please try again.';
-      msg.className = 'form-msg error';
-    }
-  } catch {
-    msg.textContent = 'Network error. Please try again.';
-    msg.className = 'form-msg error';
-  } finally {
-    btn.disabled = false;
-    btn.textContent = 'Send';
-  }
-}
-
-document.getElementById('modalOverlay').addEventListener('click', (e) => {
-  if (e.target.id === 'modalOverlay') closeModal();
-});
 
 loadBusinesses();
 </script>
