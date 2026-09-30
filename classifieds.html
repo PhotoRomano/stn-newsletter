@@ -65,12 +65,35 @@ body { font-family: Arial, Helvetica, sans-serif; background: var(--light); colo
 /* ── Listings grid ── */
 .cl-body { max-width: 960px; margin: 0 auto; padding: 24px 16px; }
 .listing-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+.group-section { margin-bottom: 28px; }
+.group-section-header { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 2px solid var(--border); display: flex; align-items: center; gap: 8px; }
+.group-section-header span { background: var(--border); color: var(--muted); border-radius: 10px; font-size: 11px; padding: 1px 7px; }
 
 .listing-card {
   background: var(--card); border: 1px solid var(--border); border-radius: 3px;
   padding: 16px; display: flex; flex-direction: column; gap: 8px;
 }
 .listing-card:hover { border-color: #9ab0cc; box-shadow: 0 2px 6px rgba(0,0,0,.07); }
+.pin-badge { display: inline-block; background: var(--gold); color: #3a2e00; font-size: 10px; font-weight: 700; padding: 1px 7px; border-radius: 2px; letter-spacing: .3px; text-transform: uppercase; margin-left: 6px; vertical-align: middle; }
+
+/* ── Listing image ── */
+.listing-img { width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: 2px; margin-bottom: 2px; }
+
+/* ── Image upload ── */
+.img-upload-area { border: 2px dashed var(--border); border-radius: 2px; padding: 16px; text-align: center; cursor: pointer; color: var(--muted); font-size: 13px; }
+.img-upload-area:hover { border-color: var(--navy); color: var(--navy); }
+.img-preview { width: 100%; max-height: 160px; object-fit: cover; border-radius: 2px; margin-top: 8px; display: none; }
+
+/* ── My Listings tab ── */
+.my-listings-tab { display: none; }
+.my-listings-tab.visible { display: inline-block; }
+
+/* ── How it works ── */
+.how-it-works { background: #fff; border-top: 1px solid var(--border); padding: 20px 24px; }
+.how-it-works h3 { font-size: 13px; font-weight: 700; color: var(--navy); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 12px; }
+.how-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+.how-item { font-size: 12.5px; color: #444; line-height: 1.5; }
+.how-item strong { color: var(--navy); display: block; margin-bottom: 2px; }
 
 .cat-badge {
   display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .4px;
@@ -189,7 +212,10 @@ textarea { resize: vertical; min-height: 100px; }
       <h1>Parish Classifieds</h1>
       <p>St. Nicholas Serbian Orthodox Church &mdash; Community Board</p>
     </div>
-    <button class="btn-post" onclick="openModal()">+ Post a Listing</button>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+      <button class="btn-post my-listings-tab" id="myListingsBtn" onclick="openMyListings()">My Listings</button>
+      <button class="btn-post" onclick="openModal()">+ Post a Listing</button>
+    </div>
   </div>
 </div>
 
@@ -206,9 +232,34 @@ textarea { resize: vertical; min-height: 100px; }
   <div id="listingArea" class="spinner">Loading listings&hellip;</div>
 </div>
 
+<div class="how-it-works">
+  <h3>How it works</h3>
+  <div class="how-grid">
+    <div class="how-item"><strong>Members only</strong>Verify your newsletter email to post. Listings are reviewed before going live.</div>
+    <div class="how-item"><strong>Your privacy</strong>Your email is never shown publicly. Interested parties message you through the site.</div>
+    <div class="how-item"><strong>30-day listings</strong>Listings expire automatically. You'll get a reminder email to renew or remove.</div>
+    <div class="how-item"><strong>Manage your listing</strong>Use the link in your approval email to renew or mark as filled at any time.</div>
+    <div class="how-item"><strong>Report a concern</strong>Use the flag button on any listing to alert the moderator — the poster is never notified.</div>
+    <div class="how-item"><strong>Weekly digest</strong>Subscribe below to get new listings delivered every Monday morning.</div>
+  </div>
+</div>
+
 <div class="digest-bar">
   <p>Get new listings delivered to your inbox every week.</p>
   <button class="btn-digest" onclick="openDigestModal()">Subscribe to Weekly Digest</button>
+</div>
+
+<!-- My Listings modal -->
+<div class="modal-bg" id="myListingsBg" onclick="maybeCloseMyListings(event)">
+  <div class="modal" style="max-width:600px;">
+    <div class="modal-header">
+      <h2>My Listings</h2>
+      <button class="modal-close" onclick="closeMyListings()">&times;</button>
+    </div>
+    <div class="modal-body" id="myListingsBody">
+      <div class="spinner">Loading&hellip;</div>
+    </div>
+  </div>
 </div>
 
 <!-- Manage listing modal (poster self-service via magic link) -->
@@ -373,6 +424,14 @@ textarea { resize: vertical; min-height: 100px; }
         <label for="fName">Your name *</label>
         <input id="fName" type="text" maxlength="80" placeholder="First name, or first + last">
       </div>
+      <div>
+        <label>Photo <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
+        <div class="img-upload-area" onclick="document.getElementById('fImage').click()">
+          Click to upload a photo (JPEG, PNG, WebP &mdash; max 5MB)
+        </div>
+        <input id="fImage" type="file" accept="image/jpeg,image/png,image/webp,image/gif" style="display:none" onchange="previewImage(this)">
+        <img id="fImagePreview" class="img-preview" alt="Preview">
+      </div>
 
       <button class="btn-submit" id="submitBtn" onclick="submitListing()">Submit for Review</button>
       <p style="font-size:12px; color:var(--muted); text-align:center;">
@@ -446,6 +505,20 @@ async function init() {
   }
 
   allListings = listRes.listings || [];
+
+  // Count badges on group tabs
+  document.querySelectorAll('.group-tab[data-group]').forEach(btn => {
+    const g = btn.dataset.group;
+    if (!g) return;
+    const count = allListings.filter(l => groupMap[g]?.includes(l.category)).length;
+    if (count) btn.insertAdjacentHTML('beforeend', ` <span style="background:rgba(255,255,255,.25);color:inherit;font-size:11px;padding:1px 6px;border-radius:10px;font-weight:600;">${count}</span>`);
+  });
+
+  // Show My Listings button if verified
+  if (getCookie('cl_verified_email')) {
+    document.getElementById('myListingsBtn').classList.add('visible');
+  }
+
   render();
 }
 
@@ -501,7 +574,28 @@ function render() {
   }
 
   const highlightId = parseInt(new URL(location.href).searchParams.get('listing') || '0');
-  area.innerHTML = `<div class="listing-grid">${items.map(l => card(l, l.id === highlightId)).join('')}</div>`;
+
+  // Show group headers only when viewing All (no active group/cat filter, no search)
+  if (!activeGroup && !activeCat && !q && Object.keys(groupMap).length) {
+    const groups = Object.keys(groupMap);
+    const sections = groups.map(g => {
+      const groupItems = items.filter(l => groupMap[g]?.includes(l.category));
+      if (!groupItems.length) return '';
+      return `<div class="group-section">
+        <div class="group-section-header">${g} <span>${groupItems.length}</span></div>
+        <div class="listing-grid">${groupItems.map(l => card(l, l.id === highlightId)).join('')}</div>
+      </div>`;
+    }).filter(Boolean);
+    // items not in any known group
+    const ungrouped = items.filter(l => !groups.some(g => groupMap[g]?.includes(l.category)));
+    if (ungrouped.length) sections.push(`<div class="group-section">
+      <div class="group-section-header">Other <span>${ungrouped.length}</span></div>
+      <div class="listing-grid">${ungrouped.map(l => card(l, l.id === highlightId)).join('')}</div>
+    </div>`);
+    area.innerHTML = sections.join('') || `<div class="empty-state">No listings yet.<br>Be the first to post!</div>`;
+  } else {
+    area.innerHTML = `<div class="listing-grid">${items.map(l => card(l, l.id === highlightId)).join('')}</div>`;
+  }
 
   if (highlightId) {
     const el = document.getElementById(`listing-${highlightId}`);
@@ -515,7 +609,11 @@ function card(l, highlight = false) {
   const cls      = CAT_CLASS[l.category] || 'community';
   return `
     <div class="listing-card${highlight ? ' highlight' : ''}" id="listing-${l.id}">
-      <div><span class="cat-badge ${cls}">${l.category}</span></div>
+      ${l.image_url ? `<img class="listing-img" src="${l.image_url}" alt="${esc(l.title)}" loading="lazy">` : ''}
+      <div>
+        <span class="cat-badge ${cls}">${l.category}</span>
+        ${l.pinned ? '<span class="pin-badge">Pinned</span>' : ''}
+      </div>
       <div class="listing-title">${esc(l.title)}</div>
       <div class="listing-desc">${esc(l.description).replace(/\n/g, '<br>')}</div>
       <div class="listing-meta">Posted by ${esc(l.name)} &middot; ${posted} &middot; expires in ${daysLeft}d</div>
@@ -532,6 +630,65 @@ function esc(s) {
     .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
     .replace(/"/g,'&quot;');
 }
+
+// ── Image upload helpers ──────────────────────────────────────────────────
+let uploadedImageUrl = null;
+
+function previewImage(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const preview = document.getElementById('fImagePreview');
+  preview.src = URL.createObjectURL(file);
+  preview.style.display = 'block';
+  uploadedImageUrl = null; // reset; will upload on submit
+}
+
+async function uploadImageIfNeeded() {
+  const input = document.getElementById('fImage');
+  if (!input.files[0]) return null;
+  const form = new FormData();
+  form.append('image', input.files[0]);
+  const res  = await fetch(`${API}/api/upload`, { method: 'POST', body: form });
+  const data = await res.json();
+  if (!data.ok) throw new Error(data.error || 'Upload failed');
+  return data.url;
+}
+
+// ── My Listings ────────────────────────────────────────────────────────────
+async function openMyListings() {
+  document.getElementById('myListingsBg').classList.add('open');
+  const body  = document.getElementById('myListingsBody');
+  const email = getCookie('cl_verified_email');
+  if (!email) { body.innerHTML = `<p style="color:var(--muted);">No verified email found.</p>`; return; }
+
+  body.innerHTML = `<div class="spinner">Loading&hellip;</div>`;
+  try {
+    const res  = await fetch(`${API}/api/my-listings?email=${encodeURIComponent(email)}`);
+    const data = await res.json();
+    if (!data.ok || !data.listings.length) {
+      body.innerHTML = `<div class="empty-state" style="padding:24px;">No active listings found for ${email}.</div>`; return;
+    }
+    body.innerHTML = data.listings.map(l => {
+      const statusLabel = { pending: '⏳ Pending review', approved: '✅ Live', closed: '✗ Closed' }[l.status] || l.status;
+      const expiry = l.expires_at ? new Date(l.expires_at).toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'}) : '—';
+      return `
+        <div style="border:1px solid var(--border);border-radius:3px;padding:14px;margin-bottom:10px;">
+          <div style="font-size:15px;font-weight:700;color:var(--navy);">${esc(l.title)}</div>
+          <div style="font-size:12px;color:var(--muted);margin:4px 0 8px;">${esc(l.category)} &middot; ${statusLabel} &middot; expires ${expiry}</div>
+          ${l.status === 'approved' ? `
+            <div style="display:flex;gap:8px;">
+              <button class="btn-contact" style="flex:none;padding:5px 12px;font-size:12px;" onclick="renewListing('${l.magic_token}');this.textContent='Renewed!'">Renew</button>
+              <button class="btn-report" style="font-size:12px;" onclick="if(confirm('Remove this listing?'))closeListing('${l.magic_token}')">Remove</button>
+            </div>` : ''}
+        </div>`;
+    }).join('');
+  } catch {
+    body.innerHTML = `<div class="form-msg error" style="display:block;">Could not load listings.</div>`;
+  }
+}
+
+function closeMyListings() { document.getElementById('myListingsBg').classList.remove('open'); }
+function maybeCloseMyListings(e) { if (e.target === document.getElementById('myListingsBg')) closeMyListings(); }
 
 // ── Cookie helpers ────────────────────────────────────────────────────────
 function setCookie(name, value, days) {
@@ -644,9 +801,12 @@ async function submitListing() {
   }
 
   btn.disabled = true;
-  btn.textContent = 'Submitting…';
+  btn.textContent = 'Uploading…';
 
   try {
+    const imageUrl = await uploadImageIfNeeded();
+    if (imageUrl) body.image_url = imageUrl;
+    btn.textContent = 'Submitting…';
     const res  = await fetch(`${API}/api/submit`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -658,10 +818,13 @@ async function submitListing() {
       msg.className = 'form-msg success';
       msg.innerHTML = data.message +
         (data.manageUrl ? ` <a href="${data.manageUrl}" style="color:#166534;font-weight:bold;">Save your listing link</a> to renew or remove it later.` : '');
-      document.getElementById('fTitle').value   = '';
-      document.getElementById('fDesc').value    = '';
-      document.getElementById('fContact').value = '';
-      document.getElementById('fName').value    = '';
+      document.getElementById('fTitle').value     = '';
+      document.getElementById('fDesc').value      = '';
+      document.getElementById('fContact').value   = '';
+      document.getElementById('fName').value      = '';
+      document.getElementById('fImage').value     = '';
+      document.getElementById('fImagePreview').style.display = 'none';
+      uploadedImageUrl = null;
       btn.textContent = 'Submitted!';
     } else {
       msg.className = 'form-msg error';

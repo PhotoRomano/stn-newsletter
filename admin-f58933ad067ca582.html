@@ -221,6 +221,7 @@ async function loadActive() {
       <div class="card-meta">By: <strong>${esc(l.name)}</strong> &middot; Expires: ${expires} (${daysLeft}d)</div>
       <div class="card-desc">${esc(l.description)}</div>
       <div class="card-actions">
+        <button class="btn-sm" style="background:${l.pinned ? '#c9a227' : '#e5e7eb'};color:${l.pinned ? '#3a2e00' : '#374151'};" onclick="togglePin(${l.id},this)">${l.pinned ? '📌 Unpin' : 'Pin'}</button>
         <button class="btn-sm btn-delete" onclick="deleteListing(${l.id},'active')">Delete</button>
       </div>
     </div>`;
@@ -266,6 +267,16 @@ async function loadCategories() {
         </div>
       </div>`;
     }).join('')}`;
+}
+
+async function togglePin(id, btn) {
+  const data = await api(`/api/admin/pin/${id}`, 'POST');
+  if (data.ok) {
+    btn.textContent = data.pinned ? '📌 Unpin' : 'Pin';
+    btn.style.background = data.pinned ? '#c9a227' : '#e5e7eb';
+    btn.style.color      = data.pinned ? '#3a2e00' : '#374151';
+    flash('msgActive', data.pinned ? 'Pinned — listing will appear at the top.' : 'Unpinned.');
+  } else flash('msgActive', data.error || 'Error', false);
 }
 
 async function approveCategory(id) {
