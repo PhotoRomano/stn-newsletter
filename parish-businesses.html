@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parish Businesses — St. Nicholas Serbian Orthodox Church</title>
+<style>
+:root {
+  --navy:  #02306e;
+  --gold:  #c9a227;
+  --red:   #c31f27;
+  --light: #eef1f6;
+  --card:  #ffffff;
+  --border:#c8d5e8;
+  --muted: #6a7d96;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, Helvetica, sans-serif; background: var(--light); color: #2b2b2b; }
+
+.pb-header { background: linear-gradient(135deg, #01245a 0%, #02306e 45%, #0a4a9e 100%); padding: 22px 24px 16px; border-bottom: 4px solid var(--gold); }
+.pb-header-row { display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+.pb-header h1 { color: #fff; font-size: 22px; font-weight: 700; letter-spacing: .4px; }
+.pb-header p  { color: #a8c4e0; font-size: 13px; margin-top: 4px; }
+
+.btn-advertise {
+  background: var(--gold); color: #3a2e00; border: none; padding: 10px 20px;
+  font-size: 13.5px; font-weight: 700; cursor: pointer; border-radius: 2px; white-space: nowrap;
+}
+.btn-advertise:hover { background: #b8911f; }
+
+.pb-toolbar { background: #fff; border-bottom: 1px solid var(--border); padding: 12px 24px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.search-input {
+  flex: 1; min-width: 220px; max-width: 420px; padding: 8px 12px; font-size: 14px; font-family: inherit;
+  border: 1px solid var(--border); border-radius: 2px; color: #2b2b2b;
+}
+.search-input:focus { outline: 2px solid var(--navy); border-color: var(--navy); }
+
+.cat-bar { background: var(--light); border-bottom: 1px solid var(--border); padding: 10px 24px; display: flex; gap: 6px; flex-wrap: wrap; }
+.cat-chip {
+  padding: 5px 13px; font-size: 12.5px; font-weight: 600; cursor: pointer;
+  border: 1px solid var(--border); border-radius: 20px; color: var(--muted);
+  background: #fff; white-space: nowrap;
+}
+.cat-chip:hover  { border-color: var(--navy); color: var(--navy); }
+.cat-chip.active { background: var(--navy); color: #fff; border-color: var(--navy); }
+
+.pb-body { max-width: 900px; margin: 0 auto; padding: 24px 16px; }
+.biz-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+@media (max-width: 560px) { .biz-grid { grid-template-columns: 1fr; } }
+
+.biz-card {
+  background: var(--card); border: 1px solid var(--border); border-radius: 4px;
+  overflow: hidden; display: flex; flex-direction: column; text-decoration: none; color: inherit;
+  transition: box-shadow .15s, border-color .15s;
+}
+.biz-card:hover { border-color: #9ab0cc; box-shadow: 0 3px 10px rgba(0,0,0,.09); }
+.biz-card-img-wrap { width: 100%; aspect-ratio: 1 / 2; background: #f0f4fb; overflow: hidden; position: relative; }
+.biz-card-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.biz-featured-badge {
+  position: absolute; top: 8px; left: 8px; background: var(--gold); color: #3a2e00;
+  font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 2px; letter-spacing: .3px; text-transform: uppercase;
+}
+.biz-card-body { padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.biz-cat-badge {
+  align-self: flex-start; font-size: 10.5px; font-weight: 700; letter-spacing: .3px;
+  padding: 2px 8px; border-radius: 2px; text-transform: uppercase; background: #f0f4fb; color: var(--navy);
+}
+.biz-name { font-size: 15.5px; font-weight: 700; color: var(--navy); line-height: 1.3; }
+.biz-tagline { font-size: 12.5px; color: #555; line-height: 1.45; flex: 1; }
+.biz-cta { font-size: 12px; font-weight: 700; color: var(--navy); margin-top: 4px; }
+.biz-card:hover .biz-cta { text-decoration: underline; }
+
+.empty-state { text-align: center; color: var(--muted); font-size: 14px; padding: 40px 16px; }
+
+/* ── Modal ── */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 100; align-items: center; justify-content: center; padding: 16px; }
+.modal-overlay.visible { display: flex; }
+.modal-box { background: #fff; border-radius: 4px; max-width: 440px; width: 100%; max-height: 90vh; overflow-y: auto; }
+.modal-header { background: var(--navy); color: #fff; padding: 16px 20px; font-size: 16px; font-weight: 700; display: flex; justify-content: space-between; align-items: center; }
+.modal-close { background: none; border: none; color: #a8c4e0; font-size: 20px; cursor: pointer; line-height: 1; }
+.modal-body { padding: 18px 20px; }
+.form-row { margin-bottom: 12px; }
+.form-row label { display: block; font-size: 12.5px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+.form-row input, .form-row textarea, .form-row select {
+  width: 100%; padding: 8px 10px; font-size: 14px; font-family: inherit;
+  border: 1px solid var(--border); border-radius: 2px; color: #2b2b2b;
+}
+.form-row textarea { resize: vertical; min-height: 70px; }
+.form-hint { font-size: 11.5px; color: var(--muted); margin-top: 3px; }
+.btn-submit { width: 100%; background: var(--navy); color: #fff; border: none; padding: 11px; font-size: 14px; font-weight: 700; cursor: pointer; border-radius: 2px; }
+.btn-submit:hover { background: #01245a; }
+.btn-submit:disabled { opacity: .6; cursor: default; }
+.form-msg { font-size: 13px; margin-top: 10px; padding: 8px 10px; border-radius: 2px; display: none; }
+.form-msg.success { display: block; background: #dcfce7; color: #166534; }
+.form-msg.error   { display: block; background: #fee2e2; color: #991b1b; }
+.modal-intro { font-size: 13px; color: #555; line-height: 1.55; margin-bottom: 14px; }
+</style>
+</head>
+<body>
+
+<div class="pb-header">
+  <div class="pb-header-row">
+    <div>
+      <h1>Parish Businesses</h1>
+      <p>Parishioner-owned businesses, supported by our community.</p>
+    </div>
+    <button class="btn-advertise" onclick="openModal()">Contact Us to Advertise</button>
+  </div>
+</div>
+
+<div class="pb-toolbar">
+  <input type="text" class="search-input" id="searchInput" placeholder="Search businesses…" oninput="renderGrid()">
+</div>
+<div class="cat-bar" id="catBar"></div>
+
+<div class="pb-body">
+  <div class="biz-grid" id="bizGrid"></div>
+  <div class="empty-state" id="emptyState" style="display:none;">No businesses match your search yet.</div>
+</div>
+
+<!-- ══ Contact-to-advertise modal ══ -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <div class="modal-header">
+      <span>Advertise Your Business</span>
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p class="modal-intro">
+        Tell us about your business and we'll follow up about advertising on this page —
+        free for parishioners in good standing (paid annual membership), paid placement for everyone else.
+      </p>
+      <form id="leadForm" onsubmit="submitLead(event)">
+        <div class="form-row">
+          <label for="leadBusinessName">Business name</label>
+          <input type="text" id="leadBusinessName" required maxlength="120">
+        </div>
+        <div class="form-row">
+          <label for="leadContactName">Your name</label>
+          <input type="text" id="leadContactName" required maxlength="80">
+        </div>
+        <div class="form-row">
+          <label for="leadEmail">Email</label>
+          <input type="email" id="leadEmail" required>
+        </div>
+        <div class="form-row">
+          <label for="leadPhone">Phone (optional)</label>
+          <input type="tel" id="leadPhone" maxlength="40">
+        </div>
+        <div class="form-row">
+          <label for="leadMember">Are you a paying church member?</label>
+          <select id="leadMember">
+            <option value="unsure">Not sure</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
+          <div class="form-hint">Members advertise free — this just helps us quote the right rate.</div>
+        </div>
+        <div class="form-row">
+          <label for="leadMessage">Tell us about your business (optional)</label>
+          <textarea id="leadMessage" maxlength="1000"></textarea>
+        </div>
+        <button type="submit" class="btn-submit" id="leadSubmitBtn">Send</button>
+        <div class="form-msg" id="leadMsg"></div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = 'https://stnicholas-classifieds.photoromano.workers.dev';
+const BIZ_DETAIL_PAGE = 'https://stnicholasphilly.org/business';
+
+const CATEGORIES = ['Food & Catering','Retail & Shops','Professional Services','Home & Trade Services','Health & Wellness','Other'];
+let allBusinesses = [];
+let activeCategory = null;
+
+function catSlug(cat) { return cat.toLowerCase().replace(/[^a-z0-9]+/g, '-'); }
+
+function renderCatBar() {
+  const bar = document.getElementById('catBar');
+  bar.innerHTML = '';
+  const allChip = document.createElement('button');
+  allChip.className = 'cat-chip' + (activeCategory === null ? ' active' : '');
+  allChip.textContent = 'All';
+  allChip.onclick = () => { activeCategory = null; renderCatBar(); renderGrid(); };
+  bar.appendChild(allChip);
+  CATEGORIES.forEach(cat => {
+    const chip = document.createElement('button');
+    chip.className = 'cat-chip' + (activeCategory === cat ? ' active' : '');
+    chip.textContent = cat;
+    chip.onclick = () => { activeCategory = cat; renderCatBar(); renderGrid(); };
+    bar.appendChild(chip);
+  });
+}
+
+function renderGrid() {
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  const grid = document.getElementById('bizGrid');
+  const empty = document.getElementById('emptyState');
+  grid.innerHTML = '';
+
+  const filtered = allBusinesses.filter(b => {
+    if (activeCategory && b.category !== activeCategory) return false;
+    if (q && !(b.name.toLowerCase().includes(q) || (b.tagline||'').toLowerCase().includes(q))) return false;
+    return true;
+  });
+
+  empty.style.display = filtered.length ? 'none' : 'block';
+
+  filtered.forEach(b => {
+    const a = document.createElement('a');
+    a.className = 'biz-card';
+    a.href = `${BIZ_DETAIL_PAGE}?slug=${encodeURIComponent(b.slug)}`;
+    const img = b.card_image_url || 'https://placehold.co/400x800/eef1f6/6a7d96?text=' + encodeURIComponent(b.name);
+    a.innerHTML = `
+      <div class="biz-card-img-wrap">
+        ${b.featured ? '<span class="biz-featured-badge">Featured</span>' : ''}
+        <img class="biz-card-img" src="${img}" alt="${b.name}" loading="lazy">
+      </div>
+      <div class="biz-card-body">
+        <span class="biz-cat-badge">${b.category}</span>
+        <div class="biz-name">${b.name}</div>
+        <div class="biz-tagline">${b.tagline || ''}</div>
+        <div class="biz-cta">Click for details &rarr;</div>
+      </div>
+    `;
+    grid.appendChild(a);
+  });
+}
+
+async function loadBusinesses() {
+  try {
+    const res = await fetch(`${API}/api/businesses`);
+    const data = await res.json();
+    allBusinesses = data.ok ? data.businesses : [];
+  } catch {
+    allBusinesses = [];
+  }
+  renderCatBar();
+  renderGrid();
+}
+
+function openModal()  { document.getElementById('modalOverlay').classList.add('visible'); }
+function closeModal() { document.getElementById('modalOverlay').classList.remove('visible'); }
+
+async function submitLead(e) {
+  e.preventDefault();
+  const btn = document.getElementById('leadSubmitBtn');
+  const msg = document.getElementById('leadMsg');
+  msg.className = 'form-msg';
+  btn.disabled = true;
+  btn.textContent = 'Sending…';
+
+  try {
+    const res = await fetch(`${API}/api/leads`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        business_name: document.getElementById('leadBusinessName').value,
+        contact_name:  document.getElementById('leadContactName').value,
+        contact_email: document.getElementById('leadEmail').value,
+        contact_phone: document.getElementById('leadPhone').value,
+        is_member:     document.getElementById('leadMember').value,
+        message:       document.getElementById('leadMessage').value,
+      }),
+    });
+    const data = await res.json();
+    if (data.ok) {
+      msg.textContent = data.message || 'Thanks! We’ll be in touch.';
+      msg.className = 'form-msg success';
+      document.getElementById('leadForm').reset();
+      setTimeout(closeModal, 2500);
+    } else {
+      msg.textContent = data.error || 'Something went wrong. Please try again.';
+      msg.className = 'form-msg error';
+    }
+  } catch {
+    msg.textContent = 'Network error. Please try again.';
+    msg.className = 'form-msg error';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Send';
+  }
+}
+
+document.getElementById('modalOverlay').addEventListener('click', (e) => {
+  if (e.target.id === 'modalOverlay') closeModal();
+});
+
+loadBusinesses();
+</script>
+
+</body>
+</html>

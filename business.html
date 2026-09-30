@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parish Businesses — St. Nicholas Serbian Orthodox Church</title>
+<style>
+:root {
+  --navy:  #02306e;
+  --gold:  #c9a227;
+  --red:   #c31f27;
+  --light: #eef1f6;
+  --card:  #ffffff;
+  --border:#c8d5e8;
+  --muted: #6a7d96;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, Helvetica, sans-serif; background: var(--light); color: #2b2b2b; }
+
+.bd-header { background: linear-gradient(135deg, #01245a 0%, #02306e 45%, #0a4a9e 100%); padding: 20px 24px; border-bottom: 4px solid var(--gold); }
+.bd-back { color: #a8c4e0; font-size: 13px; text-decoration: none; }
+.bd-back:hover { text-decoration: underline; }
+.bd-header h1 { color: #fff; font-size: 22px; font-weight: 700; margin-top: 6px; }
+.bd-header .bd-cat { color: var(--gold); font-size: 12.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .4px; margin-top: 4px; }
+
+.bd-body { max-width: 640px; margin: 0 auto; padding: 24px 16px 48px; }
+.bd-card { background: var(--card); border: 1px solid var(--border); border-radius: 4px; padding: 20px 22px; }
+.bd-tagline { font-size: 15px; color: #444; line-height: 1.5; margin-bottom: 16px; }
+
+.bd-contact { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0; }
+.bd-contact a {
+  display: inline-block; padding: 8px 16px; font-size: 13px; font-weight: 700;
+  text-decoration: none; border-radius: 2px; border: 1px solid var(--navy); color: var(--navy);
+}
+.bd-contact a:hover { background: var(--navy); color: #fff; }
+
+.bd-detail-content { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border); }
+
+.bd-not-found { text-align: center; padding: 60px 16px; color: var(--muted); }
+.bd-not-found a { color: var(--navy); }
+
+.bd-loading { text-align: center; padding: 60px 16px; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<div class="bd-header">
+  <a class="bd-back" href="https://stnicholasphilly.org/parish-businesses">&larr; All Parish Businesses</a>
+  <h1 id="bizName">Loading…</h1>
+  <div class="bd-cat" id="bizCat"></div>
+</div>
+
+<div class="bd-body">
+  <div id="bizContent" class="bd-loading">Loading business details…</div>
+</div>
+
+<script>
+const API = 'https://stnicholas-classifieds.photoromano.workers.dev';
+
+function esc(s) {
+  const d = document.createElement('div');
+  d.textContent = s || '';
+  return d.innerHTML;
+}
+
+async function loadBusiness() {
+  const params = new URLSearchParams(window.location.search);
+  const slug = params.get('slug');
+  const content = document.getElementById('bizContent');
+
+  if (!slug) {
+    document.getElementById('bizName').textContent = 'Business not found';
+    content.innerHTML = '<div class="bd-not-found">No business specified. <a href="https://stnicholasphilly.org/parish-businesses">Browse all parish businesses &rarr;</a></div>';
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API}/api/businesses/${encodeURIComponent(slug)}`);
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error || 'Not found');
+    const b = data.business;
+
+    document.title = `${b.name} — Parish Businesses — St. Nicholas Serbian Orthodox Church`;
+    document.getElementById('bizName').textContent = b.name;
+    document.getElementById('bizCat').textContent = b.category;
+
+    let contactLinks = '';
+    if (b.website_url)   contactLinks += `<a href="${esc(b.website_url)}" target="_blank" rel="noopener">Website</a>`;
+    if (b.facebook_url)  contactLinks += `<a href="${esc(b.facebook_url)}" target="_blank" rel="noopener">Facebook</a>`;
+    if (b.instagram_url) contactLinks += `<a href="${esc(b.instagram_url)}" target="_blank" rel="noopener">Instagram</a>`;
+    if (b.contact_phone) contactLinks += `<a href="tel:${esc(b.contact_phone)}">${esc(b.contact_phone)}</a>`;
+    if (b.contact_email) contactLinks += `<a href="mailto:${esc(b.contact_email)}">Email</a>`;
+
+    content.className = '';
+    content.innerHTML = `
+      <div class="bd-card">
+        ${b.tagline ? `<div class="bd-tagline">${esc(b.tagline)}</div>` : ''}
+        ${contactLinks ? `<div class="bd-contact">${contactLinks}</div>` : ''}
+        <div class="bd-detail-content">${b.detail_html || ''}</div>
+      </div>
+    `;
+  } catch (err) {
+    document.getElementById('bizName').textContent = 'Business not found';
+    content.innerHTML = '<div class="bd-not-found">This business listing could not be found. <a href="https://stnicholasphilly.org/parish-businesses">Browse all parish businesses &rarr;</a></div>';
+  }
+}
+
+loadBusiness();
+</script>
+
+</body>
+</html>
