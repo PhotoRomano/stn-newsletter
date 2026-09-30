@@ -160,19 +160,22 @@ Then in Site Manager (`stnicholasphilly.org/admin`, login may need a
    Name/slug** (`newsletter-<date>`), uncheck **nav_shown** (these
    issue pages aren't in the nav menu), Save. Note the new pageid Site
    Manager redirects to (`pages_list.php?highlight=<pageid>`).
-2. **Add the HTML Code section via copy, not the "+" button** — clicking
-   page.php's own "+" add-section control triggered a stuck
-   cross-extension state during this session (recoverable only by
-   navigating away, and it never got the section added). The reliable
-   path: `/admin/page_sections_transfer.php?pageid=<any other permanent
-   issue page, e.g. 126>`, choose the new page from "Other page", click
-   **Copy them there** — copy leaves the source page untouched and adds
-   a duplicate of its one HTML Code section to the new page. Then open
-   that new section (`page.php?pageid=<new id>` will show its
-   `section_html_edit.php` link) and overwrite its content per the next
-   step — the copy just gives you a correctly-typed, correctly-structured
-   section to paste into, since the source page is already a working
-   toggle-enabled issue.
+2. **Add the HTML Code section by navigating straight to
+   `/admin/section_html_edit.php?pageid=<new pageid>&id=0`** — `id=0`
+   creates a brand-new section on save, no existing section needed.
+   This is the reliable path, confirmed 2026-09-30 building the Parish
+   Businesses directory pages. Two other approaches were both tried and
+   both failed repeatedly that session: (a) `page.php`'s own "+"
+   add-section control does nothing when clicked (silently, no error,
+   no stuck state this time — just inert); (b) the previously-documented
+   `page_sections_transfer.php` "copy from another page" workaround
+   (still valid in principle) turned out to be genuinely flaky under
+   browser automation — the confirm dialog it pops ("Are you sure?")
+   is a real in-page modal, not decorative, and even after clicking
+   through it correctly multiple times the copy silently didn't
+   happen more often than it did, for no discernible reason (same
+   click sequence succeeded once out of ~5 tries). `id=0` sidesteps
+   the whole mechanism — skip straight to it.
 3. **Edit that section**: select all, paste in `<date>.site.html`'s
    content → Save changes. This field is a plain `<textarea>`, so
    clipboard paste (copy the file, `Cmd+V`) works cleanly every time —
