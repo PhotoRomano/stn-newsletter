@@ -32,9 +32,15 @@ body { font-family: Arial, Helvetica, sans-serif; background: var(--light); colo
   content: ""; position: absolute; inset: 0;
   background: linear-gradient(180deg, rgba(1,36,90,.35) 0%, rgba(1,36,90,.4) 30%, rgba(1,18,46,.82) 65%, rgba(1,12,32,.96) 100%);
 }
-.bd-hero-top { position: relative; z-index: 1; padding: 18px 24px; }
+.bd-hero-top { position: relative; z-index: 1; padding: 18px 24px; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
 .bd-back { color: rgba(255,255,255,.85); font-size: 13px; text-decoration: none; font-weight: 600; }
 .bd-back:hover { color: #fff; text-decoration: underline; }
+.bd-lang-toggle { display: flex; gap: 4px; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.3); border-radius: 20px; padding: 3px; }
+.bd-lang-btn {
+  background: none; border: none; color: rgba(255,255,255,.85); font-size: 11.5px; font-weight: 700;
+  padding: 4px 11px; border-radius: 16px; cursor: pointer; letter-spacing: .3px;
+}
+.bd-lang-btn.active { background: #fff; color: var(--navy); }
 .bd-hero-bottom { position: relative; z-index: 1; padding: 0 24px 56px; max-width: 900px; }
 .bd-featured-pill {
   display: inline-block; background: var(--gold); color: #3a2e00; font-size: 11px; font-weight: 700;
@@ -117,6 +123,10 @@ body.lang-sr .lang-en { display: none; }
 <div class="bd-hero" id="bdHero">
   <div class="bd-hero-top">
     <a class="bd-back" href="https://stnicholasphilly.org/parish-businesses">&larr; All Parish Businesses</a>
+    <div class="bd-lang-toggle" id="bdLangToggle">
+      <button type="button" class="bd-lang-btn" id="bdLangBtnEn" onclick="setSiteLang('en')">EN</button>
+      <button type="button" class="bd-lang-btn" id="bdLangBtnSr" onclick="setSiteLang('sr')">СР</button>
+    </div>
   </div>
   <div class="bd-hero-bottom" id="bdLoadingHero">
     <div style="color:#fff; font-size:16px;">Loading business…</div>
@@ -169,6 +179,26 @@ function siteLang() {
   return pairs.some(c => c === 'stn_lang=sr') ? 'sr' : 'en';
 }
 
+// The site's own header EN/СР toggle doesn't reliably update stn_lang
+// (confirmed live 2026-09-30 -- clicking it changes nothing, on this page
+// and on /home). Setting the cookie directly at path=/ DOES work and is
+// respected by the server elsewhere on the site, so this page carries its
+// own small, working toggle rather than depending on the broken one.
+function setSiteLang(lang) {
+  document.cookie = `stn_lang=${lang}; path=/; max-age=31536000`;
+  applySiteLang();
+}
+
+function applySiteLang() {
+  const lang = siteLang();
+  document.body.classList.remove('lang-en', 'lang-sr');
+  document.body.classList.add('lang-' + lang);
+  const enBtn = document.getElementById('bdLangBtnEn');
+  const srBtn = document.getElementById('bdLangBtnSr');
+  if (enBtn) enBtn.classList.toggle('active', lang === 'en');
+  if (srBtn) srBtn.classList.toggle('active', lang === 'sr');
+}
+
 function esc(s) {
   const d = document.createElement('div');
   d.textContent = s || '';
@@ -184,7 +214,7 @@ function showNotFound(message) {
 }
 
 async function loadBusiness() {
-  document.body.classList.add('lang-' + siteLang());
+  applySiteLang();
 
   const params = new URLSearchParams(window.location.search);
   const slug = params.get('slug');

@@ -28,6 +28,13 @@ body { font-family: Arial, Helvetica, sans-serif; background: var(--light); colo
 }
 .btn-advertise:hover { background: #b8911f; }
 
+.pb-lang-toggle { display: flex; gap: 4px; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.3); border-radius: 20px; padding: 3px; margin-bottom: 6px; }
+.pb-lang-btn {
+  background: none; border: none; color: rgba(255,255,255,.85); font-size: 11.5px; font-weight: 700;
+  padding: 4px 11px; border-radius: 16px; cursor: pointer; letter-spacing: .3px;
+}
+.pb-lang-btn.active { background: #fff; color: var(--navy); }
+
 .pb-toolbar { background: #fff; border-bottom: 1px solid var(--border); padding: 12px 24px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
 .search-input {
   flex: 1; min-width: 220px; max-width: 420px; padding: 8px 12px; font-size: 14px; font-family: inherit;
@@ -104,7 +111,13 @@ body { font-family: Arial, Helvetica, sans-serif; background: var(--light); colo
       <h1>Parish Businesses</h1>
       <p>Parishioner-owned businesses, supported by our community.</p>
     </div>
-    <button class="btn-advertise" onclick="openModal()">Contact Us to Advertise</button>
+    <div style="display:flex; flex-direction:column; align-items:flex-end; gap:8px;">
+      <div class="pb-lang-toggle" id="pbLangToggle">
+        <button type="button" class="pb-lang-btn" id="pbLangBtnEn" onclick="setSiteLang('en')">EN</button>
+        <button type="button" class="pb-lang-btn" id="pbLangBtnSr" onclick="setSiteLang('sr')">СР</button>
+      </div>
+      <button class="btn-advertise" onclick="openModal()">Contact Us to Advertise</button>
+    </div>
   </div>
 </div>
 
@@ -181,6 +194,25 @@ function siteLang() {
   return pairs.some(c => c === 'stn_lang=sr') ? 'sr' : 'en';
 }
 
+// The site's own header EN/СР toggle doesn't reliably update stn_lang
+// (confirmed live 2026-09-30). Setting the cookie directly at path=/ DOES
+// work and is respected server-side elsewhere on the site, so this page
+// carries its own small, working toggle rather than depending on the
+// broken one.
+function setSiteLang(lang) {
+  document.cookie = `stn_lang=${lang}; path=/; max-age=31536000`;
+  applySiteLang();
+  renderGrid();
+}
+
+function applySiteLang() {
+  const lang = siteLang();
+  const enBtn = document.getElementById('pbLangBtnEn');
+  const srBtn = document.getElementById('pbLangBtnSr');
+  if (enBtn) enBtn.classList.toggle('active', lang === 'en');
+  if (srBtn) srBtn.classList.toggle('active', lang === 'sr');
+}
+
 const CATEGORIES = ['Food & Catering','Retail & Shops','Professional Services','Home & Trade Services','Health & Wellness','Other'];
 let allBusinesses = [];
 let activeCategory = null;
@@ -240,6 +272,7 @@ function renderGrid() {
 }
 
 async function loadBusinesses() {
+  applySiteLang();
   try {
     const res = await fetch(`${API}/api/businesses`);
     const data = await res.json();
