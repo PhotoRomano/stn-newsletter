@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Classifieds Admin — St. Nicholas</title>
+<style>
+:root { --navy:#02306e; --gold:#c9a227; --red:#c31f27; --light:#eef1f6; --border:#c8d5e8; --muted:#6a7d96; }
+* { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:Arial,Helvetica,sans-serif; background:var(--light); color:#2b2b2b; font-size:14px; }
+
+.hdr { background:var(--navy); padding:14px 20px; border-bottom:3px solid var(--gold); display:flex; align-items:center; justify-content:space-between; }
+.hdr h1 { color:#fff; font-size:18px; }
+.hdr-sub { color:#a8c4e0; font-size:12px; }
+.btn-sm { padding:5px 12px; font-size:12px; font-weight:700; border:none; cursor:pointer; border-radius:2px; }
+.btn-approve { background:#166534; color:#fff; }
+.btn-reject  { background:#991b1b; color:#fff; }
+.btn-delete  { background:#6b7280; color:#fff; }
+.btn-logout  { background:rgba(255,255,255,.15); color:#fff; border:1px solid rgba(255,255,255,.3); }
+.btn-logout:hover { background:rgba(255,255,255,.25); }
+
+.tabs { background:#fff; border-bottom:1px solid var(--border); display:flex; padding:0 20px; }
+.tab { padding:12px 16px; font-size:13px; font-weight:600; cursor:pointer; border-bottom:3px solid transparent; color:var(--muted); background:none; border-top:none; border-left:none; border-right:none; }
+.tab.active { color:var(--navy); border-bottom-color:var(--gold); }
+.badge { display:inline-block; background:var(--red); color:#fff; border-radius:10px; font-size:10px; font-weight:700; padding:1px 6px; margin-left:4px; vertical-align:middle; }
+
+.panel { display:none; padding:20px; max-width:900px; margin:0 auto; }
+.panel.active { display:block; }
+
+.card { background:#fff; border:1px solid var(--border); border-radius:3px; padding:14px 16px; margin-bottom:12px; }
+.card-title { font-size:15px; font-weight:700; color:var(--navy); margin-bottom:6px; }
+.card-meta  { font-size:12px; color:var(--muted); margin-bottom:8px; }
+.card-desc  { font-size:13px; color:#444; margin-bottom:10px; white-space:pre-wrap; word-break:break-word; }
+.card-actions { display:flex; gap:8px; flex-wrap:wrap; }
+.cat-badge { display:inline-block; font-size:11px; font-weight:700; letter-spacing:.3px; padding:2px 7px; border-radius:2px; text-transform:uppercase; background:#e0f2fe; color:#075985; margin-right:6px; }
+
+.empty { text-align:center; padding:40px; color:var(--muted); }
+.spinner { text-align:center; padding:40px; color:var(--muted); }
+
+/* Login screen */
+.login-wrap { display:flex; align-items:center; justify-content:center; min-height:100vh; }
+.login-box { background:#fff; border:1px solid var(--border); border-radius:3px; padding:28px 24px; width:100%; max-width:360px; }
+.login-box h2 { font-size:17px; color:var(--navy); margin-bottom:16px; }
+.login-box input { width:100%; padding:9px 11px; border:1px solid var(--border); font-size:14px; font-family:inherit; border-radius:2px; margin-bottom:12px; }
+.login-box input:focus { outline:2px solid var(--navy); }
+.btn-full { width:100%; padding:10px; background:var(--navy); color:#fff; border:none; font-size:14px; font-weight:700; cursor:pointer; border-radius:2px; }
+.btn-full:hover { background:#01245a; }
+.login-err { font-size:13px; color:#991b1b; margin-top:8px; display:none; }
+
+.msg-bar { padding:8px 12px; border-radius:2px; margin-bottom:12px; font-size:13px; display:none; }
+.msg-bar.ok  { background:#dcfce7; color:#166534; display:block; }
+.msg-bar.err { background:#fee2e2; color:#991b1b; display:block; }
+</style>
+</head>
+<body>
+
+<!-- Login -->
+<div class="login-wrap" id="loginWrap">
+  <div class="login-box">
+    <h2>Classifieds Admin</h2>
+    <input type="password" id="tokenInput" placeholder="Admin token" onkeydown="if(event.key==='Enter')login()">
+    <button class="btn-full" onclick="login()">Sign In</button>
+    <div class="login-err" id="loginErr">Invalid token.</div>
+  </div>
+</div>
+
+<!-- Main UI -->
+<div id="mainWrap" style="display:none">
+  <div class="hdr">
+    <div>
+      <h1>Classifieds Admin</h1>
+      <div class="hdr-sub">St. Nicholas Serbian Orthodox Church</div>
+    </div>
+    <button class="btn-sm btn-logout" onclick="logout()">Sign Out</button>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('pending',this)">Pending <span class="badge" id="pendingBadge">0</span></button>
+    <button class="tab" onclick="showTab('active',this)">Active Listings</button>
+    <button class="tab" onclick="showTab('categories',this)">Categories <span class="badge" id="catBadge" style="display:none">0</span></button>
+  </div>
+
+  <div class="panel active" id="tab-pending">
+    <div class="msg-bar" id="msgPending"></div>
+    <div id="pendingList" class="spinner">Loading…</div>
+  </div>
+
+  <div class="panel" id="tab-active">
+    <div class="msg-bar" id="msgActive"></div>
+    <div id="activeList" class="spinner">Loading…</div>
+  </div>
+
+  <div class="panel" id="tab-categories">
+    <div class="msg-bar" id="msgCat"></div>
+    <div id="catList" class="spinner">Loading…</div>
+  </div>
+</div>
+
+<script>
+const API = 'https://stnicholas-classifieds.photoromano.workers.dev';
+let TOKEN = '';
+
+function login() {
+  const t = document.getElementById('tokenInput').value.trim();
+  if (!t) return;
+  TOKEN = t;
+  localStorage.setItem('cl_admin_token', t);
+  document.getElementById('loginErr').style.display = 'none';
+  loadAll();
+}
+
+function logout() {
+  TOKEN = '';
+  localStorage.removeItem('cl_admin_token');
+  document.getElementById('mainWrap').style.display = 'none';
+  document.getElementById('loginWrap').style.display = 'flex';
+  document.getElementById('tokenInput').value = '';
+}
+
+function showTab(name, btn) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(`tab-${name}`).classList.add('active');
+}
+
+async function api(path, method = 'GET', body = null) {
+  const opts = { method, headers: { 'Authorization': `Bearer ${TOKEN}` } };
+  if (body) { opts.headers['Content-Type'] = 'application/json'; opts.body = JSON.stringify(body); }
+  const res  = await fetch(`${API}${path}`, opts);
+  return res.json();
+}
+
+function flash(elId, msg, ok = true) {
+  const el = document.getElementById(elId);
+  el.className = `msg-bar ${ok ? 'ok' : 'err'}`;
+  el.textContent = msg;
+  setTimeout(() => { el.className = 'msg-bar'; }, 3000);
+}
+
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+async function loadAll() {
+  document.getElementById('loginWrap').style.display = 'none';
+  document.getElementById('mainWrap').style.display = 'block';
+
+  // Validate token with a quick ping
+  const test = await api('/api/admin/pending').catch(() => ({ ok: false }));
+  if (!test.ok && test.error === 'Unauthorized') {
+    document.getElementById('loginErr').style.display = 'block';
+    logout();
+    return;
+  }
+
+  loadPending();
+  loadActive();
+  loadCategories();
+}
+
+// ── Pending ────────────────────────────────────────────────────────────────
+async function loadPending() {
+  const data = await api('/api/admin/pending');
+  const list = document.getElementById('pendingList');
+  const badge = document.getElementById('pendingBadge');
+  if (!data.ok) { list.innerHTML = `<div class="empty">Error loading listings.</div>`; return; }
+  const items = data.listings;
+  badge.textContent = items.length;
+  if (!items.length) { list.innerHTML = `<div class="empty">No pending listings.</div>`; return; }
+  list.innerHTML = items.map(l => `
+    <div class="card" id="pc-${l.id}">
+      <div class="card-title"><span class="cat-badge">${esc(l.category)}</span>${esc(l.title)}</div>
+      <div class="card-meta">From: <strong>${esc(l.name)}</strong> &middot; ${esc(l.contact_email || '')} &middot; Submitted: ${new Date(l.submitted_at).toLocaleDateString()}</div>
+      <div class="card-desc">${esc(l.description)}</div>
+      ${l.contact ? `<div class="card-meta">Public contact: ${esc(l.contact)}</div>` : ''}
+      <div class="card-actions">
+        <button class="btn-sm btn-approve" onclick="approveListing(${l.id})">Approve</button>
+        <button class="btn-sm btn-reject"  onclick="rejectListing(${l.id})">Reject</button>
+        <button class="btn-sm btn-delete"  onclick="deleteListing(${l.id},'pending')">Delete</button>
+      </div>
+    </div>`).join('');
+}
+
+async function approveListing(id) {
+  const data = await api(`/api/admin/approve/${id}`, 'POST');
+  if (data.ok) { document.getElementById(`pc-${id}`)?.remove(); flash('msgPending','Approved — poster notified.'); loadPending(); loadActive(); }
+  else flash('msgPending', data.error || 'Error', false);
+}
+
+async function rejectListing(id) {
+  const data = await api(`/api/admin/reject/${id}`, 'POST');
+  if (data.ok) { document.getElementById(`pc-${id}`)?.remove(); flash('msgPending','Rejected.'); loadPending(); }
+  else flash('msgPending', data.error || 'Error', false);
+}
+
+async function deleteListing(id, tab) {
+  if (!confirm('Delete this listing permanently?')) return;
+  const data = await api(`/api/admin/listings/${id}`, 'DELETE');
+  if (data.ok) {
+    document.getElementById(`pc-${id}`)?.remove();
+    document.getElementById(`ac-${id}`)?.remove();
+    flash(`msg${tab === 'pending' ? 'Pending' : 'Active'}`, 'Deleted.');
+    if (tab === 'pending') loadPending(); else loadActive();
+  } else flash(`msg${tab === 'pending' ? 'Pending' : 'Active'}`, data.error || 'Error', false);
+}
+
+// ── Active ─────────────────────────────────────────────────────────────────
+async function loadActive() {
+  const data = await api('/api/admin/all');
+  const list = document.getElementById('activeList');
+  if (!data.ok) { list.innerHTML = `<div class="empty">Error loading listings.</div>`; return; }
+  const items = data.listings;
+  if (!items.length) { list.innerHTML = `<div class="empty">No active listings.</div>`; return; }
+  list.innerHTML = items.map(l => {
+    const expires = new Date(l.expires_at).toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'});
+    const daysLeft = Math.ceil((new Date(l.expires_at) - Date.now()) / 86_400_000);
+    return `
+    <div class="card" id="ac-${l.id}">
+      <div class="card-title"><span class="cat-badge">${esc(l.category)}</span>${esc(l.title)}</div>
+      <div class="card-meta">By: <strong>${esc(l.name)}</strong> &middot; Expires: ${expires} (${daysLeft}d)</div>
+      <div class="card-desc">${esc(l.description)}</div>
+      <div class="card-actions">
+        <button class="btn-sm btn-delete" onclick="deleteListing(${l.id},'active')">Delete</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── Categories ─────────────────────────────────────────────────────────────
+async function loadCategories() {
+  const data = await api('/api/admin/categories');
+  const list = document.getElementById('catList');
+  const badge = document.getElementById('catBadge');
+  if (!data.ok) { list.innerHTML = `<div class="empty">Error loading categories.</div>`; return; }
+  const pending = data.categories.filter(c => c.status === 'pending');
+  const active  = data.categories.filter(c => c.status === 'active');
+  if (pending.length) { badge.style.display = ''; badge.textContent = pending.length; }
+  else badge.style.display = 'none';
+
+  list.innerHTML = `
+    ${pending.length ? `<h3 style="font-size:13px;color:var(--muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px;">Pending Suggestions</h3>` : ''}
+    ${pending.map(c => `
+      <div class="card" id="cc-${c.id}">
+        <div class="card-title">${esc(c.name)}</div>
+        <div class="card-meta">Suggested by: ${esc(c.suggested_by || 'anonymous')} &middot; ${new Date(c.suggested_at).toLocaleDateString()}</div>
+        <div class="card-actions">
+          <button class="btn-sm btn-approve" onclick="approveCategory(${c.id})">Approve</button>
+          <button class="btn-sm btn-reject"  onclick="rejectCategory(${c.id})">Reject</button>
+        </div>
+      </div>`).join('')}
+    <h3 style="font-size:13px;color:var(--muted);margin:16px 0 10px;text-transform:uppercase;letter-spacing:.5px;">Active Categories (${active.length})</h3>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;">
+      ${active.map(c => `<span style="background:#e0f2fe;color:#075985;padding:4px 10px;border-radius:2px;font-size:13px;font-weight:600;">${esc(c.name)}</span>`).join('')}
+    </div>`;
+}
+
+async function approveCategory(id) {
+  const data = await api(`/api/admin/approve-category/${id}`, 'POST');
+  if (data.ok) { flash('msgCat','Category approved — now live.'); loadCategories(); }
+  else flash('msgCat', data.error || 'Error', false);
+}
+
+async function rejectCategory(id) {
+  const data = await api(`/api/admin/reject-category/${id}`, 'POST');
+  if (data.ok) { flash('msgCat','Category rejected.'); loadCategories(); }
+  else flash('msgCat', data.error || 'Error', false);
+}
+
+// Auto-login from localStorage
+const saved = localStorage.getItem('cl_admin_token');
+if (saved) { TOKEN = saved; loadAll(); }
+</script>
+</body>
+</html>
