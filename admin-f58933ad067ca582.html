@@ -243,20 +243,34 @@ async function loadCategories() {
     ${pending.map(c => `
       <div class="card" id="cc-${c.id}">
         <div class="card-title">${esc(c.name)}</div>
-        <div class="card-meta">Suggested by: ${esc(c.suggested_by || 'anonymous')} &middot; ${new Date(c.suggested_at).toLocaleDateString()}</div>
-        <div class="card-actions">
+        <div class="card-meta">Suggested by: ${esc(c.suggested_by || 'anonymous')} &middot; ${new Date(c.suggested_at).toLocaleDateString()}${c.group_name ? ` &middot; Suggested group: <strong>${esc(c.group_name)}</strong>` : ''}</div>
+        <div class="card-actions" style="align-items:center;flex-wrap:wrap;gap:8px;">
+          <select id="grp-${c.id}" style="padding:5px 8px;font-size:12px;border:1px solid #c8d5e8;border-radius:2px;">
+            <option value="">Assign group…</option>
+            <option value="Goods" ${c.group_name==='Goods'?'selected':''}>Goods</option>
+            <option value="Services" ${c.group_name==='Services'?'selected':''}>Services</option>
+            <option value="Community" ${c.group_name==='Community'?'selected':''}>Community</option>
+          </select>
           <button class="btn-sm btn-approve" onclick="approveCategory(${c.id})">Approve</button>
           <button class="btn-sm btn-reject"  onclick="rejectCategory(${c.id})">Reject</button>
         </div>
       </div>`).join('')}
     <h3 style="font-size:13px;color:var(--muted);margin:16px 0 10px;text-transform:uppercase;letter-spacing:.5px;">Active Categories (${active.length})</h3>
-    <div style="display:flex;flex-wrap:wrap;gap:8px;">
-      ${active.map(c => `<span style="background:#e0f2fe;color:#075985;padding:4px 10px;border-radius:2px;font-size:13px;font-weight:600;">${esc(c.name)}</span>`).join('')}
-    </div>`;
+    ${['Goods','Services','Community','Other'].map(g => {
+      const cats = active.filter(c => (c.group_name || 'Other') === g);
+      if (!cats.length) return '';
+      return `<div style="margin-bottom:12px;">
+        <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px;">${g}</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;">
+          ${cats.map(c => `<span style="background:#e0f2fe;color:#075985;padding:4px 10px;border-radius:2px;font-size:13px;font-weight:600;">${esc(c.name)}</span>`).join('')}
+        </div>
+      </div>`;
+    }).join('')}`;
 }
 
 async function approveCategory(id) {
-  const data = await api(`/api/admin/approve-category/${id}`, 'POST');
+  const group = document.getElementById(`grp-${id}`)?.value || '';
+  const data = await api(`/api/admin/approve-category/${id}`, 'POST', group ? { group } : {});
   if (data.ok) { flash('msgCat','Category approved — now live.'); loadCategories(); }
   else flash('msgCat', data.error || 'Error', false);
 }

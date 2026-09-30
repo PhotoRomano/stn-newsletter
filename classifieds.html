@@ -38,16 +38,29 @@ body { font-family: Arial, Helvetica, sans-serif; background: var(--light); colo
 }
 .search-input:focus { outline: 2px solid var(--navy); border-color: var(--navy); }
 
-/* ── Category tabs ── */
-.cat-bar { background: #fff; border-bottom: 1px solid var(--border); padding: 0 24px;
-           overflow-x: auto; display: flex; gap: 0; }
-.cat-tab {
-  padding: 12px 16px; font-size: 13px; font-weight: 600; cursor: pointer;
+/* ── Category navigation ── */
+.group-bar { background: #fff; border-bottom: 1px solid var(--border); padding: 0 24px;
+             overflow-x: auto; display: flex; gap: 0; }
+.group-tab {
+  padding: 12px 18px; font-size: 13.5px; font-weight: 700; cursor: pointer;
   border-bottom: 3px solid transparent; color: var(--muted); white-space: nowrap;
-  background: none; border-top: none; border-left: none; border-right: none;
+  background: none; border-top: none; border-left: none; border-right: none; letter-spacing: .2px;
 }
-.cat-tab:hover  { color: var(--navy); }
-.cat-tab.active { color: var(--navy); border-bottom-color: var(--gold); }
+.group-tab:hover  { color: var(--navy); }
+.group-tab.active { color: var(--navy); border-bottom-color: var(--gold); }
+
+.sub-bar {
+  background: var(--light); border-bottom: 1px solid var(--border);
+  padding: 8px 24px; display: none; gap: 6px; flex-wrap: wrap; align-items: center;
+}
+.sub-bar.visible { display: flex; }
+.sub-chip {
+  padding: 4px 12px; font-size: 12.5px; font-weight: 600; cursor: pointer;
+  border: 1px solid var(--border); border-radius: 20px; color: var(--muted);
+  background: #fff; white-space: nowrap;
+}
+.sub-chip:hover  { border-color: var(--navy); color: var(--navy); }
+.sub-chip.active { background: var(--navy); color: #fff; border-color: var(--navy); }
 
 /* ── Listings grid ── */
 .cl-body { max-width: 960px; margin: 0 auto; padding: 24px 16px; }
@@ -184,10 +197,10 @@ textarea { resize: vertical; min-height: 100px; }
   <input class="search-input" id="searchInput" type="search" placeholder="Search listings…" oninput="render()">
 </div>
 
-<div class="cat-bar" id="catBar">
-  <button class="cat-tab active" data-cat="" onclick="selectCat(this)">All</button>
-  <button class="cat-tab" style="margin-left:auto;color:var(--gold);font-size:12px;" onclick="openSuggestModal()">+ Suggest a Category</button>
+<div class="group-bar" id="groupBar">
+  <button class="group-tab active" data-group="" onclick="selectGroup(this)">All</button>
 </div>
+<div class="sub-bar" id="subBar"></div>
 
 <div class="cl-body">
   <div id="listingArea" class="spinner">Loading listings&hellip;</div>
@@ -291,6 +304,15 @@ textarea { resize: vertical; min-height: 100px; }
         <input id="sCatName" type="text" maxlength="60" placeholder="e.g. Lost &amp; Found, Rides, Pets&hellip;" onkeydown="if(event.key==='Enter')submitSuggestion()">
         <div class="field-hint">60 characters max</div>
       </div>
+      <div>
+        <label for="sCatGroup">Group (optional)</label>
+        <select id="sCatGroup">
+          <option value="">— Let admin decide —</option>
+          <option value="Goods">Goods</option>
+          <option value="Services">Services</option>
+          <option value="Community">Community</option>
+        </select>
+      </div>
       <button class="btn-submit" id="suggestBtn" onclick="submitSuggestion()">Submit Suggestion</button>
     </div>
   </div>
@@ -374,8 +396,10 @@ const CAT_CLASS = {
   'Community': 'community',
 };
 
-let allListings = [];
-let activeCat   = '';
+let allListings  = [];
+let activeGroup  = '';
+let activeCat    = '';
+let groupMap     = {}; // group -> [category names]
 
 async function init() {
   const [catRes, listRes] = await Promise.all([
@@ -383,20 +407,41 @@ async function init() {
     fetch(`${API}/api/listings`).then(r => r.json()),
   ]);
 
-  // Populate category tabs and select dropdown
-  const bar = document.getElementById('catBar');
-  const sel = document.getElementById('fCategory');
-  for (const cat of (catRes.categories || [])) {
-    const btn = document.createElement('button');
-    btn.className = 'cat-tab';
-    btn.dataset.cat = cat;
-    btn.textContent = cat;
-    btn.onclick = () => selectCat(btn);
-    bar.appendChild(btn);
+  const categories = catRes.categories || [];
 
+  // Build groupMap
+  groupMap = {};
+  for (const c of categories) {
+    const g = c.group_name || 'Other';
+    if (!groupMap[g]) groupMap[g] = [];
+    groupMap[g].push(c.name);
+  }
+
+  // Build group tab bar
+  const groupBar = document.getElementById('groupBar');
+  for (const g of Object.keys(groupMap)) {
+    const btn = document.createElement('button');
+    btn.className = 'group-tab';
+    btn.dataset.group = g;
+    btn.textContent = g;
+    btn.onclick = () => selectGroup(btn);
+    groupBar.appendChild(btn);
+  }
+
+  // Suggest a Category at end of group bar
+  const suggestBtn = document.createElement('button');
+  suggestBtn.className = 'group-tab';
+  suggestBtn.style.cssText = 'margin-left:auto;color:var(--gold);font-size:12px;font-weight:600;';
+  suggestBtn.textContent = '+ Suggest a Category';
+  suggestBtn.onclick = openSuggestModal;
+  groupBar.appendChild(suggestBtn);
+
+  // Populate submission form select
+  const sel = document.getElementById('fCategory');
+  for (const c of categories) {
     const opt = document.createElement('option');
-    opt.value = cat;
-    opt.textContent = cat;
+    opt.value = c.name;
+    opt.textContent = c.name;
     sel.appendChild(opt);
   }
 
@@ -404,8 +449,28 @@ async function init() {
   render();
 }
 
-function selectCat(btn) {
-  document.querySelectorAll('.cat-tab').forEach(b => b.classList.remove('active'));
+function selectGroup(btn) {
+  document.querySelectorAll('.group-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  activeGroup = btn.dataset.group || '';
+  activeCat   = '';
+
+  const subBar = document.getElementById('subBar');
+  if (activeGroup && groupMap[activeGroup]) {
+    subBar.className = 'sub-bar visible';
+    subBar.innerHTML = `<button class="sub-chip active" data-cat="" onclick="selectSub(this)">All ${activeGroup}</button>` +
+      groupMap[activeGroup].map(name =>
+        `<button class="sub-chip" data-cat="${name}" onclick="selectSub(this)">${name}</button>`
+      ).join('');
+  } else {
+    subBar.className = 'sub-bar';
+    subBar.innerHTML = '';
+  }
+  render();
+}
+
+function selectSub(btn) {
+  document.querySelectorAll('.sub-chip').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   activeCat = btn.dataset.cat || '';
   render();
@@ -413,7 +478,12 @@ function selectCat(btn) {
 
 function render() {
   const q = (document.getElementById('searchInput').value || '').toLowerCase().trim();
-  let items = activeCat ? allListings.filter(l => l.category === activeCat) : allListings;
+  let items = allListings;
+  if (activeCat) {
+    items = items.filter(l => l.category === activeCat);
+  } else if (activeGroup && groupMap[activeGroup]) {
+    items = items.filter(l => groupMap[activeGroup].includes(l.category));
+  }
   if (q) {
     items = items.filter(l =>
       l.title.toLowerCase().includes(q) ||
@@ -880,10 +950,11 @@ async function submitSuggestion() {
   btn.textContent = 'Submitting…';
 
   try {
+    const group = document.getElementById('sCatGroup').value;
     const res  = await fetch(`${API}/api/suggest-category`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email: getCookie('cl_verified_email') || '' }),
+      body: JSON.stringify({ name, group, email: getCookie('cl_verified_email') || '' }),
     });
     const data = await res.json();
 
