@@ -616,6 +616,7 @@ function card(l, highlight = false) {
       </div>
       <div class="listing-title">${esc(l.title)}</div>
       <div class="listing-desc">${esc(l.description).replace(/\n/g, '<br>')}</div>
+      ${l.contact ? `<div class="listing-meta">&#128222; ${esc(l.contact)}</div>` : ''}
       <div class="listing-meta">Posted by ${esc(l.name)} &middot; ${posted} &middot; expires in ${daysLeft}d</div>
       <div class="card-actions">
         <button class="btn-contact" onclick="openContact(${l.id})">Message Poster</button>
@@ -789,7 +790,7 @@ async function submitListing() {
     category:      document.getElementById('fCategory').value,
     title:         document.getElementById('fTitle').value.trim(),
     description:   document.getElementById('fDesc').value.trim(),
-    contact:       document.getElementById('fContact').value.trim() || verifiedEmail,
+    contact:       document.getElementById('fContact').value.trim(),
     contact_email: verifiedEmail,
     name:          document.getElementById('fName').value.trim(),
   };
