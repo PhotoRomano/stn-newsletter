@@ -191,6 +191,11 @@ const CATEGORY_SR = {
 };
 function categoryLabel(cat) { return siteLang() === 'sr' ? (CATEGORY_SR[cat] || cat) : cat; }
 function featuredLabel() { return siteLang() === 'sr' ? 'Истакнути посао' : 'Featured Business'; }
+// Business name is a proper noun/brand -- stays the same in both languages.
+// Tagline is business-specific prose -- only shown in Serbian if the owner
+// has provided a real (board-reviewed-standard) tagline_sr; no machine
+// translation, matching the newsletter's own hand-translation rule.
+function taglineFor(b) { return (siteLang() === 'sr' && b.tagline_sr) ? b.tagline_sr : (b.tagline || ''); }
 
 function applySiteLang() {
   const lang = siteLang();
@@ -203,6 +208,16 @@ function applySiteLang() {
   if (catPill && currentBusiness) catPill.textContent = categoryLabel(currentBusiness.category);
   const featuredPill = document.querySelector('.bd-featured-pill');
   if (featuredPill) featuredPill.textContent = featuredLabel();
+  if (currentBusiness) {
+    const tagline = taglineFor(currentBusiness);
+    const heroTagline = document.querySelector('.bd-hero-tagline');
+    if (heroTagline) heroTagline.textContent = tagline;
+    const about = document.getElementById('bdAbout');
+    if (about) {
+      about.textContent = tagline;
+      about.style.display = tagline ? '' : 'none';
+    }
+  }
 }
 
 // The site's own header EN/СР buttons (.stn-lang-btn[data-l="en"/"sr"])
@@ -258,11 +273,11 @@ async function loadBusiness() {
       ${b.featured ? `<span class="bd-featured-pill">${featuredLabel()}</span>` : ''}
       <span class="bd-cat-pill">${esc(categoryLabel(b.category))}</span>
       <h1 class="heading-font">${esc(b.name)}</h1>
-      ${b.tagline ? `<div class="bd-hero-tagline">${esc(b.tagline)}</div>` : ''}
+      ${taglineFor(b) ? `<div class="bd-hero-tagline">${esc(taglineFor(b))}</div>` : ''}
     `;
 
-    document.getElementById('bdAbout').textContent = b.tagline || '';
-    if (!b.tagline) document.getElementById('bdAbout').style.display = 'none';
+    document.getElementById('bdAbout').textContent = taglineFor(b);
+    if (!taglineFor(b)) document.getElementById('bdAbout').style.display = 'none';
 
     document.getElementById('bdDetailContent').innerHTML = b.detail_html || '';
 

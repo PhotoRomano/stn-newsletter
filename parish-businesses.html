@@ -165,6 +165,11 @@ const UI_SR = {
   searchPlaceholder: 'Претражите послове…',
 };
 function categoryLabel(cat) { return siteLang() === 'sr' ? (CATEGORY_SR[cat] || cat) : cat; }
+// Business name is a proper noun/brand -- stays the same in both languages.
+// Tagline is business-specific prose -- only shown in Serbian if the owner
+// has provided a real (board-reviewed-standard) tagline_sr; no machine
+// translation, matching the newsletter's own hand-translation rule.
+function taglineFor(b) { return (siteLang() === 'sr' && b.tagline_sr) ? b.tagline_sr : (b.tagline || ''); }
 function uiText(key, en) { return siteLang() === 'sr' ? UI_SR[key] : en; }
 
 let allBusinesses = [];
@@ -217,7 +222,7 @@ function renderGrid() {
       <div class="biz-card-body">
         <span class="biz-cat-badge">${categoryLabel(b.category)}</span>
         <div class="biz-name">${b.name}</div>
-        <div class="biz-tagline">${b.tagline || ''}</div>
+        <div class="biz-tagline">${taglineFor(b)}</div>
         <div class="biz-cta">${uiText('clickForDetails', 'Click for details &rarr;')}</div>
       </div>
     `;
