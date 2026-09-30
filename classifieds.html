@@ -144,10 +144,33 @@ textarea { resize: vertical; min-height: 100px; }
 
 <div class="cat-bar" id="catBar">
   <button class="cat-tab active" data-cat="" onclick="selectCat(this)">All</button>
+  <button class="cat-tab" style="margin-left:auto;color:var(--gold);font-size:12px;" onclick="openSuggestModal()">+ Suggest a Category</button>
 </div>
 
 <div class="cl-body">
   <div id="listingArea" class="spinner">Loading listings&hellip;</div>
+</div>
+
+<!-- Suggest a category modal -->
+<div class="modal-bg" id="suggestBg" onclick="maybeCloseSuggest(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>Suggest a Category</h2>
+      <button class="modal-close" onclick="closeSuggest()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="verify-note">
+        Don't see what you need? Suggest a new category — we'll review it and add it if it's a good fit for the parish board.
+      </div>
+      <div class="form-msg" id="suggestMsg"></div>
+      <div>
+        <label for="sCatName">Category name *</label>
+        <input id="sCatName" type="text" maxlength="60" placeholder="e.g. Lost &amp; Found, Rides, Pets&hellip;" onkeydown="if(event.key==='Enter')submitSuggestion()">
+        <div class="field-hint">60 characters max</div>
+      </div>
+      <button class="btn-submit" id="suggestBtn" onclick="submitSuggestion()">Submit Suggestion</button>
+    </div>
+  </div>
 </div>
 
 <!-- Step 1: Verify modal -->
@@ -435,6 +458,59 @@ async function submitListing() {
     msg.textContent = 'Network error. Please try again.';
     btn.disabled = false;
     btn.textContent = 'Submit for Review';
+  }
+}
+
+// ── Suggest a category flow ───────────────────────────────────────────────
+function openSuggestModal() {
+  document.getElementById('sCatName').value = '';
+  document.getElementById('suggestMsg').className = 'form-msg';
+  document.getElementById('suggestMsg').textContent = '';
+  document.getElementById('suggestBtn').disabled = false;
+  document.getElementById('suggestBtn').textContent = 'Submit Suggestion';
+  document.getElementById('suggestBg').classList.add('open');
+  setTimeout(() => document.getElementById('sCatName').focus(), 50);
+}
+function closeSuggest() { document.getElementById('suggestBg').classList.remove('open'); }
+function maybeCloseSuggest(e) { if (e.target === document.getElementById('suggestBg')) closeSuggest(); }
+
+async function submitSuggestion() {
+  const btn  = document.getElementById('suggestBtn');
+  const msg  = document.getElementById('suggestMsg');
+  const name = document.getElementById('sCatName').value.trim();
+
+  if (!name) {
+    msg.className = 'form-msg error';
+    msg.textContent = 'Please enter a category name.';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Submitting…';
+
+  try {
+    const res  = await fetch(`${API}/api/suggest-category`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email: getCookie('cl_verified_email') || '' }),
+    });
+    const data = await res.json();
+
+    if (data.ok) {
+      msg.className = 'form-msg success';
+      msg.textContent = data.message;
+      btn.textContent = 'Submitted!';
+    } else {
+      msg.className = 'form-msg error';
+      msg.textContent = data.error || 'Submission failed. Please try again.';
+      btn.disabled = false;
+      btn.textContent = 'Submit Suggestion';
+    }
+  } catch {
+    msg.className = 'form-msg error';
+    msg.textContent = 'Network error. Please try again.';
+    btn.disabled = false;
+    btn.textContent = 'Submit Suggestion';
   }
 }
 
