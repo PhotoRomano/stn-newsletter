@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Advertise With Us — St. Nicholas Serbian Orthodox Church</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@600;700&family=Arial&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:  #02306e;
+  --navy-dark: #01245a;
+  --gold:  #c9a227;
+  --red:   #c31f27;
+  --light: #eef1f6;
+  --card:  #ffffff;
+  --border:#c8d5e8;
+  --muted: #6a7d96;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, Helvetica, sans-serif; background: var(--light); color: #2b2b2b; }
+.heading-font { font-family: 'El Messiri', Georgia, serif; }
+
+.aw-header { background: linear-gradient(135deg, #01245a 0%, #02306e 45%, #0a4a9e 100%); padding: 40px 24px 44px; border-bottom: 4px solid var(--gold); text-align: center; }
+.aw-header a.aw-back { display: inline-block; color: rgba(255,255,255,.75); font-size: 13px; text-decoration: none; font-weight: 600; margin-bottom: 18px; }
+.aw-header a.aw-back:hover { color: #fff; text-decoration: underline; }
+.aw-header h1 { color: #fff; font-size: 32px; font-weight: 700; margin-bottom: 10px; }
+.aw-header p { color: #cfe0f5; font-size: 15.5px; max-width: 560px; margin: 0 auto; line-height: 1.6; }
+
+.aw-stats { max-width: 760px; margin: -30px auto 0; padding: 0 20px; position: relative; z-index: 2; }
+.aw-stats-card {
+  background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+  box-shadow: 0 8px 28px rgba(2,48,110,.14); padding: 26px 30px; display: flex; gap: 24px; flex-wrap: wrap; justify-content: center;
+}
+.aw-stat { text-align: center; min-width: 120px; }
+.aw-stat .num { font-size: 28px; font-weight: 700; color: var(--navy); font-family: 'El Messiri', Georgia, serif; }
+.aw-stat .lbl { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .3px; margin-top: 2px; }
+
+.aw-wrap { max-width: 900px; margin: 0 auto; padding: 44px 20px 60px; }
+
+.aw-tiers { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 40px; }
+@media (max-width: 720px) { .aw-tiers { grid-template-columns: 1fr; } }
+
+.aw-tier { background: var(--card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; }
+.aw-tier-head { padding: 22px 24px 18px; border-bottom: 1px solid var(--border); }
+.aw-tier-head .aw-pill { display: inline-block; font-size: 10.5px; font-weight: 700; letter-spacing: .4px; text-transform: uppercase; padding: 3px 10px; border-radius: 20px; margin-bottom: 10px; }
+.aw-tier-free .aw-pill { background: #dcfce7; color: #166534; }
+.aw-tier-paid .aw-pill { background: var(--gold); color: #3a2e00; }
+.aw-tier-head h2 { font-size: 21px; color: var(--navy); font-weight: 700; margin-bottom: 4px; }
+.aw-tier-head .aw-price { font-size: 14px; color: var(--muted); font-weight: 600; }
+.aw-tier-body { padding: 20px 24px 26px; font-size: 14.5px; line-height: 1.65; color: #3a3a3a; flex: 1; }
+.aw-tier-body h3 { font-size: 13px; color: var(--navy); text-transform: uppercase; letter-spacing: .3px; margin: 16px 0 8px; }
+.aw-tier-body h3:first-child { margin-top: 0; }
+.aw-tier-body ul { padding-left: 20px; margin-bottom: 4px; }
+.aw-tier-body li { margin-bottom: 5px; }
+.aw-note { background: var(--light); border: 1px solid var(--border); border-radius: 6px; padding: 12px 14px; font-size: 13px; color: var(--navy); margin-top: 14px; line-height: 1.55; }
+.aw-note strong { color: var(--red); }
+
+.aw-math { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 26px 28px; margin-bottom: 40px; }
+.aw-math h2.heading-font { font-size: 19px; color: var(--navy); font-weight: 700; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 2px solid var(--gold); }
+.aw-math-row { display: flex; justify-content: space-between; align-items: baseline; padding: 7px 0; font-size: 14.5px; border-bottom: 1px dashed var(--border); }
+.aw-math-row:last-child { border-bottom: none; }
+.aw-math-row .k { color: #555; }
+.aw-math-row .v { font-weight: 700; color: var(--navy); }
+.aw-math-total { margin-top: 10px; padding-top: 12px; border-top: 2px solid var(--gold); display: flex; justify-content: space-between; align-items: baseline; }
+.aw-math-total .k { font-size: 15px; font-weight: 700; color: var(--navy); }
+.aw-math-total .v { font-size: 20px; font-weight: 700; color: var(--navy); font-family: 'El Messiri', Georgia, serif; }
+.aw-math-foot { font-size: 12.5px; color: var(--muted); margin-top: 12px; line-height: 1.55; }
+
+.aw-form-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 28px 30px; }
+.aw-form-card h2.heading-font { font-size: 20px; color: var(--navy); font-weight: 700; margin-bottom: 6px; }
+.aw-form-card .aw-form-sub { font-size: 13.5px; color: var(--muted); margin-bottom: 20px; }
+.form-row { margin-bottom: 14px; }
+.form-row label { display: block; font-size: 12.5px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+.form-row input, .form-row textarea, .form-row select {
+  width: 100%; padding: 9px 11px; font-size: 14px; font-family: inherit;
+  border: 1px solid var(--border); border-radius: 4px; color: #2b2b2b;
+}
+.form-row textarea { resize: vertical; min-height: 80px; }
+.form-hint { font-size: 11.5px; color: var(--muted); margin-top: 3px; }
+.btn-submit { background: var(--navy); color: #fff; border: none; padding: 12px 26px; font-size: 14.5px; font-weight: 700; cursor: pointer; border-radius: 4px; }
+.btn-submit:hover { background: #01245a; }
+.btn-submit:disabled { opacity: .6; cursor: default; }
+.form-msg { font-size: 13px; margin-top: 12px; padding: 9px 12px; border-radius: 4px; display: none; }
+.form-msg.success { display: block; background: #dcfce7; color: #166534; }
+.form-msg.error   { display: block; background: #fee2e2; color: #991b1b; }
+</style>
+</head>
+<body>
+
+<div class="aw-header">
+  <a class="aw-back" href="https://stnicholasphilly.org/parishioner-businesses">&larr; All Parishioner Businesses</a>
+  <h1 class="heading-font">Advertise With Us</h1>
+  <p>Reach parishioners and friends of the parish every week — right inside the newsletter they already open.</p>
+</div>
+
+<div class="aw-stats">
+  <div class="aw-stats-card">
+    <div class="aw-stat"><div class="num">217</div><div class="lbl">Newsletter subscribers</div></div>
+    <div class="aw-stat"><div class="num">57%</div><div class="lbl">Average open rate</div></div>
+    <div class="aw-stat"><div class="num">~124</div><div class="lbl">Readers per issue</div></div>
+    <div class="aw-stat"><div class="num">52</div><div class="lbl">Issues per year</div></div>
+  </div>
+</div>
+
+<div class="aw-wrap">
+
+  <div class="aw-tiers">
+    <div class="aw-tier aw-tier-free">
+      <div class="aw-tier-head">
+        <span class="aw-pill">Member Rate</span>
+        <h2 class="heading-font">Parishioner in Good Standing</h2>
+        <div class="aw-price">Free</div>
+      </div>
+      <div class="aw-tier-body">
+        <p>Free placement is a benefit of full voting membership in the parish — not something anyone can claim on day one. Per the parish bylaws, that means:</p>
+        <h3>General Parishioner</h3>
+        <p>Baptized and chrismated in the Orthodox Church, and residing within the parish's territory.</p>
+        <h3>Full Voting Membership</h3>
+        <ul>
+          <li>Regular participation in the Divine Liturgy and other services, and receiving Holy Communion regularly</li>
+          <li>Legal adult, in good standing with the parish priest</li>
+          <li>Timely, regular fulfillment of annual stewardship/dues obligations</li>
+          <li>The prescribed church oath taken before the parish priest</li>
+        </ul>
+        <div class="aw-note">
+          <strong>6-month wait applies.</strong> Per the bylaws, a new parishioner only gains full voting rights — and with it, the free advertising rate — after six (6) months as an active member. If you join the parish today specifically to advertise, the free tier starts in six months, not immediately.
+        </div>
+      </div>
+    </div>
+
+    <div class="aw-tier aw-tier-paid">
+      <div class="aw-tier-head">
+        <span class="aw-pill">Open to All</span>
+        <h2 class="heading-font">Community Sponsor</h2>
+        <div class="aw-price">$20/week or $75/month</div>
+      </div>
+      <div class="aw-tier-body">
+        <p>For everyone else — parishioners who haven't reached the 6-month mark yet, and any business owner in the wider community who wants to reach this audience. No membership or waiting period required.</p>
+        <h3>What's included</h3>
+        <ul>
+          <li>A featured card on the Parishioner Businesses directory page</li>
+          <li>A full business detail page with your photos, hours, and contact links</li>
+          <li>Placement in the weekly parish newsletter</li>
+        </ul>
+        <h3>Rate lock</h3>
+        <p>Once you start, your rate is <strong>locked for 12 months</strong> from your start date — no mid-year increases.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="aw-math">
+    <h2 class="heading-font">How we priced it</h2>
+    <div class="aw-math-row"><span class="k">Newsletter subscribers</span><span class="v">217</span></div>
+    <div class="aw-math-row"><span class="k">Average open rate</span><span class="v">57%</span></div>
+    <div class="aw-math-row"><span class="k">Average readers per issue</span><span class="v">≈ 124</span></div>
+    <div class="aw-math-row"><span class="k">Issues per year (weekly)</span><span class="v">52</span></div>
+    <div class="aw-math-row"><span class="k">Total annual impressions</span><span class="v">≈ 6,400</span></div>
+    <div class="aw-math-total">
+      <span class="k">Weekly plan, paid annually</span>
+      <span class="v">$20 &times; 52 = $1,040/yr</span>
+    </div>
+    <div class="aw-math-total">
+      <span class="k">Monthly plan, paid annually</span>
+      <span class="v">$75 &times; 12 = $900/yr</span>
+    </div>
+    <div class="aw-math-foot">This is a small, hyper-local, high-trust audience — not a mass-market ad buy. The value is in reaching parishioners and friends of the parish who already know and trust this community, not raw impression volume.</div>
+  </div>
+
+  <div class="aw-form-card">
+    <h2 class="heading-font">Get Started</h2>
+    <p class="aw-form-sub">Tell us about your business and which tier fits — we'll follow up to confirm details and get you listed.</p>
+    <form id="leadForm" onsubmit="submitLead(event)">
+      <div class="form-row">
+        <label for="leadBusinessName">Business name</label>
+        <input type="text" id="leadBusinessName" required maxlength="120">
+      </div>
+      <div class="form-row">
+        <label for="leadContactName">Your name</label>
+        <input type="text" id="leadContactName" required maxlength="80">
+      </div>
+      <div class="form-row">
+        <label for="leadEmail">Email</label>
+        <input type="email" id="leadEmail" required>
+      </div>
+      <div class="form-row">
+        <label for="leadPhone">Phone (optional)</label>
+        <input type="tel" id="leadPhone" maxlength="40">
+      </div>
+      <div class="form-row">
+        <label for="leadMember">Are you a full voting parish member (6+ months)?</label>
+        <select id="leadMember">
+          <option value="unsure">Not sure</option>
+          <option value="yes">Yes — member rate</option>
+          <option value="no">No — community sponsor rate</option>
+        </select>
+        <div class="form-hint">This just helps us quote the right rate — we'll confirm membership status with the parish office either way.</div>
+      </div>
+      <div class="form-row">
+        <label for="leadMessage">Tell us about your business (optional)</label>
+        <textarea id="leadMessage" maxlength="1000"></textarea>
+      </div>
+      <button type="submit" class="btn-submit" id="leadSubmitBtn">Send</button>
+      <div class="form-msg" id="leadMsg"></div>
+    </form>
+  </div>
+
+</div>
+
+<script>
+const API = 'https://stnicholas-classifieds.photoromano.workers.dev';
+
+async function submitLead(e) {
+  e.preventDefault();
+  const btn = document.getElementById('leadSubmitBtn');
+  const msg = document.getElementById('leadMsg');
+  msg.className = 'form-msg';
+  btn.disabled = true;
+  btn.textContent = 'Sending…';
+
+  try {
+    const res = await fetch(`${API}/api/leads`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        business_name: document.getElementById('leadBusinessName').value,
+        contact_name:  document.getElementById('leadContactName').value,
+        contact_email: document.getElementById('leadEmail').value,
+        contact_phone: document.getElementById('leadPhone').value,
+        is_member:     document.getElementById('leadMember').value,
+        message:       document.getElementById('leadMessage').value,
+      }),
+    });
+    const data = await res.json();
+    if (data.ok) {
+      msg.textContent = data.message || 'Thanks! We’ll be in touch.';
+      msg.className = 'form-msg success';
+      document.getElementById('leadForm').reset();
+    } else {
+      msg.textContent = data.error || 'Something went wrong. Please try again.';
+      msg.className = 'form-msg error';
+    }
+  } catch {
+    msg.textContent = 'Network error. Please try again.';
+    msg.className = 'form-msg error';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Send';
+  }
+}
+</script>
+
+</body>
+</html>
