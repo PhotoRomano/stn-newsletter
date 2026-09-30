@@ -356,7 +356,7 @@ async function verifyEmail() {
     const data = await res.json();
 
     if (data.ok && data.subscribed) {
-      setCookie('cl_verified_email', email, 90);
+      setCookie('cl_verified_email', email, 36500);
       closeVerify();
       // Pre-fill contact with verified email and open submission form
       document.getElementById('fContact').value = email;
