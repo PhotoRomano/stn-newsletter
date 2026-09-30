@@ -4,9 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Parish Businesses — St. Nicholas Serbian Orthodox Church</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@600;700&family=Arial&display=swap" rel="stylesheet">
 <style>
 :root {
   --navy:  #02306e;
+  --navy-dark: #01245a;
   --gold:  #c9a227;
   --red:   #c31f27;
   --light: #eef1f6;
@@ -16,46 +20,134 @@
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: Arial, Helvetica, sans-serif; background: var(--light); color: #2b2b2b; }
+.heading-font { font-family: 'El Messiri', Georgia, serif; }
 
-.bd-header { background: linear-gradient(135deg, #01245a 0%, #02306e 45%, #0a4a9e 100%); padding: 20px 24px; border-bottom: 4px solid var(--gold); }
-.bd-back { color: #a8c4e0; font-size: 13px; text-decoration: none; }
-.bd-back:hover { text-decoration: underline; }
-.bd-header h1 { color: #fff; font-size: 22px; font-weight: 700; margin-top: 6px; }
-.bd-header .bd-cat { color: var(--gold); font-size: 12.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .4px; margin-top: 4px; }
-
-.bd-body { max-width: 640px; margin: 0 auto; padding: 24px 16px 48px; }
-.bd-card { background: var(--card); border: 1px solid var(--border); border-radius: 4px; padding: 20px 22px; }
-.bd-tagline { font-size: 15px; color: #444; line-height: 1.5; margin-bottom: 16px; }
-
-.bd-contact { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0; }
-.bd-contact a {
-  display: inline-block; padding: 8px 16px; font-size: 13px; font-weight: 700;
-  text-decoration: none; border-radius: 2px; border: 1px solid var(--navy); color: var(--navy);
+/* ── Hero ── */
+.bd-hero {
+  position: relative; min-height: 420px; display: flex; flex-direction: column;
+  justify-content: space-between; background-size: cover; background-position: center;
+  background-color: var(--navy);
 }
-.bd-contact a:hover { background: var(--navy); color: #fff; }
+.bd-hero::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(1,36,90,.55) 0%, rgba(1,36,90,.35) 35%, rgba(1,18,46,.88) 100%);
+}
+.bd-hero-top { position: relative; z-index: 1; padding: 18px 24px; }
+.bd-back { color: rgba(255,255,255,.85); font-size: 13px; text-decoration: none; font-weight: 600; }
+.bd-back:hover { color: #fff; text-decoration: underline; }
+.bd-hero-bottom { position: relative; z-index: 1; padding: 0 24px 56px; max-width: 900px; }
+.bd-featured-pill {
+  display: inline-block; background: var(--gold); color: #3a2e00; font-size: 11px; font-weight: 700;
+  letter-spacing: .4px; text-transform: uppercase; padding: 4px 12px; border-radius: 20px; margin-bottom: 12px;
+}
+.bd-cat-pill {
+  display: inline-block; background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.4);
+  color: #fff; font-size: 11.5px; font-weight: 700; letter-spacing: .4px; text-transform: uppercase;
+  padding: 4px 12px; border-radius: 20px; margin: 0 0 14px 8px;
+}
+.bd-hero h1 {
+  color: #fff; font-size: 42px; font-weight: 700; line-height: 1.1; margin-bottom: 10px;
+  text-shadow: 0 2px 12px rgba(0,0,0,.35);
+}
+.bd-hero-tagline { color: rgba(255,255,255,.92); font-size: 17px; line-height: 1.55; max-width: 620px; }
 
-.bd-detail-content { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border); }
+/* ── Content wrap: overlaps the hero for a layered "premium" feel ── */
+.bd-wrap { max-width: 1100px; margin: 0 auto; padding: 0 20px 56px; }
+.bd-grid {
+  display: grid; grid-template-columns: 2fr 1fr; gap: 28px;
+  margin-top: -46px; position: relative; z-index: 2;
+}
+@media (max-width: 860px) { .bd-grid { grid-template-columns: 1fr; margin-top: -32px; } }
 
-.bd-not-found { text-align: center; padding: 60px 16px; color: var(--muted); }
+.bd-card {
+  background: var(--card); border-radius: 10px; box-shadow: 0 8px 28px rgba(2,48,110,.14);
+  border: 1px solid var(--border);
+}
+.bd-main { padding: 36px 40px; }
+@media (max-width: 560px) { .bd-main { padding: 26px 22px; } }
+.bd-main h2.heading-font {
+  font-size: 22px; color: var(--navy); font-weight: 700; margin: 0 0 16px;
+  padding-bottom: 10px; border-bottom: 2px solid var(--gold);
+}
+.bd-about { font-size: 15.5px; line-height: 1.7; color: #3a3a3a; margin-bottom: 8px; }
+
+/* ── Sidebar ── */
+.bd-sidebar { display: flex; flex-direction: column; gap: 18px; }
+.bd-sidebar-card { padding: 22px 24px; }
+.bd-sidebar-card h3.heading-font {
+  font-size: 14px; color: var(--navy); font-weight: 700; text-transform: uppercase;
+  letter-spacing: .4px; margin-bottom: 14px;
+}
+.bd-connect-list { display: flex; flex-direction: column; gap: 10px; }
+.bd-connect-item {
+  display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-radius: 6px;
+  background: var(--light); color: var(--navy); text-decoration: none; font-size: 14px; font-weight: 700;
+  border: 1px solid var(--border); transition: background .15s, border-color .15s;
+}
+.bd-connect-item:hover { background: #e4ebf7; border-color: var(--navy); }
+.bd-connect-item .icon { font-size: 16px; width: 20px; text-align: center; }
+.bd-promo-card {
+  background: linear-gradient(135deg, var(--navy-dark), var(--navy)); color: #fff; padding: 20px 22px;
+}
+.bd-promo-card p { font-size: 13.5px; line-height: 1.55; color: #cfe0f5; margin-bottom: 12px; }
+.bd-promo-card a {
+  display: inline-block; background: var(--gold); color: #3a2e00; text-decoration: none;
+  font-size: 12.5px; font-weight: 700; padding: 8px 14px; border-radius: 4px;
+}
+
+.bd-detail-content { margin-top: 24px; }
+
+.bd-footer { text-align: center; padding: 30px 16px 10px; color: var(--muted); font-size: 12.5px; }
+.bd-footer a { color: var(--navy); font-weight: 700; text-decoration: none; }
+.bd-footer a:hover { text-decoration: underline; }
+
+.bd-not-found { text-align: center; padding: 80px 16px; color: var(--muted); }
 .bd-not-found a { color: var(--navy); }
-
-.bd-loading { text-align: center; padding: 60px 16px; color: var(--muted); }
+.bd-loading { text-align: center; padding: 100px 16px; color: var(--muted); font-size: 15px; }
 </style>
 </head>
 <body>
 
-<div class="bd-header">
-  <a class="bd-back" href="https://stnicholasphilly.org/parish-businesses">&larr; All Parish Businesses</a>
-  <h1 id="bizName">Loading…</h1>
-  <div class="bd-cat" id="bizCat"></div>
+<div class="bd-hero" id="bdHero">
+  <div class="bd-hero-top">
+    <a class="bd-back" href="https://stnicholasphilly.org/parish-businesses">&larr; All Parish Businesses</a>
+  </div>
+  <div class="bd-hero-bottom" id="bdLoadingHero">
+    <div style="color:#fff; font-size:16px;">Loading business…</div>
+  </div>
 </div>
 
-<div class="bd-body">
-  <div id="bizContent" class="bd-loading">Loading business details…</div>
+<div class="bd-wrap">
+  <div class="bd-grid" id="bdGrid" style="display:none;">
+    <div class="bd-card bd-main">
+      <h2 class="heading-font">About</h2>
+      <p class="bd-about" id="bdAbout"></p>
+      <div class="bd-detail-content" id="bdDetailContent"></div>
+    </div>
+    <div class="bd-sidebar">
+      <div class="bd-card bd-sidebar-card">
+        <h3 class="heading-font">Connect</h3>
+        <div class="bd-connect-list" id="bdConnectList"></div>
+      </div>
+      <div class="bd-card bd-promo-card">
+        <p>Own a parish business? Get featured right here, with a full page just like this one.</p>
+        <a href="https://stnicholasphilly.org/parish-businesses">Learn More &rarr;</a>
+      </div>
+    </div>
+  </div>
+  <div id="bdNotFoundWrap"></div>
+</div>
+
+<div class="bd-footer">
+  <div style="margin-bottom:6px;">
+    <a href="https://stnicholasphilly.org/parish-businesses">&larr; Browse All Parish Businesses</a>
+  </div>
+  St. Nicholas Serbian Orthodox Church &middot; 506 Stahr Road, Elkins Park, PA 19027
 </div>
 
 <script>
 const API = 'https://stnicholas-classifieds.photoromano.workers.dev';
+const FALLBACK_HERO = 'https://photoromano.github.io/stn-newsletter/st_nicholas_banner.png';
 
 function esc(s) {
   const d = document.createElement('div');
@@ -63,14 +155,20 @@ function esc(s) {
   return d.innerHTML;
 }
 
+function showNotFound(message) {
+  document.getElementById('bdLoadingHero').innerHTML = '';
+  document.getElementById('bdHero').style.backgroundImage = `url('${FALLBACK_HERO}')`;
+  document.querySelector('.bd-hero-bottom').innerHTML = '<h1 class="heading-font">Business Not Found</h1>';
+  document.getElementById('bdNotFoundWrap').innerHTML =
+    `<div class="bd-card bd-not-found" style="margin-top:20px;">${message} <a href="https://stnicholasphilly.org/parish-businesses">Browse all parish businesses &rarr;</a></div>`;
+}
+
 async function loadBusiness() {
   const params = new URLSearchParams(window.location.search);
   const slug = params.get('slug');
-  const content = document.getElementById('bizContent');
 
   if (!slug) {
-    document.getElementById('bizName').textContent = 'Business not found';
-    content.innerHTML = '<div class="bd-not-found">No business specified. <a href="https://stnicholasphilly.org/parish-businesses">Browse all parish businesses &rarr;</a></div>';
+    showNotFound('No business specified.');
     return;
   }
 
@@ -81,27 +179,42 @@ async function loadBusiness() {
     const b = data.business;
 
     document.title = `${b.name} — Parish Businesses — St. Nicholas Serbian Orthodox Church`;
-    document.getElementById('bizName').textContent = b.name;
-    document.getElementById('bizCat').textContent = b.category;
 
-    let contactLinks = '';
-    if (b.website_url)   contactLinks += `<a href="${esc(b.website_url)}" target="_blank" rel="noopener">Website</a>`;
-    if (b.facebook_url)  contactLinks += `<a href="${esc(b.facebook_url)}" target="_blank" rel="noopener">Facebook</a>`;
-    if (b.instagram_url) contactLinks += `<a href="${esc(b.instagram_url)}" target="_blank" rel="noopener">Instagram</a>`;
-    if (b.contact_phone) contactLinks += `<a href="tel:${esc(b.contact_phone)}">${esc(b.contact_phone)}</a>`;
-    if (b.contact_email) contactLinks += `<a href="mailto:${esc(b.contact_email)}">Email</a>`;
+    const heroUrl = b.hero_image_url || b.card_image_url || FALLBACK_HERO;
+    document.getElementById('bdHero').style.backgroundImage = `url('${esc(heroUrl)}')`;
 
-    content.className = '';
-    content.innerHTML = `
-      <div class="bd-card">
-        ${b.tagline ? `<div class="bd-tagline">${esc(b.tagline)}</div>` : ''}
-        ${contactLinks ? `<div class="bd-contact">${contactLinks}</div>` : ''}
-        <div class="bd-detail-content">${b.detail_html || ''}</div>
-      </div>
+    document.querySelector('.bd-hero-bottom').innerHTML = `
+      ${b.featured ? '<span class="bd-featured-pill">Featured Business</span>' : ''}
+      <span class="bd-cat-pill">${esc(b.category)}</span>
+      <h1 class="heading-font">${esc(b.name)}</h1>
+      ${b.tagline ? `<div class="bd-hero-tagline">${esc(b.tagline)}</div>` : ''}
     `;
+
+    document.getElementById('bdAbout').textContent = b.tagline || '';
+    if (!b.tagline) document.getElementById('bdAbout').style.display = 'none';
+
+    document.getElementById('bdDetailContent').innerHTML = b.detail_html || '';
+
+    const connect = [];
+    if (b.website_url)   connect.push({ icon: '🌐', label: 'Website', href: b.website_url });
+    if (b.facebook_url)  connect.push({ icon: '📘', label: 'Facebook', href: b.facebook_url });
+    if (b.instagram_url) connect.push({ icon: '📷', label: 'Instagram', href: b.instagram_url });
+    if (b.contact_phone) connect.push({ icon: '📞', label: b.contact_phone, href: `tel:${b.contact_phone}` });
+    if (b.contact_email) connect.push({ icon: '✉️', label: 'Email', href: `mailto:${b.contact_email}` });
+
+    const connectList = document.getElementById('bdConnectList');
+    if (connect.length) {
+      connectList.innerHTML = connect.map(c =>
+        `<a class="bd-connect-item" href="${esc(c.href)}" target="_blank" rel="noopener"><span class="icon">${c.icon}</span> ${esc(c.label)}</a>`
+      ).join('');
+    } else {
+      connectList.innerHTML = '<div style="font-size:13px;color:var(--muted);">No contact info listed yet.</div>';
+    }
+
+    document.getElementById('bdGrid').style.display = 'grid';
+    document.getElementById('bdLoadingHero').style.display = 'none';
   } catch (err) {
-    document.getElementById('bizName').textContent = 'Business not found';
-    content.innerHTML = '<div class="bd-not-found">This business listing could not be found. <a href="https://stnicholasphilly.org/parish-businesses">Browse all parish businesses &rarr;</a></div>';
+    showNotFound('This business listing could not be found.');
   }
 }
 
