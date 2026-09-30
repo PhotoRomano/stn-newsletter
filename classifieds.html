@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parish Classifieds — St. Nicholas Serbian Orthodox Church</title>
+<style>
+:root {
+  --navy:  #02306e;
+  --gold:  #c9a227;
+  --red:   #c31f27;
+  --light: #eef1f6;
+  --card:  #ffffff;
+  --border:#c8d5e8;
+  --muted: #6a7d96;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, Helvetica, sans-serif; background: var(--light); color: #2b2b2b; }
+
+/* ── Header ── */
+.cl-header { background: var(--navy); padding: 20px 24px 14px; border-bottom: 4px solid var(--gold); }
+.cl-header h1 { color: #fff; font-size: 22px; font-weight: 700; letter-spacing: .4px; }
+.cl-header p  { color: #a8c4e0; font-size: 13px; margin-top: 4px; }
+.cl-header-row { display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+
+.btn-post {
+  background: var(--gold); color: #3a2e00; border: none; padding: 10px 20px;
+  font-size: 13.5px; font-weight: 700; cursor: pointer; border-radius: 2px;
+  white-space: nowrap;
+}
+.btn-post:hover { background: #b8911f; }
+
+/* ── Category tabs ── */
+.cat-bar { background: #fff; border-bottom: 1px solid var(--border); padding: 0 24px;
+           overflow-x: auto; display: flex; gap: 0; }
+.cat-tab {
+  padding: 12px 16px; font-size: 13px; font-weight: 600; cursor: pointer;
+  border-bottom: 3px solid transparent; color: var(--muted); white-space: nowrap;
+  background: none; border-top: none; border-left: none; border-right: none;
+}
+.cat-tab:hover  { color: var(--navy); }
+.cat-tab.active { color: var(--navy); border-bottom-color: var(--gold); }
+
+/* ── Listings grid ── */
+.cl-body { max-width: 960px; margin: 0 auto; padding: 24px 16px; }
+.listing-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+
+.listing-card {
+  background: var(--card); border: 1px solid var(--border); border-radius: 3px;
+  padding: 16px; display: flex; flex-direction: column; gap: 8px;
+}
+.listing-card:hover { border-color: #9ab0cc; box-shadow: 0 2px 6px rgba(0,0,0,.07); }
+
+.cat-badge {
+  display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .4px;
+  padding: 2px 8px; border-radius: 2px; text-transform: uppercase;
+}
+.cat-badge.for-sale    { background: #dbeafe; color: #1e40af; }
+.cat-badge.for-free    { background: #dcfce7; color: #166534; }
+.cat-badge.wanted      { background: #fef9c3; color: #854d0e; }
+.cat-badge.services    { background: #f3e8ff; color: #6b21a8; }
+.cat-badge.housing     { background: #ffedd5; color: #9a3412; }
+.cat-badge.jobs        { background: #e0f2fe; color: #075985; }
+.cat-badge.childcare   { background: #fce7f3; color: #9d174d; }
+.cat-badge.community   { background: #f0fdf4; color: #14532d; }
+
+.listing-title { font-size: 15px; font-weight: 700; color: var(--navy); line-height: 1.3; }
+.listing-desc  { font-size: 13.5px; color: #444; line-height: 1.55; flex: 1; }
+.listing-meta  { font-size: 12px; color: var(--muted); padding-top: 8px; border-top: 1px solid var(--border); }
+.listing-contact { font-size: 13px; color: var(--navy); font-weight: 600; word-break: break-all; }
+
+.empty-state { text-align: center; padding: 48px 16px; color: var(--muted); font-size: 15px; }
+
+/* ── Modal ── */
+.modal-bg {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5);
+  z-index: 100; align-items: center; justify-content: center; padding: 16px;
+}
+.modal-bg.open { display: flex; }
+.modal {
+  background: #fff; border-radius: 3px; width: 100%; max-width: 520px;
+  max-height: 90vh; overflow-y: auto; box-shadow: 0 8px 32px rgba(0,0,0,.2);
+}
+.modal-header {
+  background: var(--navy); color: #fff; padding: 16px 20px;
+  display: flex; justify-content: space-between; align-items: center;
+  border-bottom: 3px solid var(--gold);
+}
+.modal-header h2 { font-size: 17px; font-weight: 700; }
+.modal-close { background: none; border: none; color: #a8c4e0; font-size: 22px; cursor: pointer; line-height: 1; }
+.modal-close:hover { color: #fff; }
+.modal-body { padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+
+label { display: block; font-size: 13px; font-weight: 600; color: var(--navy); margin-bottom: 4px; }
+input, select, textarea {
+  width: 100%; padding: 9px 11px; border: 1px solid var(--border); font-size: 14px;
+  font-family: inherit; border-radius: 2px; color: #2b2b2b;
+}
+input:focus, select:focus, textarea:focus { outline: 2px solid var(--navy); border-color: var(--navy); }
+textarea { resize: vertical; min-height: 100px; }
+.field-hint { font-size: 11.5px; color: var(--muted); margin-top: 3px; }
+
+.btn-submit {
+  background: var(--navy); color: #fff; border: none; padding: 12px 24px;
+  font-size: 14px; font-weight: 700; cursor: pointer; border-radius: 2px; width: 100%;
+}
+.btn-submit:hover   { background: #01245a; }
+.btn-submit:disabled { background: #8a9ab5; cursor: not-allowed; }
+
+.form-msg { font-size: 13.5px; padding: 10px 12px; border-radius: 2px; display: none; }
+.form-msg.success { background: #dcfce7; color: #166534; display: block; }
+.form-msg.error   { background: #fee2e2; color: #991b1b; display: block; }
+
+/* ── Loading ── */
+.spinner { text-align: center; padding: 40px; color: var(--muted); font-size: 14px; }
+
+@media (max-width: 560px) {
+  .cl-header-row { flex-direction: column; align-items: flex-start; }
+  .cat-tab { padding: 10px 12px; font-size: 12px; }
+}
+</style>
+</head>
+<body>
+
+<div class="cl-header">
+  <div class="cl-header-row">
+    <div>
+      <a href="https://stnicholasphilly.org" style="color:#a8c4e0; font-size:12px; text-decoration:none; display:block; margin-bottom:6px;">&#8592; stnicholasphilly.org</a>
+      <h1>Parish Classifieds</h1>
+      <p>St. Nicholas Serbian Orthodox Church &mdash; Community Board</p>
+    </div>
+    <button class="btn-post" onclick="openModal()">+ Post a Listing</button>
+  </div>
+</div>
+
+<div class="cat-bar" id="catBar">
+  <button class="cat-tab active" data-cat="" onclick="selectCat(this)">All</button>
+</div>
+
+<div class="cl-body">
+  <div id="listingArea" class="spinner">Loading listings&hellip;</div>
+</div>
+
+<!-- Submit modal -->
+<div class="modal-bg" id="modalBg" onclick="maybeClose(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>Post a Listing</h2>
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-msg" id="formMsg"></div>
+
+      <div>
+        <label for="fCategory">Category *</label>
+        <select id="fCategory"></select>
+      </div>
+      <div>
+        <label for="fTitle">Title *</label>
+        <input id="fTitle" type="text" maxlength="120" placeholder="e.g. Oak dining table — 6 seats">
+        <div class="field-hint">120 characters max</div>
+      </div>
+      <div>
+        <label for="fDesc">Description *</label>
+        <textarea id="fDesc" maxlength="1000" placeholder="Describe the item, service, or request in detail&#10;(price, condition, availability, etc.)"></textarea>
+        <div class="field-hint">1,000 characters max</div>
+      </div>
+      <div>
+        <label for="fContact">Contact info *</label>
+        <input id="fContact" type="text" maxlength="200" placeholder="Email address, phone number, or both">
+        <div class="field-hint">Shown publicly on the listing</div>
+      </div>
+      <div>
+        <label for="fName">Your name *</label>
+        <input id="fName" type="text" maxlength="80" placeholder="First name, or first + last">
+      </div>
+
+      <button class="btn-submit" id="submitBtn" onclick="submitListing()">Submit for Review</button>
+      <p style="font-size:12px; color:var(--muted); text-align:center;">
+        Listings are reviewed before going live and expire automatically after 30 days.
+      </p>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = 'https://stnicholas-classifieds.photoromano.workers.dev';
+
+const CAT_CLASS = {
+  'For Sale':  'for-sale',
+  'For Free':  'for-free',
+  'Wanted':    'wanted',
+  'Services':  'services',
+  'Housing':   'housing',
+  'Jobs':      'jobs',
+  'Childcare': 'childcare',
+  'Community': 'community',
+};
+
+let allListings = [];
+let activeCat   = '';
+
+async function init() {
+  const [catRes, listRes] = await Promise.all([
+    fetch(`${API}/api/categories`).then(r => r.json()),
+    fetch(`${API}/api/listings`).then(r => r.json()),
+  ]);
+
+  // Populate category tabs and select dropdown
+  const bar = document.getElementById('catBar');
+  const sel = document.getElementById('fCategory');
+  for (const cat of (catRes.categories || [])) {
+    const btn = document.createElement('button');
+    btn.className = 'cat-tab';
+    btn.dataset.cat = cat;
+    btn.textContent = cat;
+    btn.onclick = () => selectCat(btn);
+    bar.appendChild(btn);
+
+    const opt = document.createElement('option');
+    opt.value = cat;
+    opt.textContent = cat;
+    sel.appendChild(opt);
+  }
+
+  allListings = listRes.listings || [];
+  render();
+}
+
+function selectCat(btn) {
+  document.querySelectorAll('.cat-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  activeCat = btn.dataset.cat || '';
+  render();
+}
+
+function render() {
+  const items = activeCat ? allListings.filter(l => l.category === activeCat) : allListings;
+  const area  = document.getElementById('listingArea');
+
+  if (!items.length) {
+    area.innerHTML = `<div class="empty-state">No listings yet in this category.<br>Be the first to post!</div>`;
+    return;
+  }
+
+  area.innerHTML = `<div class="listing-grid">${items.map(card).join('')}</div>`;
+}
+
+function card(l) {
+  const daysLeft = Math.ceil((new Date(l.expires_at) - Date.now()) / 86_400_000);
+  const posted   = new Date(l.approved_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  const cls      = CAT_CLASS[l.category] || 'community';
+  return `
+    <div class="listing-card">
+      <div><span class="cat-badge ${cls}">${l.category}</span></div>
+      <div class="listing-title">${esc(l.title)}</div>
+      <div class="listing-desc">${esc(l.description).replace(/\n/g, '<br>')}</div>
+      <div class="listing-contact">${esc(l.contact)}</div>
+      <div class="listing-meta">Posted by ${esc(l.name)} &middot; ${posted} &middot; expires in ${daysLeft}d</div>
+    </div>`;
+}
+
+function esc(s) {
+  return String(s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+function openModal()  { document.getElementById('modalBg').classList.add('open'); }
+function closeModal() {
+  document.getElementById('modalBg').classList.remove('open');
+  document.getElementById('formMsg').className = 'form-msg';
+  document.getElementById('formMsg').textContent = '';
+}
+function maybeClose(e) { if (e.target === document.getElementById('modalBg')) closeModal(); }
+
+async function submitListing() {
+  const btn = document.getElementById('submitBtn');
+  const msg = document.getElementById('formMsg');
+
+  const body = {
+    category:    document.getElementById('fCategory').value,
+    title:       document.getElementById('fTitle').value.trim(),
+    description: document.getElementById('fDesc').value.trim(),
+    contact:     document.getElementById('fContact').value.trim(),
+    name:        document.getElementById('fName').value.trim(),
+  };
+
+  if (!body.title || !body.description || !body.contact || !body.name) {
+    msg.className = 'form-msg error';
+    msg.textContent = 'Please fill in all required fields.';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Submitting…';
+
+  try {
+    const res  = await fetch(`${API}/api/submit`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    const data = await res.json();
+
+    if (data.ok) {
+      msg.className = 'form-msg success';
+      msg.textContent = data.message;
+      document.getElementById('fTitle').value = '';
+      document.getElementById('fDesc').value  = '';
+      document.getElementById('fContact').value = '';
+      document.getElementById('fName').value  = '';
+      btn.textContent = 'Submitted!';
+    } else {
+      msg.className = 'form-msg error';
+      msg.textContent = data.error || 'Submission failed. Please try again.';
+      btn.disabled = false;
+      btn.textContent = 'Submit for Review';
+    }
+  } catch {
+    msg.className = 'form-msg error';
+    msg.textContent = 'Network error. Please try again.';
+    btn.disabled = false;
+    btn.textContent = 'Submit for Review';
+  }
+}
+
+init().catch(() => {
+  document.getElementById('listingArea').innerHTML =
+    '<div class="empty-state">Could not load listings. Please try again later.</div>';
+});
+</script>
+</body>
+</html>
