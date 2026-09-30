@@ -162,8 +162,11 @@ const FALLBACK_HERO = 'https://photoromano.github.io/stn-newsletter/st_nicholas_
 // building its own toggle -- this page follows the site's global choice,
 // it doesn't offer a separate local one.
 function siteLang() {
-  const m = document.cookie.match(/(?:^|;\s*)stn_lang=([^;]+)/);
-  return m && m[1] === 'sr' ? 'sr' : 'en';
+  // The site sets stn_lang at more than one cookie scope (confirmed live
+  // 2026-09-30 -- two distinct stn_lang cookies coexist after toggling),
+  // so scan all occurrences rather than trusting whichever comes first.
+  const pairs = document.cookie.split(';').map(c => c.trim());
+  return pairs.some(c => c === 'stn_lang=sr') ? 'sr' : 'en';
 }
 
 function esc(s) {

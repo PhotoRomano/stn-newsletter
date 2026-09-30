@@ -174,8 +174,11 @@ const BIZ_DETAIL_PAGE = 'https://stnicholasphilly.org/business';
 // Site-wide language preference, same stn_lang cookie the header EN/СР
 // toggle sets everywhere else on stnicholasphilly.org (data-l="en"/"sr").
 function siteLang() {
-  const m = document.cookie.match(/(?:^|;\s*)stn_lang=([^;]+)/);
-  return m && m[1] === 'sr' ? 'sr' : 'en';
+  // The site sets stn_lang at more than one cookie scope (confirmed live
+  // 2026-09-30 -- two distinct stn_lang cookies coexist after toggling),
+  // so scan all occurrences rather than trusting whichever comes first.
+  const pairs = document.cookie.split(';').map(c => c.trim());
+  return pairs.some(c => c === 'stn_lang=sr') ? 'sr' : 'en';
 }
 
 const CATEGORIES = ['Food & Catering','Retail & Shops','Professional Services','Home & Trade Services','Health & Wellness','Other'];
