@@ -171,6 +171,13 @@ body { font-family: Arial, Helvetica, sans-serif; background: var(--light); colo
 const API = 'https://stnicholas-classifieds.photoromano.workers.dev';
 const BIZ_DETAIL_PAGE = 'https://stnicholasphilly.org/business';
 
+// Site-wide language preference, same stn_lang cookie the header EN/СР
+// toggle sets everywhere else on stnicholasphilly.org (data-l="en"/"sr").
+function siteLang() {
+  const m = document.cookie.match(/(?:^|;\s*)stn_lang=([^;]+)/);
+  return m && m[1] === 'sr' ? 'sr' : 'en';
+}
+
 const CATEGORIES = ['Food & Catering','Retail & Shops','Professional Services','Home & Trade Services','Health & Wellness','Other'];
 let allBusinesses = [];
 let activeCategory = null;
@@ -212,7 +219,7 @@ function renderGrid() {
     const a = document.createElement('a');
     a.className = 'biz-card';
     a.href = `${BIZ_DETAIL_PAGE}?slug=${encodeURIComponent(b.slug)}`;
-    const img = b.card_image_url || 'https://placehold.co/400x800/eef1f6/6a7d96?text=' + encodeURIComponent(b.name);
+    const img = (siteLang() === 'sr' && b.card_image_url_sr) || b.card_image_url || 'https://placehold.co/400x800/eef1f6/6a7d96?text=' + encodeURIComponent(b.name);
     a.innerHTML = `
       <div class="biz-card-img-wrap">
         ${b.featured ? '<span class="biz-featured-badge">Featured</span>' : ''}
