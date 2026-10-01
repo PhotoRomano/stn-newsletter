@@ -32,7 +32,11 @@ ROOT = Path(__file__).parent
 BANNER_URL = "https://photoromano.github.io/stn-newsletter/st_nicholas_banner.png"
 SEPARATOR = " \xa0/\xa0 "  # the literal "&nbsp;/&nbsp;" text bs4 exposes for Giving's merged strings
 
-CONTENT_START_MARKER = "This Week at the Altar"
+# "In This Issue" is the current first weekly-varying section (added
+# 2026-10-01, sits above "This Week at the Altar"); older masters built
+# before that change don't have it, so both markers are checked and
+# whichever appears first in a given issue starts the zone.
+CONTENT_START_MARKERS = ("In This Issue", "This Week at the Altar")
 CONTENT_END_MARKER = "Beehiiv Poll placeholder"
 GIVING_MARKER = "Giving —"
 
@@ -93,7 +97,7 @@ def extract_sections(soup, lang):
     out = []
     in_zone = False
     for label, tr in top_level_children_with_comments(table):
-        if label and CONTENT_START_MARKER in label:
+        if label and any(marker in label for marker in CONTENT_START_MARKERS):
             in_zone = True
         if label and CONTENT_END_MARKER in label:
             break
