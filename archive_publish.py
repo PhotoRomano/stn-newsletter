@@ -33,11 +33,16 @@ def strip_draft_chrome(soup):
             break
     # "NEEDS BOARD INPUT" amber callout -- an internal editorial note (open
     # questions, stale meeting references) that must never reach the public
-    # archive page, same class of leak as the DRAFT banner above.
-    for div in soup.find_all("div"):
-        if div.get("style") and "background:#fdf1e0" in div.get("style", "") and "border-bottom:2px solid #c9a227" in div.get("style", ""):
-            div.decompose()
-            break
+    # archive page, same class of leak as the DRAFT banner above. Anchored on
+    # the box's text rather than its markup/color, since the box has shipped
+    # as both a <div> and a <table> with different background colors and a
+    # markup-specific selector silently stopped matching (caught 2026-10-01
+    # -- the box survived into archive/2026-10-01.html unstripped).
+    needs_board_text = soup.find(string=re.compile(r"NEEDS BOARD INPUT before this goes out"))
+    if needs_board_text:
+        container = needs_board_text.find_parent(["table", "div"])
+        if container:
+            container.decompose()
     # language-preference bar row -- walk up from the link itself to its
     # immediate containing <tr>, not find_all("tr") (which matches the outer
     # wrapper row first, since it also contains this link as a descendant,
