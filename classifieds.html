@@ -1155,5 +1155,22 @@ init().then(() => {
     '<div class="empty-state">Could not load listings. Please try again later.</div>';
 });
 </script>
+
+<script>
+(function fixMobileNav() {
+  var MAP = {
+    'Parishioner Businesses': '/parish-businesses',
+    'Parish Classifieds': '/classifieds',
+    'Advertise With Us': '/advertise-with-us',
+  };
+  function patch() {
+    document.querySelectorAll('a[href*="shop.html"]').forEach(function(a) {
+      var dest = MAP[a.textContent.trim()];
+      if (dest) a.href = dest;
+    });
+  }
+  document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', patch) : patch();
+})();
+</script>
 </body>
 </html>
