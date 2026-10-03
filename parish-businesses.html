@@ -259,7 +259,9 @@ loadBusinesses();
       if (dest) a.href = dest;
     });
   }
-  document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', patch) : patch();
+  patch();
+  document.addEventListener('DOMContentLoaded', patch);
+  new MutationObserver(patch).observe(document.documentElement, {childList:true, subtree:true});
 })();
 </script>
 
