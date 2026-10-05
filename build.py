@@ -30,6 +30,7 @@ from bs4 import BeautifulSoup, Comment, NavigableString
 
 ROOT = Path(__file__).parent
 BANNER_URL = "https://photoromano.github.io/stn-newsletter/st_nicholas_banner.png"
+BORDER_STRIP_URL = "https://photoromano.github.io/stn-newsletter/assets/border-strip.png"
 SEPARATOR = " \xa0/\xa0 "  # the literal "&nbsp;/&nbsp;" text bs4 exposes for Giving's merged strings
 
 # "In This Issue" is the current first weekly-varying section (added
@@ -333,6 +334,12 @@ def build_variant(lang, week, sections_html):
 {other_banner_html}  <!-- ══ Masthead ══ -->
   <tr><td style="background:#ffffff; padding:14px 16px 10px; text-align:center;">
     <img class="masthead-img" src="{BANNER_URL}" width="560" alt="{cfg['masthead_alt']}"
+         style="display:block; margin:0 auto; width:100%; max-width:560px; height:auto;">
+  </td></tr>
+
+  <!-- ══ Serbian embroidery border ══ -->
+  <tr><td style="background:#ffffff; padding:0 16px 10px; text-align:center;">
+    <img src="{BORDER_STRIP_URL}" width="560" alt=""
          style="display:block; margin:0 auto; width:100%; max-width:560px; height:auto;">
   </td></tr>
 
