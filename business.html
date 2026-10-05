@@ -126,7 +126,7 @@ body.lang-sr .lang-en { display: none; }
 <div class="bd-wrap">
   <div class="bd-grid" id="bdGrid" style="display:none;">
     <div class="bd-card bd-main">
-      <h2 class="heading-font">About</h2>
+      <h2 class="heading-font" id="bdAboutHeading">About</h2>
       <p class="bd-about" id="bdAbout"></p>
       <div class="bd-detail-content" id="bdDetailContent"></div>
     </div>
@@ -213,9 +213,24 @@ function applySiteLang() {
     const heroTagline = document.querySelector('.bd-hero-tagline');
     if (heroTagline) heroTagline.textContent = tagline;
     const about = document.getElementById('bdAbout');
+    const aboutHeading = document.getElementById('bdAboutHeading');
     if (about) {
-      about.textContent = tagline;
-      about.style.display = tagline ? '' : 'none';
+      // MaxStudio's own listing swaps the generic About recap for a direct
+      // pitch CTA (Max, 2026-10-05) -- per-slug override, not a general
+      // field, since every other listing still wants the plain About recap.
+      if (currentBusiness.slug === 'maxstudio') {
+        const ctaHeading = lang === 'sr' ? 'Хајде да разговарамо о вашој идеји' : "Let's Discuss Your Ideas";
+        const ctaBody = lang === 'sr'
+          ? 'Поделите што више детаља о вашој идеји и направићу бесплатан дизајн ваше идеје пре него што разговарамо о цени.'
+          : "Share as much detail as you can about your idea and I will make a free design of your idea before any cost framework is discussed.";
+        if (aboutHeading) aboutHeading.textContent = ctaHeading;
+        about.textContent = ctaBody;
+        about.style.display = '';
+      } else {
+        if (aboutHeading) aboutHeading.textContent = 'About';
+        about.textContent = tagline;
+        about.style.display = tagline ? '' : 'none';
+      }
     }
   }
 }
@@ -276,8 +291,7 @@ async function loadBusiness() {
       ${taglineFor(b) ? `<div class="bd-hero-tagline">${esc(taglineFor(b))}</div>` : ''}
     `;
 
-    document.getElementById('bdAbout').textContent = taglineFor(b);
-    if (!taglineFor(b)) document.getElementById('bdAbout').style.display = 'none';
+    applySiteLang();
 
     document.getElementById('bdDetailContent').innerHTML = b.detail_html || '';
 
