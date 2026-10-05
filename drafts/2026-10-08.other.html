@@ -144,15 +144,12 @@
             </a>
 
 </td></tr>
-<tr><td style="padding:0 16px 16px;">
-<p id="stn-vote-thanks" style="display:none; font-size:13px; font-weight:bold; color:#ffffff; background:rgba(21,90,43,.92); border-radius:4px; padding:10px 14px; margin:0;"></p>
-</td></tr>
 </table>
 </td></tr>
 
 <tr><td style="padding:0;">
 <div id="stn-vote-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:9999; align-items:center; justify-content:center; padding:20px;">
-<div style="background:#ffffff; border-radius:8px; max-width:360px; width:100%; padding:24px; text-align:center; font-family:Georgia,'Times New Roman',serif;">
+<div id="stn-vote-modal-body" style="background:#ffffff; border-radius:8px; max-width:360px; width:100%; padding:24px; text-align:center; font-family:Georgia,'Times New Roman',serif;">
 <p style="font-size:15px; color:#333; margin:0 0 18px;">Vote for <strong id="stn-vote-modal-choice"></strong>?  /  Гласати за <strong id="stn-vote-modal-choice-sr"></strong>?</p>
 <div style="text-align:center;">
 <button id="stn-vote-cancel" style="padding:10px 18px; font-size:13.5px; border:1px solid #ccc; background:#f5f5f5; border-radius:2px; cursor:pointer; margin-right:8px;" type="button">Cancel / Откажи</button>
@@ -164,36 +161,54 @@
     (function(){
       var API = 'https://stnicholas-social-poll.photoromano.workers.dev';
       var POLL = 'parish-social-2026-10-17';
-      var LS_KEY = 'stn-vote-' + POLL;
       var modal = document.getElementById('stn-vote-modal');
+      var modalBody = document.getElementById('stn-vote-modal-body');
       var choiceEl = document.getElementById('stn-vote-modal-choice');
       var choiceSrEl = document.getElementById('stn-vote-modal-choice-sr');
       var cancelBtn = document.getElementById('stn-vote-cancel');
       var confirmBtn = document.getElementById('stn-vote-confirm');
-      var thanksEls = document.querySelectorAll('#stn-vote-thanks');
       if (!modal || !confirmBtn) return;
       var pending = null;
+      var defaultModalHtml = modalBody.innerHTML;
 
-      function setThanks(label) {
-        thanksEls.forEach(function(el){
-          el.style.display = 'block';
-          el.textContent = '✓ Vote received for ' + label + ' — thank you! / Глас примљен — хвала!';
-        });
-        document.querySelectorAll('.stn-vote-opt').forEach(function(a){
-          a.style.pointerEvents = 'none';
-          a.style.opacity = '.6';
-          a.style.textDecoration = 'line-through';
-        });
+      function closeModal() {
+        modal.style.display = 'none';
+        pending = null;
+        modalBody.innerHTML = defaultModalHtml;
+        bindButtons();
       }
 
-      var existing = null;
-      try { existing = localStorage.getItem(LS_KEY); } catch (e) {}
-      if (existing) setThanks(existing);
+      function bindButtons() {
+        document.getElementById('stn-vote-cancel').addEventListener('click', closeModal);
+        document.getElementById('stn-vote-confirm').addEventListener('click', onConfirm);
+      }
+
+      function onConfirm() {
+        if (!pending) return;
+        var btn = document.getElementById('stn-vote-confirm');
+        btn.disabled = true;
+        btn.textContent = 'Voting…';
+        fetch(API + '/vote', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ poll: POLL, option: pending.key })
+        }).then(function(r){ return r.json(); }).then(function(data){
+          if (data && data.ok) {
+            modalBody.innerHTML = '<p style="font-size:15px; color:#155a2b; font-weight:bold; margin:0 0 18px;">' +
+              '✓ Thanks for voting! / Хвала на гласу!</p>' +
+              '<button type="button" id="stn-vote-ok" style="padding:10px 18px; font-size:13.5px; border:none; background:#8c1419; color:#ffffff; border-radius:2px; cursor:pointer; font-weight:bold;">OK</button>';
+            document.getElementById('stn-vote-ok').addEventListener('click', closeModal);
+          } else {
+            closeModal();
+          }
+        }).catch(function(){
+          closeModal();
+        });
+      }
 
       document.querySelectorAll('.stn-vote-opt').forEach(function(a){
         a.addEventListener('click', function(e){
           e.preventDefault();
-          if (existing) return;
           pending = { key: a.getAttribute('data-option'), label: a.getAttribute('data-label') };
           choiceEl.textContent = pending.label;
           choiceSrEl.textContent = pending.label;
@@ -201,34 +216,7 @@
         });
       });
 
-      cancelBtn.addEventListener('click', function(){
-        modal.style.display = 'none';
-        pending = null;
-      });
-
-      confirmBtn.addEventListener('click', function(){
-        if (!pending) return;
-        confirmBtn.disabled = true;
-        confirmBtn.textContent = 'Voting…';
-        fetch(API + '/vote', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ poll: POLL, option: pending.key })
-        }).then(function(r){ return r.json(); }).then(function(data){
-          modal.style.display = 'none';
-          confirmBtn.disabled = false;
-          confirmBtn.textContent = 'Confirm ✓';
-          if (data && data.ok) {
-            try { localStorage.setItem(LS_KEY, pending.label); } catch (e) {}
-            existing = pending.label;
-            setThanks(pending.label);
-          }
-        }).catch(function(){
-          modal.style.display = 'none';
-          confirmBtn.disabled = false;
-          confirmBtn.textContent = 'Confirm ✓';
-        });
-      });
+      bindButtons();
     })();
     </script>
 </td></tr>
