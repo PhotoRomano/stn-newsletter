@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Classifieds Admin — St. Nicholas</title>
+<title>Parish Admin — St. Nicholas</title>
 <style>
 :root { --navy:#02306e; --gold:#c9a227; --red:#c31f27; --light:#eef1f6; --border:#c8d5e8; --muted:#6a7d96; }
 * { box-sizing:border-box; margin:0; padding:0; }
@@ -57,7 +57,7 @@ body { font-family:Arial,Helvetica,sans-serif; background:var(--light); color:#2
 <!-- Login -->
 <div class="login-wrap" id="loginWrap">
   <div class="login-box">
-    <h2>Classifieds Admin</h2>
+    <h2>Parish Admin</h2>
     <input type="password" id="tokenInput" placeholder="Admin token" onkeydown="if(event.key==='Enter')login()">
     <button class="btn-full" onclick="login()">Sign In</button>
     <div class="login-err" id="loginErr">Invalid token.</div>
@@ -68,7 +68,7 @@ body { font-family:Arial,Helvetica,sans-serif; background:var(--light); color:#2
 <div id="mainWrap" style="display:none">
   <div class="hdr">
     <div>
-      <h1>Classifieds Admin</h1>
+      <h1>Parish Admin</h1>
       <div class="hdr-sub">St. Nicholas Serbian Orthodox Church</div>
     </div>
     <button class="btn-sm btn-logout" onclick="logout()">Sign Out</button>
@@ -78,6 +78,7 @@ body { font-family:Arial,Helvetica,sans-serif; background:var(--light); color:#2
     <button class="tab active" onclick="showTab('pending',this)">Pending <span class="badge" id="pendingBadge">0</span></button>
     <button class="tab" onclick="showTab('active',this)">Active Listings</button>
     <button class="tab" onclick="showTab('categories',this)">Categories <span class="badge" id="catBadge" style="display:none">0</span></button>
+    <button class="tab" onclick="showTab('polls',this)">Poll Votes</button>
   </div>
 
   <div class="panel active" id="tab-pending">
@@ -94,10 +95,26 @@ body { font-family:Arial,Helvetica,sans-serif; background:var(--light); color:#2
     <div class="msg-bar" id="msgCat"></div>
     <div id="catList" class="spinner">Loading…</div>
   </div>
+
+  <div class="panel" id="tab-polls">
+    <div class="msg-bar" id="msgPolls"></div>
+    <div id="pollsList" class="spinner">Loading…</div>
+  </div>
 </div>
 
 <script>
 const API = 'https://stnicholas-classifieds.photoromano.workers.dev';
+const POLL_API = 'https://stnicholas-social-poll.photoromano.workers.dev';
+const POLL_LABELS = {
+  'parish-social-2026-10-17': 'Parish Social Night (Oct 17)',
+};
+const POLL_OPTION_LABELS = {
+  'movie-night': '🎥 Movie Night & Popcorn Bar',
+  'bingo-night': '🎯 Bingo Night',
+  'game-night': '🎲 Game Night',
+  'fellowship-social': '☕ Fellowship Social',
+  'other': '✍️ Write-in (other)',
+};
 let TOKEN = '';
 
 function login() {
@@ -131,6 +148,11 @@ async function api(path, method = 'GET', body = null) {
   return res.json();
 }
 
+async function pollApi(path) {
+  const res = await fetch(`${POLL_API}${path}`, { headers: { 'Authorization': `Bearer ${TOKEN}` } });
+  return res.json();
+}
+
 function flash(elId, msg, ok = true) {
   const el = document.getElementById(elId);
   el.className = `msg-bar ${ok ? 'ok' : 'err'}`;
@@ -157,6 +179,7 @@ async function loadAll() {
   loadPending();
   loadActive();
   loadCategories();
+  loadPolls();
 }
 
 // ── Pending ────────────────────────────────────────────────────────────────
@@ -292,6 +315,53 @@ async function rejectCategory(id) {
   const data = await api(`/api/admin/reject-category/${id}`, 'POST');
   if (data.ok) { flash('msgCat','Category rejected.'); loadCategories(); }
   else flash('msgCat', data.error || 'Error', false);
+}
+
+// ── Poll Votes ─────────────────────────────────────────────────────────────
+async function loadPolls() {
+  const list = document.getElementById('pollsList');
+  const pollsData = await pollApi('/admin/polls');
+  if (!pollsData.ok) {
+    list.innerHTML = `<div class="empty">Error loading polls${pollsData.error ? ': ' + esc(pollsData.error) : ''}.</div>`;
+    return;
+  }
+  const polls = pollsData.polls || [];
+  if (!polls.length) { list.innerHTML = `<div class="empty">No polls configured.</div>`; return; }
+
+  const sections = await Promise.all(polls.map(async (pollId) => {
+    const data = await pollApi(`/results?poll=${encodeURIComponent(pollId)}`);
+    if (!data.ok) return `<div class="card"><div class="card-title">${esc(POLL_LABELS[pollId] || pollId)}</div><div class="card-meta">Error loading results.</div></div>`;
+    const counts = data.counts || {};
+    const writeins = data.writeins || [];
+    const max = Math.max(1, ...Object.values(counts));
+    const total = Object.values(counts).reduce((a, b) => a + b, 0);
+    const bars = Object.entries(counts).map(([opt, n]) => `
+      <div style="margin-bottom:8px;">
+        <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:3px;">
+          <span>${esc(POLL_OPTION_LABELS[opt] || opt)}</span>
+          <strong>${n}</strong>
+        </div>
+        <div style="background:#eef1f6;border-radius:2px;height:10px;overflow:hidden;">
+          <div style="background:var(--navy);height:100%;width:${Math.round((n / max) * 100)}%;"></div>
+        </div>
+      </div>`).join('');
+    const writeinsHtml = writeins.length ? `
+      <div style="margin-top:12px;">
+        <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px;">Write-ins (${writeins.length})</div>
+        <ul style="padding-left:18px;font-size:13px;color:#444;">
+          ${writeins.map(w => `<li>${esc(w)}</li>`).join('')}
+        </ul>
+      </div>` : '';
+    return `
+      <div class="card">
+        <div class="card-title">${esc(POLL_LABELS[pollId] || pollId)}</div>
+        <div class="card-meta">${total} total vote${total === 1 ? '' : 's'}</div>
+        ${bars}
+        ${writeinsHtml}
+      </div>`;
+  }));
+
+  list.innerHTML = sections.join('');
 }
 
 // Auto-login from localStorage

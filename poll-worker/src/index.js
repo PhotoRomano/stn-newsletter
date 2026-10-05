@@ -9,6 +9,9 @@
 // combinations are accepted -- add a new entry here for each future event
 // poll rather than accepting arbitrary option strings from the client. The
 // 'other' option is the write-in path -- it requires body.writein text.
+//
+// GET /results and /admin/polls require Authorization: Bearer <ADMIN_TOKEN>
+// (set via `wrangler secret put ADMIN_TOKEN`; see admin-*.html for the UI).
 
 const POLLS = {
   'parish-social-2026-10-17': [
@@ -34,13 +37,18 @@ const VOTE_DEDUPE_TTL_SECONDS = 60 * 60 * 24 * 14; // 14 days
 function corsHeaders(origin) {
   const headers = {
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
     Vary: 'Origin',
   };
   if (ALLOWED_ORIGINS.has(origin)) {
     headers['Access-Control-Allow-Origin'] = origin;
   }
   return headers;
+}
+
+function isAdmin(request, env) {
+  const auth = request.headers.get('Authorization') || '';
+  return Boolean(env.ADMIN_TOKEN) && auth === `Bearer ${env.ADMIN_TOKEN}`;
 }
 
 function json(data, status, headers) {
@@ -83,6 +91,9 @@ export default {
     }
 
     if (request.method === 'GET' && url.pathname === '/results') {
+      if (!isAdmin(request, env)) {
+        return json({ ok: false, error: 'Unauthorized' }, 401, headers);
+      }
       const poll = url.searchParams.get('poll') || '';
       if (!POLLS[poll]) {
         return json({ ok: false, error: 'Unknown poll' }, 404, headers);
@@ -91,6 +102,13 @@ export default {
       const writeinsRaw = await env.VOTES.get(`writeins:${poll}`);
       const writeins = writeinsRaw ? JSON.parse(writeinsRaw) : [];
       return json({ ok: true, poll, counts, writeins }, 200, headers);
+    }
+
+    if (request.method === 'GET' && url.pathname === '/admin/polls') {
+      if (!isAdmin(request, env)) {
+        return json({ ok: false, error: 'Unauthorized' }, 401, headers);
+      }
+      return json({ ok: true, polls: Object.keys(POLLS) }, 200, headers);
     }
 
     if (request.method === 'POST' && url.pathname === '/vote') {
