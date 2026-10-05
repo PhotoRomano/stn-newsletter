@@ -129,14 +129,17 @@
               All are welcome — see the parish calendar for full details.
             </p>
 <div style="background:rgba(255,255,255,.92); border-radius:4px; padding:12px 14px; margin:0 0 14px;">
-<p style="font-size:13px; font-weight:bold; color:#8c1419; margin:0 0 8px;">💬 Help us plan it — tap your favorite activity to vote:</p>
-<ol style="font-size:13px; line-height:1.6; color:#333; margin:0; padding-left:18px;">
-<li><a class="stn-vote-opt" data-label="Movie Night &amp; Popcorn Bar" data-option="movie-night" href="#" style="color:#333; text-decoration:underline dotted; cursor:pointer;">🎥 Movie Night &amp; Popcorn Bar</a></li>
-<li><a class="stn-vote-opt" data-label="Bingo Night" data-option="bingo-night" href="#" style="color:#333; text-decoration:underline dotted; cursor:pointer;">🎯 Bingo Night (prizes for kids &amp; grown-ups)</a></li>
-<li><a class="stn-vote-opt" data-label="Game Night" data-option="game-night" href="#" style="color:#333; text-decoration:underline dotted; cursor:pointer;">🎲 Game Night (board games, cornhole, trivia)</a></li>
-<li><a class="stn-vote-opt" data-label="Fellowship Social with Music &amp; Dancing" data-option="fellowship-social" href="#" style="color:#333; text-decoration:underline dotted; cursor:pointer;">☕ Fellowship Social with Music &amp; Dancing</a></li>
-</ol>
+<p style="font-size:13px; font-weight:bold; color:#8c1419; margin:0 0 8px;">💬 Help us plan it — here's what we're considering:</p>
+<ul style="font-size:13px; line-height:1.6; color:#333; margin:0; padding-left:18px; list-style:none;">
+<li>🎥 Movie Night &amp; Popcorn Bar</li>
+<li>🎯 Bingo Night (prizes for kids &amp; grown-ups)</li>
+<li>🎲 Game Night (board games, cornhole, trivia)</li>
+<li>☕ Fellowship Social with Music &amp; Dancing</li>
+</ul>
 <p style="font-size:11.5px; line-height:1.5; color:#666; margin:8px 0 0; font-style:italic;">One vote per household, please.</p>
+<div style="text-align:center; margin:12px 0 0;">
+<button class="stn-vote-open" style="display:inline-block; background:#8c1419; color:#ffffff; border:none; padding:10px 20px; font-size:13.5px; font-weight:bold; border-radius:2px; cursor:pointer;" type="button">🗳️ Vote Now →</button>
+</div>
 </div>
 <a href="https://stnicholasphilly.org/calendar.html" style="display:inline-block; background:#ffffff; color:#8c1419; text-decoration:none; padding:10px 18px; font-size:13.5px; font-weight:bold; border-radius:2px;">
               Calendar →
@@ -148,11 +151,20 @@
 
 <tr><td style="padding:0;">
 <div id="stn-vote-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:9999; align-items:center; justify-content:center; padding:20px;">
-<div id="stn-vote-modal-body" style="background:#ffffff; border-radius:8px; max-width:360px; width:100%; padding:24px; text-align:center; font-family:Georgia,'Times New Roman',serif;">
-<p style="font-size:15px; color:#333; margin:0 0 18px;">Vote for <strong id="stn-vote-modal-choice"></strong>?  /  Гласати за <strong id="stn-vote-modal-choice-sr"></strong>?</p>
+<div id="stn-vote-modal-body" style="background:#ffffff; border-radius:8px; max-width:380px; width:100%; padding:24px; text-align:center; font-family:Georgia,'Times New Roman',serif;">
+<p style="font-size:15px; font-weight:bold; color:#333; margin:0 0 14px;">Vote: Parish Social Night Activity<br/><span style="font-size:13px; font-weight:normal; color:#666;">Гласајте: активност за парохијско вече</span></p>
+<div style="text-align:left; margin:0 0 14px;">
+<label style="display:block; font-size:13.5px; color:#333; margin:0 0 9px; cursor:pointer;"><input name="stn-vote-choice" style="margin-right:8px;" type="radio" value="movie-night"/>🎥 Movie Night &amp; Popcorn Bar / Филмско вече и кокице</label>
+<label style="display:block; font-size:13.5px; color:#333; margin:0 0 9px; cursor:pointer;"><input name="stn-vote-choice" style="margin-right:8px;" type="radio" value="bingo-night"/>🎯 Bingo Night / Бинго вече</label>
+<label style="display:block; font-size:13.5px; color:#333; margin:0 0 9px; cursor:pointer;"><input name="stn-vote-choice" style="margin-right:8px;" type="radio" value="game-night"/>🎲 Game Night / Вече игара</label>
+<label style="display:block; font-size:13.5px; color:#333; margin:0 0 9px; cursor:pointer;"><input name="stn-vote-choice" style="margin-right:8px;" type="radio" value="fellowship-social"/>☕ Fellowship Social / Дружење уз музику</label>
+<label style="display:block; font-size:13.5px; color:#333; margin:0 0 6px; cursor:pointer;"><input id="stn-vote-other-radio" name="stn-vote-choice" style="margin-right:8px;" type="radio" value="other"/>✏️ Something else / Нешто друго:</label>
+<input id="stn-vote-writein" maxlength="200" placeholder="Write in your idea / Упишите своју идеју" style="display:block; width:100%; box-sizing:border-box; padding:8px 10px; font-size:13px; border:1px solid #ccc; border-radius:3px; margin:0 0 2px 26px; max-width:calc(100% - 26px);" type="text"/>
+</div>
+<p id="stn-vote-error" style="display:none; font-size:12px; color:#8c1419; margin:0 0 10px;"></p>
 <div style="text-align:center;">
 <button id="stn-vote-cancel" style="padding:10px 18px; font-size:13.5px; border:1px solid #ccc; background:#f5f5f5; border-radius:2px; cursor:pointer; margin-right:8px;" type="button">Cancel / Откажи</button>
-<button id="stn-vote-confirm" style="padding:10px 18px; font-size:13.5px; border:none; background:#8c1419; color:#ffffff; border-radius:2px; cursor:pointer; font-weight:bold;" type="button">Confirm ✓</button>
+<button id="stn-vote-confirm" style="padding:10px 18px; font-size:13.5px; border:none; background:#8c1419; color:#ffffff; border-radius:2px; cursor:pointer; font-weight:bold;" type="button">Submit Vote ✓</button>
 </div>
 </div>
 </div>
@@ -162,35 +174,58 @@
       var POLL = 'parish-social-2026-10-17';
       var modal = document.getElementById('stn-vote-modal');
       var modalBody = document.getElementById('stn-vote-modal-body');
-      var choiceEl = document.getElementById('stn-vote-modal-choice');
-      var choiceSrEl = document.getElementById('stn-vote-modal-choice-sr');
-      var cancelBtn = document.getElementById('stn-vote-cancel');
-      var confirmBtn = document.getElementById('stn-vote-confirm');
-      if (!modal || !confirmBtn) return;
-      var pending = null;
+      if (!modal || !modalBody) return;
       var defaultModalHtml = modalBody.innerHTML;
+
+      function bindButtons() {
+        var cancelBtn = document.getElementById('stn-vote-cancel');
+        var confirmBtn = document.getElementById('stn-vote-confirm');
+        if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
+        if (confirmBtn) confirmBtn.addEventListener('click', onConfirm);
+      }
+
+      function openModal() {
+        modalBody.innerHTML = defaultModalHtml;
+        bindButtons();
+        modal.style.display = 'flex';
+      }
 
       function closeModal() {
         modal.style.display = 'none';
-        pending = null;
         modalBody.innerHTML = defaultModalHtml;
         bindButtons();
       }
 
-      function bindButtons() {
-        document.getElementById('stn-vote-cancel').addEventListener('click', closeModal);
-        document.getElementById('stn-vote-confirm').addEventListener('click', onConfirm);
+      function showError(msg) {
+        var err = document.getElementById('stn-vote-error');
+        if (err) { err.textContent = msg; err.style.display = 'block'; }
       }
 
       function onConfirm() {
-        if (!pending) return;
+        var checked = modalBody.querySelector('input[name="stn-vote-choice"]:checked');
+        if (!checked) {
+          showError('Please choose an option. / Молимо изаберите опцију.');
+          return;
+        }
+        var option = checked.value;
+        var writein = '';
+        if (option === 'other') {
+          var writeinEl = document.getElementById('stn-vote-writein');
+          writein = (writeinEl && writeinEl.value ? writeinEl.value : '').trim();
+          if (!writein) {
+            showError('Please write in your idea. / Молимо упишите своју идеју.');
+            return;
+          }
+        }
         var btn = document.getElementById('stn-vote-confirm');
         btn.disabled = true;
         btn.textContent = 'Voting…';
+        var payload = { poll: POLL, option: option };
+        if (writein) payload.writein = writein;
         fetch(API + '/vote', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ poll: POLL, option: pending.key })
+          body: JSON.stringify(payload)
         }).then(function(r){ return r.json(); }).then(function(data){
           if (data && data.ok) {
             modalBody.innerHTML = '<p style="font-size:15px; color:#155a2b; font-weight:bold; margin:0 0 18px;">' +
@@ -205,14 +240,8 @@
         });
       }
 
-      document.querySelectorAll('.stn-vote-opt').forEach(function(a){
-        a.addEventListener('click', function(e){
-          e.preventDefault();
-          pending = { key: a.getAttribute('data-option'), label: a.getAttribute('data-label') };
-          choiceEl.textContent = pending.label;
-          choiceSrEl.textContent = pending.label;
-          modal.style.display = 'flex';
-        });
+      document.querySelectorAll('.stn-vote-open').forEach(function(btn){
+        btn.addEventListener('click', openModal);
       });
 
       bindButtons();

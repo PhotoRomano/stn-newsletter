@@ -1,13 +1,14 @@
 // St. Nicholas newsletter — lightweight event polls (e.g. Parish Social Night
 // activity vote). One KV namespace, keys scoped per poll:
 //   count:<poll>:<option>   -> integer vote count
-//   voted:<poll>:<ip-hash>  -> "1" (TTL'd) -- best-effort same-network dedupe,
-//                              not a security control; the real guard is the
-//                              client's localStorage flag set after voting.
+//   writeins:<poll>         -> JSON array of free-text write-in submissions
+//                              (option === 'other'), capped at WRITEIN_MAX_STORED
+//   voted:<poll>:<ip-hash>  -> "1" (TTL'd) -- best-effort same-network dedupe.
 //
 // POLLS below is the single source of truth for which poll/option
 // combinations are accepted -- add a new entry here for each future event
-// poll rather than accepting arbitrary option strings from the client.
+// poll rather than accepting arbitrary option strings from the client. The
+// 'other' option is the write-in path -- it requires body.writein text.
 
 const POLLS = {
   'parish-social-2026-10-17': [
@@ -15,8 +16,12 @@ const POLLS = {
     'bingo-night',
     'game-night',
     'fellowship-social',
+    'other',
   ],
 };
+
+const WRITEIN_MAX_LEN = 200;
+const WRITEIN_MAX_STORED = 200;
 
 const ALLOWED_ORIGINS = new Set([
   'https://stnicholasphilly.org',
@@ -83,7 +88,9 @@ export default {
         return json({ ok: false, error: 'Unknown poll' }, 404, headers);
       }
       const counts = await getCounts(env, poll);
-      return json({ ok: true, poll, counts }, 200, headers);
+      const writeinsRaw = await env.VOTES.get(`writeins:${poll}`);
+      const writeins = writeinsRaw ? JSON.parse(writeinsRaw) : [];
+      return json({ ok: true, poll, counts, writeins }, 200, headers);
     }
 
     if (request.method === 'POST' && url.pathname === '/vote') {
@@ -99,6 +106,14 @@ export default {
 
       if (!POLLS[poll] || !POLLS[poll].includes(option)) {
         return json({ ok: false, error: 'Unknown poll or option' }, 400, headers);
+      }
+
+      let writein = '';
+      if (option === 'other') {
+        writein = (body.writein || '').trim().slice(0, WRITEIN_MAX_LEN);
+        if (!writein) {
+          return json({ ok: false, error: 'Write-in text required' }, 400, headers);
+        }
       }
 
       const ip = request.headers.get('CF-Connecting-IP') || '';
@@ -120,6 +135,15 @@ export default {
       const current = await env.VOTES.get(countKey);
       const next = (current ? parseInt(current, 10) : 0) + 1;
       await env.VOTES.put(countKey, String(next));
+
+      if (writein) {
+        const writeinsKey = `writeins:${poll}`;
+        const raw = await env.VOTES.get(writeinsKey);
+        const list = raw ? JSON.parse(raw) : [];
+        list.push(writein);
+        while (list.length > WRITEIN_MAX_STORED) list.shift();
+        await env.VOTES.put(writeinsKey, JSON.stringify(list));
+      }
 
       const counts = await getCounts(env, poll);
       return json({ ok: true, poll, counts }, 200, headers);
