@@ -1,0 +1,10 @@
+name = "stnicholas-social-poll"
+main = "src/index.js"
+compatibility_date = "2026-08-01"
+
+[observability]
+enabled = true
+
+[[kv_namespaces]]
+binding = "VOTES"
+id = "487d4e63d0824e4789e19d045fd3809b"

@@ -130,21 +130,107 @@
               All are welcome — see the parish calendar for full details.
             </p>
 <div style="background:rgba(255,255,255,.92); border-radius:4px; padding:12px 14px; margin:0 0 14px;">
-<p style="font-size:13px; font-weight:bold; color:#8c1419; margin:0 0 8px;">💬 Help us plan it — vote for your favorite activity:</p>
+<p style="font-size:13px; font-weight:bold; color:#8c1419; margin:0 0 8px;">💬 Help us plan it — tap your favorite activity to vote:</p>
 <ol style="font-size:13px; line-height:1.6; color:#333; margin:0; padding-left:18px;">
-<li>🎥 Movie Night &amp; Popcorn Bar</li>
-<li>🎯 Bingo Night (prizes for kids &amp; grown-ups)</li>
-<li>🎲 Game Night (board games, cornhole, trivia)</li>
-<li>☕ Fellowship Social with Music &amp; Dancing</li>
+<li><a class="stn-vote-opt" data-label="Movie Night &amp; Popcorn Bar" data-option="movie-night" href="#" style="color:#333; text-decoration:underline dotted; cursor:pointer;">🎥 Movie Night &amp; Popcorn Bar</a></li>
+<li><a class="stn-vote-opt" data-label="Bingo Night" data-option="bingo-night" href="#" style="color:#333; text-decoration:underline dotted; cursor:pointer;">🎯 Bingo Night (prizes for kids &amp; grown-ups)</a></li>
+<li><a class="stn-vote-opt" data-label="Game Night" data-option="game-night" href="#" style="color:#333; text-decoration:underline dotted; cursor:pointer;">🎲 Game Night (board games, cornhole, trivia)</a></li>
+<li><a class="stn-vote-opt" data-label="Fellowship Social with Music &amp; Dancing" data-option="fellowship-social" href="#" style="color:#333; text-decoration:underline dotted; cursor:pointer;">☕ Fellowship Social with Music &amp; Dancing</a></li>
 </ol>
-<p style="font-size:11.5px; line-height:1.5; color:#666; margin:8px 0 0; font-style:italic;">Vote in this week's email — the poll's just below the headline.</p>
+<p style="font-size:11.5px; line-height:1.5; color:#666; margin:8px 0 0; font-style:italic;">One vote per household, please — or vote from this week's email.</p>
 </div>
 <a href="https://stnicholasphilly.org/calendar.html" style="display:inline-block; background:#ffffff; color:#8c1419; text-decoration:none; padding:10px 18px; font-size:13.5px; font-weight:bold; border-radius:2px;">
               Calendar →
             </a>
 
 </td></tr>
+<tr><td style="padding:0 16px 16px;">
+<p id="stn-vote-thanks" style="display:none; font-size:13px; font-weight:bold; color:#ffffff; background:rgba(21,90,43,.92); border-radius:4px; padding:10px 14px; margin:0;"></p>
+</td></tr>
 </table>
+</td></tr>
+
+<tr><td style="padding:0;">
+<div id="stn-vote-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:9999; align-items:center; justify-content:center; padding:20px;">
+<div style="background:#ffffff; border-radius:8px; max-width:360px; width:100%; padding:24px; text-align:center; font-family:Georgia,'Times New Roman',serif;">
+<p style="font-size:15px; color:#333; margin:0 0 18px;">Vote for <strong id="stn-vote-modal-choice"></strong>?  /  Гласати за <strong id="stn-vote-modal-choice-sr"></strong>?</p>
+<div style="text-align:center;">
+<button id="stn-vote-cancel" style="padding:10px 18px; font-size:13.5px; border:1px solid #ccc; background:#f5f5f5; border-radius:2px; cursor:pointer; margin-right:8px;" type="button">Cancel / Откажи</button>
+<button id="stn-vote-confirm" style="padding:10px 18px; font-size:13.5px; border:none; background:#8c1419; color:#ffffff; border-radius:2px; cursor:pointer; font-weight:bold;" type="button">Confirm ✓</button>
+</div>
+</div>
+</div>
+<script>
+    (function(){
+      var API = 'https://stnicholas-social-poll.photoromano.workers.dev';
+      var POLL = 'parish-social-2026-10-17';
+      var LS_KEY = 'stn-vote-' + POLL;
+      var modal = document.getElementById('stn-vote-modal');
+      var choiceEl = document.getElementById('stn-vote-modal-choice');
+      var choiceSrEl = document.getElementById('stn-vote-modal-choice-sr');
+      var cancelBtn = document.getElementById('stn-vote-cancel');
+      var confirmBtn = document.getElementById('stn-vote-confirm');
+      var thanksEls = document.querySelectorAll('#stn-vote-thanks');
+      if (!modal || !confirmBtn) return;
+      var pending = null;
+
+      function setThanks(label) {
+        thanksEls.forEach(function(el){
+          el.style.display = 'block';
+          el.textContent = '✓ Vote received for ' + label + ' — thank you! / Глас примљен — хвала!';
+        });
+        document.querySelectorAll('.stn-vote-opt').forEach(function(a){
+          a.style.pointerEvents = 'none';
+          a.style.opacity = '.6';
+          a.style.textDecoration = 'line-through';
+        });
+      }
+
+      var existing = null;
+      try { existing = localStorage.getItem(LS_KEY); } catch (e) {}
+      if (existing) setThanks(existing);
+
+      document.querySelectorAll('.stn-vote-opt').forEach(function(a){
+        a.addEventListener('click', function(e){
+          e.preventDefault();
+          if (existing) return;
+          pending = { key: a.getAttribute('data-option'), label: a.getAttribute('data-label') };
+          choiceEl.textContent = pending.label;
+          choiceSrEl.textContent = pending.label;
+          modal.style.display = 'flex';
+        });
+      });
+
+      cancelBtn.addEventListener('click', function(){
+        modal.style.display = 'none';
+        pending = null;
+      });
+
+      confirmBtn.addEventListener('click', function(){
+        if (!pending) return;
+        confirmBtn.disabled = true;
+        confirmBtn.textContent = 'Voting…';
+        fetch(API + '/vote', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ poll: POLL, option: pending.key })
+        }).then(function(r){ return r.json(); }).then(function(data){
+          modal.style.display = 'none';
+          confirmBtn.disabled = false;
+          confirmBtn.textContent = 'Confirm ✓';
+          if (data && data.ok) {
+            try { localStorage.setItem(LS_KEY, pending.label); } catch (e) {}
+            existing = pending.label;
+            setThanks(pending.label);
+          }
+        }).catch(function(){
+          modal.style.display = 'none';
+          confirmBtn.disabled = false;
+          confirmBtn.textContent = 'Confirm ✓';
+        });
+      });
+    })();
+    </script>
 </td></tr>
 
 <tr><td class="pad" style="padding:0 32px 20px;">
