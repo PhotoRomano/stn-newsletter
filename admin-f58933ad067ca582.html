@@ -5,128 +5,160 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Parish Admin — St. Nicholas</title>
 <style>
-:root { --navy:#02306e; --gold:#c9a227; --red:#c31f27; --light:#eef1f6; --border:#c8d5e8; --muted:#6a7d96; }
+:root { --navy:#02306e; --gold:#c9a227; --red:#c31f27; --border:#c8d5e8; --muted:#6a7d96; }
 * { box-sizing:border-box; margin:0; padding:0; }
-body { font-family:Arial,Helvetica,sans-serif; background:var(--light); color:#2b2b2b; font-size:14px; }
+body { font-family:Arial,Helvetica,sans-serif; background:#eef1f6; color:#2b2b2b; }
 
-.hdr { background:var(--navy); padding:14px 20px; border-bottom:3px solid var(--gold); display:flex; align-items:center; justify-content:space-between; }
-.hdr h1 { color:#fff; font-size:18px; }
-.hdr-sub { color:#a8c4e0; font-size:12px; }
-.btn-sm { padding:5px 12px; font-size:12px; font-weight:700; border:none; cursor:pointer; border-radius:2px; }
-.btn-approve { background:#166534; color:#fff; }
-.btn-reject  { background:#991b1b; color:#fff; }
-.btn-delete  { background:#6b7280; color:#fff; }
-.btn-logout  { background:rgba(255,255,255,.15); color:#fff; border:1px solid rgba(255,255,255,.3); }
-.btn-logout:hover { background:rgba(255,255,255,.25); }
+.header { background:var(--navy); padding:16px 24px; border-bottom:4px solid var(--gold);
+          display:flex; align-items:center; justify-content:space-between; }
+.header h1 { color:#fff; font-size:18px; }
+.header span { color:#a8c4e0; font-size:13px; }
 
-.tabs { background:#fff; border-bottom:1px solid var(--border); display:flex; padding:0 20px; }
-.tab { padding:12px 16px; font-size:13px; font-weight:600; cursor:pointer; border-bottom:3px solid transparent; color:var(--muted); background:none; border-top:none; border-left:none; border-right:none; }
-.tab.active { color:var(--navy); border-bottom-color:var(--gold); }
-.badge { display:inline-block; background:var(--red); color:#fff; border-radius:10px; font-size:10px; font-weight:700; padding:1px 6px; margin-left:4px; vertical-align:middle; }
+.token-bar { background:#fff4d6; border-bottom:2px solid var(--gold); padding:12px 24px;
+             display:flex; align-items:center; gap:10px; flex-wrap:wrap; font-size:13px; }
+.token-bar input { padding:7px 10px; border:1px solid var(--border); font-size:13px;
+                   border-radius:2px; width:300px; font-family:monospace; }
+.token-bar button { background:var(--navy); color:#fff; border:none; padding:7px 16px;
+                    font-size:13px; font-weight:700; border-radius:2px; cursor:pointer; }
+.token-bar button:hover { background:#01245a; }
+.token-status { font-size:12px; }
+.token-status.ok  { color:#166534; }
+.token-status.err { color:#991b1b; }
 
-.panel { display:none; padding:20px; max-width:900px; margin:0 auto; }
-.panel.active { display:block; }
+.body { max-width:1000px; margin:0 auto; padding:24px 16px; display:flex; flex-direction:column; gap:32px; }
 
-.card { background:#fff; border:1px solid var(--border); border-radius:3px; padding:14px 16px; margin-bottom:12px; }
-.card-title { font-size:15px; font-weight:700; color:var(--navy); margin-bottom:6px; }
-.card-meta  { font-size:12px; color:var(--muted); margin-bottom:8px; }
-.card-desc  { font-size:13px; color:#444; margin-bottom:10px; white-space:pre-wrap; word-break:break-word; }
-.card-actions { display:flex; gap:8px; flex-wrap:wrap; }
-.cat-badge { display:inline-block; font-size:11px; font-weight:700; letter-spacing:.3px; padding:2px 7px; border-radius:2px; text-transform:uppercase; background:#e0f2fe; color:#075985; margin-right:6px; }
+.section-title {
+  font-size:16px; font-weight:700; color:#fff; background:var(--navy);
+  padding:10px 16px; border-left:4px solid var(--gold);
+  display:flex; align-items:center; justify-content:space-between;
+}
+.accordion-title { cursor:pointer; user-select:none; }
+.accordion-title:hover { background:#01245a; }
+.accordion-chevron { font-size:13px; transition:transform .15s ease; margin-left:10px; }
+.accordion-title.open .accordion-chevron { transform:rotate(90deg); }
+.accordion-body { overflow:hidden; max-height:4000px; transition:max-height .2s ease; }
+.accordion-body.collapsed { max-height:0; }
+.badge { background:var(--red); color:#fff; font-size:11px; font-weight:700;
+         padding:2px 7px; border-radius:10px; }
+.badge.green { background:#166534; }
 
-.empty { text-align:center; padding:40px; color:var(--muted); }
-.spinner { text-align:center; padding:40px; color:var(--muted); }
+table { width:100%; border-collapse:collapse; background:#fff; font-size:13.5px; }
+th { background:#f0f4fb; color:var(--navy); font-weight:700; padding:10px 12px;
+     text-align:left; border-bottom:2px solid var(--border); }
+td { padding:10px 12px; border-bottom:1px solid var(--border); vertical-align:top; }
+tr:last-child td { border-bottom:none; }
+tr:hover td { background:#f8fafc; }
 
-/* Login screen */
-.login-wrap { display:flex; align-items:center; justify-content:center; min-height:100vh; }
-.login-box { background:#fff; border:1px solid var(--border); border-radius:3px; padding:28px 24px; width:100%; max-width:360px; }
-.login-box h2 { font-size:17px; color:var(--navy); margin-bottom:16px; }
-.login-box input { width:100%; padding:9px 11px; border:1px solid var(--border); font-size:14px; font-family:inherit; border-radius:2px; margin-bottom:12px; }
-.login-box input:focus { outline:2px solid var(--navy); }
-.btn-full { width:100%; padding:10px; background:var(--navy); color:#fff; border:none; font-size:14px; font-weight:700; cursor:pointer; border-radius:2px; }
-.btn-full:hover { background:#01245a; }
-.login-err { font-size:13px; color:#991b1b; margin-top:8px; display:none; }
+.col-title { font-weight:600; color:var(--navy); }
+.col-desc  { color:#444; max-width:280px; white-space:pre-wrap; word-break:break-word; }
+.col-meta  { color:var(--muted); font-size:12px; }
+.col-cat   { white-space:nowrap; }
 
-.msg-bar { padding:8px 12px; border-radius:2px; margin-bottom:12px; font-size:13px; display:none; }
-.msg-bar.ok  { background:#dcfce7; color:#166534; display:block; }
-.msg-bar.err { background:#fee2e2; color:#991b1b; display:block; }
+.cat-badge { display:inline-block; font-size:11px; font-weight:700; letter-spacing:.3px;
+             padding:2px 7px; border-radius:2px; text-transform:uppercase; }
+.for-sale   { background:#dbeafe; color:#1e40af; }
+.for-free   { background:#dcfce7; color:#166534; }
+.wanted     { background:#fef9c3; color:#854d0e; }
+.services   { background:#f3e8ff; color:#6b21a8; }
+.housing    { background:#ffedd5; color:#9a3412; }
+.jobs       { background:#e0f2fe; color:#075985; }
+.childcare  { background:#fce7f3; color:#9d174d; }
+.community  { background:#f0fdf4; color:#14532d; }
 
-.stats-picker { display:flex; align-items:center; gap:10px; margin-bottom:16px; }
-.stats-picker select { padding:7px 10px; border:1px solid var(--border); font-size:13.5px; border-radius:2px; min-width:240px; }
-.stat-cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-bottom:16px; }
-.stat-card { background:#fff; border:1px solid var(--border); border-radius:4px; padding:14px 16px; text-align:center; }
+.action-cell { white-space:nowrap; display:flex; gap:6px; }
+.btn-approve { background:#166534; color:#fff; border:none; padding:6px 12px;
+               font-size:12px; font-weight:700; border-radius:2px; cursor:pointer; }
+.btn-approve:hover { background:#14532d; }
+.btn-reject  { background:#991b1b; color:#fff; border:none; padding:6px 12px;
+               font-size:12px; font-weight:700; border-radius:2px; cursor:pointer; }
+.btn-reject:hover  { background:#7f1d1d; }
+.btn-delete  { background:#6a7d96; color:#fff; border:none; padding:6px 12px;
+               font-size:12px; font-weight:700; border-radius:2px; cursor:pointer; }
+.btn-delete:hover  { background:#4a5568; }
+
+.empty { padding:24px; text-align:center; color:var(--muted); font-size:14px; background:#fff; }
+.reload-btn { background:none; border:1px solid #a8c4e0; color:#a8c4e0; padding:4px 10px;
+              font-size:12px; border-radius:2px; cursor:pointer; }
+.reload-btn:hover { background:#01245a; }
+
+.stats-picker { background:#fff; padding:14px 16px; border-bottom:1px solid var(--border);
+                display:flex; align-items:center; gap:10px; }
+.stats-picker select { padding:7px 10px; border:1px solid var(--border); font-size:13.5px;
+                       border-radius:2px; min-width:240px; }
+.stat-cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+              gap:12px; background:#fff; padding:16px; }
+.stat-card { background:#f8fafc; border:1px solid var(--border); border-radius:4px;
+             padding:14px 16px; text-align:center; }
 .stat-card .n { font-size:26px; font-weight:700; color:var(--navy); }
 .stat-card .l { font-size:12px; color:var(--muted); margin-top:4px; }
-.link-click-row { display:flex; justify-content:space-between; padding:8px 16px; background:#fff; border-bottom:1px solid var(--border); font-size:13.5px; }
-.link-click-row:first-child { border-radius:3px 3px 0 0; }
-.link-click-row:last-child { border-bottom:none; border-radius:0 0 3px 3px; }
+.link-click-row { display:flex; justify-content:space-between; padding:8px 16px;
+                   border-bottom:1px solid var(--border); font-size:13.5px; }
+.link-click-row:last-child { border-bottom:none; }
 .link-click-row .n { font-weight:700; color:var(--navy); }
-.subhead { font-size:12px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.4px; margin:16px 0 8px; }
-.stats-table { width:100%; border-collapse:collapse; background:#fff; font-size:13px; }
-.stats-table th { background:#f0f4fb; color:var(--navy); font-weight:700; padding:8px 10px; text-align:left; border-bottom:2px solid var(--border); }
-.stats-table td { padding:8px 10px; border-bottom:1px solid var(--border); }
-.stats-table tr:last-child td { border-bottom:none; }
 </style>
 </head>
 <body>
 
-<!-- Login -->
-<div class="login-wrap" id="loginWrap">
-  <div class="login-box">
-    <h2>Parish Admin</h2>
-    <input type="password" id="tokenInput" placeholder="Admin token" onkeydown="if(event.key==='Enter')login()">
-    <button class="btn-full" onclick="login()">Sign In</button>
-    <div class="login-err" id="loginErr">Invalid token.</div>
-  </div>
+<div class="header">
+  <h1>Parish Admin &mdash; St. Nicholas</h1>
+  <button class="reload-btn" onclick="load()">&#8635; Refresh</button>
 </div>
 
-<!-- Main UI -->
-<div id="mainWrap" style="display:none">
-  <div class="hdr">
-    <div>
-      <h1>Parish Admin</h1>
-      <div class="hdr-sub">St. Nicholas Serbian Orthodox Church</div>
+<div class="token-bar">
+  <label for="tokenInput"><strong>Admin token:</strong></label>
+  <input id="tokenInput" name="stn_business_stats_token" type="text" placeholder="Paste ADMIN_TOKEN here"
+         autocomplete="off" data-lpignore="true" data-1p-ignore data-bwignore
+         style="font-family:monospace; -webkit-text-security:disc;"
+         oninput="saveToken()">
+  <button onclick="load()">Load</button>
+  <span class="token-status" id="tokenStatus"></span>
+</div>
+
+<div class="body">
+  <!-- Pending -->
+  <div>
+    <div class="section-title accordion-title open" onclick="toggleSection(this)">
+      <span>Pending Review <span class="badge" id="pendingCount">0</span></span>
+      <span class="accordion-chevron">&#9656;</span>
     </div>
-    <button class="btn-sm btn-logout" onclick="logout()">Sign Out</button>
+    <div class="accordion-body" id="pendingArea-wrap"><div id="pendingArea"><div class="empty">Enter your admin token and click Load.</div></div></div>
   </div>
 
-  <div class="tabs">
-    <button class="tab active" onclick="showTab('pending',this)">Pending <span class="badge" id="pendingBadge">0</span></button>
-    <button class="tab" onclick="showTab('active',this)">Active Listings</button>
-    <button class="tab" onclick="showTab('categories',this)">Categories <span class="badge" id="catBadge" style="display:none">0</span></button>
-    <button class="tab" onclick="showTab('polls',this)">Poll Votes</button>
-    <button class="tab" onclick="showTab('bizstats',this)">Business Stats</button>
-  </div>
-
-  <div class="panel active" id="tab-pending">
-    <div class="msg-bar" id="msgPending"></div>
-    <div id="pendingList" class="spinner">Loading…</div>
-  </div>
-
-  <div class="panel" id="tab-active">
-    <div class="msg-bar" id="msgActive"></div>
-    <div id="activeList" class="spinner">Loading…</div>
-  </div>
-
-  <div class="panel" id="tab-categories">
-    <div class="msg-bar" id="msgCat"></div>
-    <div id="catList" class="spinner">Loading…</div>
-  </div>
-
-  <div class="panel" id="tab-polls">
-    <div class="msg-bar" id="msgPolls"></div>
-    <div id="pollsList" class="spinner">Loading…</div>
-  </div>
-
-  <div class="panel" id="tab-bizstats">
-    <div class="msg-bar" id="msgBiz"></div>
-    <div class="stats-picker">
-      <label for="bizSelect"><strong>Business:</strong></label>
-      <select id="bizSelect" onchange="loadBizStats()">
-        <option value="">Select a business…</option>
-      </select>
+  <!-- Live -->
+  <div>
+    <div class="section-title accordion-title" onclick="toggleSection(this)">
+      <span>Live Listings <span class="badge green" id="liveCount">0</span></span>
+      <span class="accordion-chevron">&#9656;</span>
     </div>
-    <div id="bizStatsArea"><div class="empty">Pick a business to see its stats.</div></div>
+    <div class="accordion-body collapsed" id="liveArea-wrap"><div id="liveArea"></div></div>
+  </div>
+
+  <!-- Business Stats -->
+  <div>
+    <div class="section-title accordion-title" onclick="toggleSection(this)">
+      <span>Parishioner Business Stats</span>
+      <span class="accordion-chevron">&#9656;</span>
+    </div>
+    <div class="accordion-body collapsed" id="bizStats-wrap">
+      <div class="stats-picker">
+        <label for="bizSelect"><strong>Business:</strong></label>
+        <select id="bizSelect" onchange="loadBizStats()">
+          <option value="">Select a business…</option>
+        </select>
+      </div>
+      <div id="bizStatsArea"><div class="empty">Load your token above, then pick a business.</div></div>
+    </div>
+  </div>
+
+  <!-- Poll Votes -->
+  <div>
+    <div class="section-title accordion-title" onclick="toggleSection(this)">
+      <span>Poll Votes</span>
+      <span class="accordion-chevron">&#9656;</span>
+    </div>
+    <div class="accordion-body collapsed" id="pollsArea-wrap">
+      <div id="pollsArea"><div class="empty">Load your token above to see poll results.</div></div>
+    </div>
   </div>
 </div>
 
@@ -143,260 +175,67 @@ const POLL_OPTION_LABELS = {
   'fellowship-social': '☕ Fellowship Social',
   'other': '✍️ Write-in (other)',
 };
-let TOKEN = '';
 
-function login() {
-  const t = document.getElementById('tokenInput').value.trim();
-  if (!t) return;
-  TOKEN = t;
-  localStorage.setItem('cl_admin_token', t);
-  document.getElementById('loginErr').style.display = 'none';
-  loadAll();
-}
-
-function logout() {
-  TOKEN = '';
-  localStorage.removeItem('cl_admin_token');
-  document.getElementById('mainWrap').style.display = 'none';
-  document.getElementById('loginWrap').style.display = 'flex';
-  document.getElementById('tokenInput').value = '';
-}
-
-function showTab(name, btn) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById(`tab-${name}`).classList.add('active');
-}
-
-async function api(path, method = 'GET', body = null) {
-  const opts = { method, headers: { 'Authorization': `Bearer ${TOKEN}` } };
-  if (body) { opts.headers['Content-Type'] = 'application/json'; opts.body = JSON.stringify(body); }
-  const res  = await fetch(`${API}${path}`, opts);
-  return res.json();
-}
-
-async function pollApi(path) {
-  const res = await fetch(`${POLL_API}${path}`, { headers: { 'Authorization': `Bearer ${TOKEN}` } });
-  return res.json();
-}
-
-function flash(elId, msg, ok = true) {
-  const el = document.getElementById(elId);
-  el.className = `msg-bar ${ok ? 'ok' : 'err'}`;
-  el.textContent = msg;
-  setTimeout(() => { el.className = 'msg-bar'; }, 3000);
-}
-
-function esc(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-async function loadAll() {
-  document.getElementById('loginWrap').style.display = 'none';
-  document.getElementById('mainWrap').style.display = 'block';
-
-  // Validate token with a quick ping
-  const test = await api('/api/admin/pending').catch(() => ({ ok: false }));
-  if (!test.ok && test.error === 'Unauthorized') {
-    document.getElementById('loginErr').style.display = 'block';
-    logout();
-    return;
+function toggleSection(titleEl) {
+  const body = titleEl.nextElementSibling;
+  const willOpen = body.classList.contains('collapsed');
+  document.querySelectorAll('.accordion-body').forEach(b => b.classList.add('collapsed'));
+  document.querySelectorAll('.accordion-title').forEach(t => t.classList.remove('open'));
+  if (willOpen) {
+    body.classList.remove('collapsed');
+    titleEl.classList.add('open');
   }
-
-  loadPending();
-  loadActive();
-  loadCategories();
-  loadPolls();
-  loadBizList();
 }
 
-// ── Pending ────────────────────────────────────────────────────────────────
-async function loadPending() {
-  const data = await api('/api/admin/pending');
-  const list = document.getElementById('pendingList');
-  const badge = document.getElementById('pendingBadge');
-  if (!data.ok) { list.innerHTML = `<div class="empty">Error loading listings.</div>`; return; }
-  const items = data.listings;
-  badge.textContent = items.length;
-  if (!items.length) { list.innerHTML = `<div class="empty">No pending listings.</div>`; return; }
-  list.innerHTML = items.map(l => `
-    <div class="card" id="pc-${l.id}">
-      ${l.image_url ? `<img src="${l.image_url}" alt="Listing photo" style="width:100%;max-height:240px;object-fit:cover;border-radius:2px;margin-bottom:10px;">` : ''}
-      <div class="card-title"><span class="cat-badge">${esc(l.category)}</span>${esc(l.title)}</div>
-      <div class="card-meta">From: <strong>${esc(l.name)}</strong> &middot; ${esc(l.contact_email || '')} &middot; Submitted: ${new Date(l.submitted_at).toLocaleDateString()}</div>
-      <div class="card-desc">${esc(l.description)}</div>
-      ${l.contact ? `<div class="card-meta">Public contact: ${esc(l.contact)}</div>` : ''}
-      <div class="card-actions">
-        <button class="btn-sm btn-approve" onclick="approveListing(${l.id})">Approve</button>
-        <button class="btn-sm btn-reject"  onclick="rejectListing(${l.id})">Reject</button>
-        <button class="btn-sm btn-delete"  onclick="deleteListing(${l.id},'pending')">Delete</button>
-      </div>
-    </div>`).join('');
+const CAT_CLASS = {
+  'For Sale':'for-sale','For Free':'for-free','Wanted':'wanted','Services':'services',
+  'Housing':'housing','Jobs':'jobs','Childcare':'childcare','Community':'community',
+};
+
+function getToken() { return localStorage.getItem('stn_admin_token') || ''; }
+function saveToken() {
+  localStorage.setItem('stn_admin_token', document.getElementById('tokenInput').value.trim());
 }
 
-async function approveListing(id) {
-  const data = await api(`/api/admin/approve/${id}`, 'POST');
-  if (data.ok) { document.getElementById(`pc-${id}`)?.remove(); flash('msgPending','Approved — poster notified.'); loadPending(); loadActive(); }
-  else flash('msgPending', data.error || 'Error', false);
+window.addEventListener('DOMContentLoaded', () => {
+  const t = getToken();
+  if (t) { document.getElementById('tokenInput').value = t; load(); }
+});
+
+function authHeaders() {
+  return { 'Authorization': `Bearer ${getToken()}`, 'Content-Type': 'application/json' };
 }
 
-async function rejectListing(id) {
-  const data = await api(`/api/admin/reject/${id}`, 'POST');
-  if (data.ok) { document.getElementById(`pc-${id}`)?.remove(); flash('msgPending','Rejected.'); loadPending(); }
-  else flash('msgPending', data.error || 'Error', false);
-}
+async function load() {
+  const status = document.getElementById('tokenStatus');
+  status.textContent = 'Loading…'; status.className = 'token-status';
 
-async function deleteListing(id, tab) {
-  if (!confirm('Delete this listing permanently?')) return;
-  const data = await api(`/api/admin/listings/${id}`, 'DELETE');
-  if (data.ok) {
-    document.getElementById(`pc-${id}`)?.remove();
-    document.getElementById(`ac-${id}`)?.remove();
-    flash(`msg${tab === 'pending' ? 'Pending' : 'Active'}`, 'Deleted.');
-    if (tab === 'pending') loadPending(); else loadActive();
-  } else flash(`msg${tab === 'pending' ? 'Pending' : 'Active'}`, data.error || 'Error', false);
-}
+  try {
+    const [pRes, lRes] = await Promise.all([
+      fetch(`${API}/api/admin/pending`, { headers: authHeaders() }).then(r => r.json()),
+      fetch(`${API}/api/admin/all`,     { headers: authHeaders() }).then(r => r.json()),
+    ]);
 
-// ── Active ─────────────────────────────────────────────────────────────────
-async function loadActive() {
-  const data = await api('/api/admin/all');
-  const list = document.getElementById('activeList');
-  if (!data.ok) { list.innerHTML = `<div class="empty">Error loading listings.</div>`; return; }
-  const items = data.listings;
-  if (!items.length) { list.innerHTML = `<div class="empty">No active listings.</div>`; return; }
-  list.innerHTML = items.map(l => {
-    const expires = new Date(l.expires_at).toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'});
-    const daysLeft = Math.ceil((new Date(l.expires_at) - Date.now()) / 86_400_000);
-    return `
-    <div class="card" id="ac-${l.id}">
-      ${l.image_url ? `<img src="${l.image_url}" alt="Listing photo" style="width:100%;max-height:200px;object-fit:cover;border-radius:2px;margin-bottom:10px;">` : ''}
-      <div class="card-title"><span class="cat-badge">${esc(l.category)}</span>${esc(l.title)}</div>
-      <div class="card-meta">By: <strong>${esc(l.name)}</strong> &middot; Expires: ${expires} (${daysLeft}d)</div>
-      <div class="card-desc">${esc(l.description)}</div>
-      <div class="card-actions">
-        <button class="btn-sm" style="background:${l.pinned ? '#c9a227' : '#e5e7eb'};color:${l.pinned ? '#3a2e00' : '#374151'};" onclick="togglePin(${l.id},this)">${l.pinned ? '📌 Unpin' : 'Pin'}</button>
-        <button class="btn-sm btn-delete" onclick="deleteListing(${l.id},'active')">Delete</button>
-      </div>
-    </div>`;
-  }).join('');
-}
+    if (!pRes.ok) {
+      status.textContent = 'Auth failed — check your token.'; status.className = 'token-status err';
+      return;
+    }
 
-// ── Categories ─────────────────────────────────────────────────────────────
-async function loadCategories() {
-  const data = await api('/api/admin/categories');
-  const list = document.getElementById('catList');
-  const badge = document.getElementById('catBadge');
-  if (!data.ok) { list.innerHTML = `<div class="empty">Error loading categories.</div>`; return; }
-  const pending = data.categories.filter(c => c.status === 'pending');
-  const active  = data.categories.filter(c => c.status === 'active');
-  if (pending.length) { badge.style.display = ''; badge.textContent = pending.length; }
-  else badge.style.display = 'none';
+    status.textContent = 'Connected'; status.className = 'token-status ok';
 
-  list.innerHTML = `
-    ${pending.length ? `<h3 style="font-size:13px;color:var(--muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px;">Pending Suggestions</h3>` : ''}
-    ${pending.map(c => `
-      <div class="card" id="cc-${c.id}">
-        <div class="card-title">${esc(c.name)}</div>
-        <div class="card-meta">Suggested by: ${esc(c.suggested_by || 'anonymous')} &middot; ${new Date(c.suggested_at).toLocaleDateString()}${c.group_name ? ` &middot; Suggested group: <strong>${esc(c.group_name)}</strong>` : ''}</div>
-        <div class="card-actions" style="align-items:center;flex-wrap:wrap;gap:8px;">
-          <select id="grp-${c.id}" style="padding:5px 8px;font-size:12px;border:1px solid #c8d5e8;border-radius:2px;">
-            <option value="">Assign group…</option>
-            <option value="Goods" ${c.group_name==='Goods'?'selected':''}>Goods</option>
-            <option value="Services" ${c.group_name==='Services'?'selected':''}>Services</option>
-            <option value="Community" ${c.group_name==='Community'?'selected':''}>Community</option>
-          </select>
-          <button class="btn-sm btn-approve" onclick="approveCategory(${c.id})">Approve</button>
-          <button class="btn-sm btn-reject"  onclick="rejectCategory(${c.id})">Reject</button>
-        </div>
-      </div>`).join('')}
-    <h3 style="font-size:13px;color:var(--muted);margin:16px 0 10px;text-transform:uppercase;letter-spacing:.5px;">Active Categories (${active.length})</h3>
-    ${['Goods','Services','Community','Other'].map(g => {
-      const cats = active.filter(c => (c.group_name || 'Other') === g);
-      if (!cats.length) return '';
-      return `<div style="margin-bottom:12px;">
-        <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px;">${g}</div>
-        <div style="display:flex;flex-wrap:wrap;gap:6px;">
-          ${cats.map(c => `<span style="background:#e0f2fe;color:#075985;padding:4px 10px;border-radius:2px;font-size:13px;font-weight:600;">${esc(c.name)}</span>`).join('')}
-        </div>
-      </div>`;
-    }).join('')}`;
-}
-
-async function togglePin(id, btn) {
-  const data = await api(`/api/admin/pin/${id}`, 'POST');
-  if (data.ok) {
-    btn.textContent = data.pinned ? '📌 Unpin' : 'Pin';
-    btn.style.background = data.pinned ? '#c9a227' : '#e5e7eb';
-    btn.style.color      = data.pinned ? '#3a2e00' : '#374151';
-    flash('msgActive', data.pinned ? 'Pinned — listing will appear at the top.' : 'Unpinned.');
-  } else flash('msgActive', data.error || 'Error', false);
-}
-
-async function approveCategory(id) {
-  const group = document.getElementById(`grp-${id}`)?.value || '';
-  const data = await api(`/api/admin/approve-category/${id}`, 'POST', group ? { group } : {});
-  if (data.ok) { flash('msgCat','Category approved — now live.'); loadCategories(); }
-  else flash('msgCat', data.error || 'Error', false);
-}
-
-async function rejectCategory(id) {
-  const data = await api(`/api/admin/reject-category/${id}`, 'POST');
-  if (data.ok) { flash('msgCat','Category rejected.'); loadCategories(); }
-  else flash('msgCat', data.error || 'Error', false);
-}
-
-// ── Poll Votes ─────────────────────────────────────────────────────────────
-async function loadPolls() {
-  const list = document.getElementById('pollsList');
-  const pollsData = await pollApi('/admin/polls');
-  if (!pollsData.ok) {
-    list.innerHTML = `<div class="empty">Error loading polls${pollsData.error ? ': ' + esc(pollsData.error) : ''}.</div>`;
-    return;
+    renderPending(pRes.listings || []);
+    renderLive(lRes.listings || []);
+    loadBizList();
+    loadPolls();
+  } catch (e) {
+    status.textContent = 'Network error'; status.className = 'token-status err';
   }
-  const polls = pollsData.polls || [];
-  if (!polls.length) { list.innerHTML = `<div class="empty">No polls configured.</div>`; return; }
-
-  const sections = await Promise.all(polls.map(async (pollId) => {
-    const data = await pollApi(`/results?poll=${encodeURIComponent(pollId)}`);
-    if (!data.ok) return `<div class="card"><div class="card-title">${esc(POLL_LABELS[pollId] || pollId)}</div><div class="card-meta">Error loading results.</div></div>`;
-    const counts = data.counts || {};
-    const writeins = data.writeins || [];
-    const max = Math.max(1, ...Object.values(counts));
-    const total = Object.values(counts).reduce((a, b) => a + b, 0);
-    const bars = Object.entries(counts).map(([opt, n]) => `
-      <div style="margin-bottom:8px;">
-        <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:3px;">
-          <span>${esc(POLL_OPTION_LABELS[opt] || opt)}</span>
-          <strong>${n}</strong>
-        </div>
-        <div style="background:#eef1f6;border-radius:2px;height:10px;overflow:hidden;">
-          <div style="background:var(--navy);height:100%;width:${Math.round((n / max) * 100)}%;"></div>
-        </div>
-      </div>`).join('');
-    const writeinsHtml = writeins.length ? `
-      <div style="margin-top:12px;">
-        <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px;">Write-ins (${writeins.length})</div>
-        <ul style="padding-left:18px;font-size:13px;color:#444;">
-          ${writeins.map(w => `<li>${esc(w)}</li>`).join('')}
-        </ul>
-      </div>` : '';
-    return `
-      <div class="card">
-        <div class="card-title">${esc(POLL_LABELS[pollId] || pollId)}</div>
-        <div class="card-meta">${total} total vote${total === 1 ? '' : 's'}</div>
-        ${bars}
-        ${writeinsHtml}
-      </div>`;
-  }));
-
-  list.innerHTML = sections.join('');
 }
 
-// ── Business Stats ───────────────────────────────────────────────────────────
 async function loadBizList() {
   try {
-    const data = await api('/api/admin/businesses');
+    const res = await fetch(`${API}/api/admin/businesses`, { headers: authHeaders() });
+    const data = await res.json();
     if (!data.ok) return;
     const sel = document.getElementById('bizSelect');
     const current = sel.value;
@@ -415,7 +254,8 @@ async function loadBizStats() {
 
   area.innerHTML = '<div class="empty">Loading…</div>';
   try {
-    const data = await api(`/api/admin/businesses/${encodeURIComponent(slug)}/stats`);
+    const res = await fetch(`${API}/api/admin/businesses/${encodeURIComponent(slug)}/stats`, { headers: authHeaders() });
+    const data = await res.json();
     if (!data.ok) { area.innerHTML = `<div class="empty">${esc(data.error || 'Could not load stats.')}</div>`; return; }
 
     const lc = data.link_clicks || {};
@@ -428,13 +268,13 @@ async function loadBizStats() {
         <div class="stat-card"><div class="n">${data.click_through_rate ?? '—'}${data.click_through_rate != null ? '%' : ''}</div><div class="l">Click-through rate</div></div>
         <div class="stat-card"><div class="n">${data.clicks_from_directory}</div><div class="l">Clicks from directory grid</div></div>
       </div>
-      <div class="subhead">Outbound Link Clicks</div>
+      <div class="section-title" style="margin-top:0;">Outbound Link Clicks</div>
       ${Object.keys(linkLabels).map(k => `
         <div class="link-click-row"><span>${linkLabels[k]}</span><span class="n">${lc[k] || 0}</span></div>
       `).join('')}
-      <div class="subhead">Monthly (full history — compare any two months)</div>
+      <div class="section-title" style="margin-top:0;">Monthly (full history — compare any two months)</div>
       ${(data.monthly && data.monthly.length) ? `
-        <table class="stats-table">
+        <table>
           <thead><tr><th>Month</th><th>Impressions</th><th>Views</th><th>Link Clicks</th><th>From Directory</th><th>vs. Prior Month</th></tr></thead>
           <tbody>${data.monthly.map((m, i) => {
             const prev = i > 0 ? data.monthly[i - 1] : null;
@@ -442,9 +282,9 @@ async function loadBizStats() {
             return `<tr><td>${fmtMonth(m.month)}</td><td>${m.impressions}</td><td>${m.views}</td><td>${m.link_clicks}</td><td>${m.clicks_from_directory}</td><td>${deltaLabel(delta)}</td></tr>`;
           }).join('')}</tbody>
         </table>` : '<div class="empty">No activity recorded yet.</div>'}
-      <div class="subhead">Daily (last 30 days)</div>
+      <div class="section-title" style="margin-top:0;">Daily (last 30 days)</div>
       ${(data.daily_last_30d && data.daily_last_30d.length) ? `
-        <table class="stats-table">
+        <table>
           <thead><tr><th>Date</th><th>Views</th><th>Impressions</th></tr></thead>
           <tbody>${data.daily_last_30d.map(d => `<tr><td>${fmtDate(d.day)}</td><td>${d.views}</td><td>${d.impressions}</td></tr>`).join('')}</tbody>
         </table>` : '<div class="empty">No activity in the last 30 days.</div>'}
@@ -452,6 +292,136 @@ async function loadBizStats() {
   } catch {
     area.innerHTML = '<div class="empty">Network error.</div>';
   }
+}
+
+async function loadPolls() {
+  const area = document.getElementById('pollsArea');
+  area.innerHTML = '<div class="empty">Loading…</div>';
+  try {
+    const pollsRes = await fetch(`${POLL_API}/admin/polls`, { headers: authHeaders() });
+    const pollsData = await pollsRes.json();
+    if (!pollsData.ok) { area.innerHTML = `<div class="empty">${esc(pollsData.error || 'Could not load polls.')}</div>`; return; }
+    const polls = pollsData.polls || [];
+    if (!polls.length) { area.innerHTML = '<div class="empty">No polls configured.</div>'; return; }
+
+    const sections = await Promise.all(polls.map(async (pollId) => {
+      const res = await fetch(`${POLL_API}/results?poll=${encodeURIComponent(pollId)}`, { headers: authHeaders() });
+      const data = await res.json();
+      if (!data.ok) return `<div class="section-title" style="margin-top:0;">${esc(POLL_LABELS[pollId] || pollId)}</div><div class="empty">Error loading results.</div>`;
+      const counts = data.counts || {};
+      const writeins = data.writeins || [];
+      const max = Math.max(1, ...Object.values(counts));
+      const total = Object.values(counts).reduce((a, b) => a + b, 0);
+      const bars = Object.entries(counts).map(([opt, n]) => `
+        <div class="link-click-row" style="display:block;padding:10px 16px;">
+          <div style="display:flex;justify-content:space-between;font-size:13.5px;margin-bottom:4px;">
+            <span>${esc(POLL_OPTION_LABELS[opt] || opt)}</span><span class="n">${n}</span>
+          </div>
+          <div style="background:#eef1f6;border-radius:2px;height:8px;overflow:hidden;">
+            <div style="background:var(--navy);height:100%;width:${Math.round((n / max) * 100)}%;"></div>
+          </div>
+        </div>`).join('');
+      const writeinsHtml = writeins.length ? `
+        <div class="section-title" style="margin-top:0;">Write-ins (${writeins.length})</div>
+        <div style="background:#fff;padding:12px 16px;">
+          <ul style="padding-left:18px;font-size:13.5px;color:#444;">
+            ${writeins.map(w => `<li>${esc(w)}</li>`).join('')}
+          </ul>
+        </div>` : '';
+      return `
+        <div class="section-title" style="margin-top:0;">${esc(POLL_LABELS[pollId] || pollId)} — ${total} vote${total === 1 ? '' : 's'}</div>
+        <div style="background:#fff;">${bars}</div>
+        ${writeinsHtml}`;
+    }));
+
+    area.innerHTML = sections.join('');
+  } catch {
+    area.innerHTML = '<div class="empty">Network error.</div>';
+  }
+}
+
+function renderPending(items) {
+  document.getElementById('pendingCount').textContent = items.length;
+  const area = document.getElementById('pendingArea');
+  if (!items.length) { area.innerHTML = '<div class="empty">No listings pending review.</div>'; return; }
+
+  area.innerHTML = `
+    <table>
+      <thead><tr>
+        <th>Category</th><th>Title</th><th>Description</th>
+        <th>Contact</th><th>Name</th><th>Submitted</th><th>Actions</th>
+      </tr></thead>
+      <tbody>
+        ${items.map(l => `
+          <tr id="p${l.id}">
+            <td class="col-cat"><span class="cat-badge ${CAT_CLASS[l.category]||'community'}">${esc(l.category)}</span></td>
+            <td class="col-title">${esc(l.title)}</td>
+            <td class="col-desc">${esc(l.description)}</td>
+            <td>${esc(l.contact)}</td>
+            <td>${esc(l.name)}</td>
+            <td class="col-meta">${fmtDate(l.submitted_at)}</td>
+            <td><div class="action-cell">
+              <button class="btn-approve" onclick="approve(${l.id})">Approve</button>
+              <button class="btn-reject"  onclick="reject(${l.id})">Reject</button>
+            </div></td>
+          </tr>`).join('')}
+      </tbody>
+    </table>`;
+}
+
+function renderLive(items) {
+  document.getElementById('liveCount').textContent = items.length;
+  const area = document.getElementById('liveArea');
+  if (!items.length) { area.innerHTML = '<div class="empty">No live listings.</div>'; return; }
+
+  area.innerHTML = `
+    <table>
+      <thead><tr>
+        <th>Category</th><th>Title</th><th>Description</th>
+        <th>Contact</th><th>Name</th><th>Approved</th><th>Expires</th><th></th>
+      </tr></thead>
+      <tbody>
+        ${items.map(l => `
+          <tr id="l${l.id}">
+            <td class="col-cat"><span class="cat-badge ${CAT_CLASS[l.category]||'community'}">${esc(l.category)}</span></td>
+            <td class="col-title">${esc(l.title)}</td>
+            <td class="col-desc">${esc(l.description)}</td>
+            <td>${esc(l.contact)}</td>
+            <td>${esc(l.name)}</td>
+            <td class="col-meta">${fmtDate(l.approved_at)}</td>
+            <td class="col-meta">${fmtDate(l.expires_at)}</td>
+            <td><button class="btn-delete" onclick="remove(${l.id})">Remove</button></td>
+          </tr>`).join('')}
+      </tbody>
+    </table>`;
+}
+
+async function approve(id) {
+  const res = await fetch(`${API}/api/admin/approve/${id}`, { method:'POST', headers: authHeaders() });
+  const data = await res.json();
+  if (data.ok) { document.getElementById(`p${id}`)?.remove(); load(); }
+  else alert('Error: ' + data.error);
+}
+
+async function reject(id) {
+  if (!confirm('Reject and discard this listing?')) return;
+  const res = await fetch(`${API}/api/admin/reject/${id}`, { method:'POST', headers: authHeaders() });
+  const data = await res.json();
+  if (data.ok) { document.getElementById(`p${id}`)?.remove(); updateCount('pendingCount', -1); }
+  else alert('Error: ' + data.error);
+}
+
+async function remove(id) {
+  if (!confirm('Remove this live listing permanently?')) return;
+  const res = await fetch(`${API}/api/admin/listings/${id}`, { method:'DELETE', headers: authHeaders() });
+  const data = await res.json();
+  if (data.ok) { document.getElementById(`l${id}`)?.remove(); updateCount('liveCount', -1); }
+  else alert('Error: ' + data.error);
+}
+
+function updateCount(id, delta) {
+  const el = document.getElementById(id);
+  el.textContent = Math.max(0, parseInt(el.textContent) + delta);
 }
 
 function fmtDate(iso) {
@@ -476,9 +446,10 @@ function deltaLabel(delta) {
   return `<span style="color:${color};font-weight:700;">${sign}${delta}%</span>`;
 }
 
-// Auto-login from localStorage
-const saved = localStorage.getItem('cl_admin_token');
-if (saved) { TOKEN = saved; loadAll(); }
+function esc(s) {
+  return String(s||'')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
 </script>
 </body>
 </html>
