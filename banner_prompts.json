@@ -4,14 +4,14 @@
   "crop_aspect_ratio": "4:1",
   "display_max_width_px": 440,
   "model": "canva:generate-image",
-  "style": "Bright, vivid, realistic illustration with crisp detail and natural warm daylight, rich saturated palette of navy blue, golden amber, and deep red accents, lively and cheerful energy, warm expressive realistic faces, evocative of a close-knit parish community having a genuinely good time together. Compose the main subjects within a horizontal band across the vertical middle third of the frame, since the image will be cropped into a very wide, short letterbox strip. No text, no legible words or letters, no logos.",
+  "style": "Bright, vivid, realistic illustration shot in high-key natural daylight (evenly bright exposure, no deep shadows or dim corners) with crisp detail, rich saturated palette of navy blue, golden amber, and deep red accents, lively and cheerful energy, warm expressive realistic faces, evocative of a close-knit parish community having a genuinely good time together. Compose the main subjects within a horizontal band across the vertical middle third of the frame, since the image will be cropped into a very wide, short letterbox strip. No text, no legible words or letters, no logos.",
   "negative_prompt": "text, letters, words, captions, watermark, logo, muted desaturated colors, flat lighting, distorted hands, clip art, cartoon outlines, modern branding",
   "sections": [
     {
       "slug": "church-school",
       "label_en": "Church School",
       "label_sr": "Црквена школа",
-      "prompt": "A small church school scene: a teacher with her hair uncovered (no headscarf or head covering of any kind) and young children seated around a low wooden table with open picture-books, a small icon corner glowing warmly in the background, warm autumn light through a tall arched window, golden and navy tones, joyful and unhurried mood. No candles anywhere in the scene."
+      "prompt": "A sunlit small church school scene shot in bright high-key natural light: a teacher with her hair uncovered (no headscarf or head covering of any kind) and young children seated around a low wooden table with open picture-books, golden late-morning sunlight flooding evenly through a tall arched window so the whole room is brightly lit with no dim or shadowed areas, a small icon corner softly visible in the background, warm cream, golden, and soft navy tones, airy and joyful mood. No candles anywhere in the scene."
     },
     {
       "slug": "serbian-language-school",
@@ -23,7 +23,7 @@
       "slug": "young-adults",
       "label_en": "Young Adults",
       "label_sr": "Млади",
-      "prompt": "A young-adults gathering scene: friends around a table with coffee cups and an open board game, bright natural daylight streaming through tall windows, a hint of a sunny church courtyard visible through a window behind them, relaxed navy and green accents, cheerful upbeat daytime mood, easy conversation."
+      "prompt": "A sunlit young-adults gathering shot in bright high-key natural light: friends around a table with coffee cups and an open board game, warm golden daylight flooding evenly through large windows with no dim or shadowed areas, a cheerful sunny church courtyard visible outside, warm cream, golden, and soft red/navy accents, lively upbeat daytime mood, easy conversation."
     }
   ]
 }
