@@ -11,19 +11,19 @@
       "slug": "church-school",
       "label_en": "Church School",
       "label_sr": "Црквена школа",
-      "prompt": "Watercolor scene of a small church school: young children seated around a low wooden table with open picture-books and a lit beeswax candle, a small icon corner glowing warmly in the background, soft autumn light through a tall arched window, gentle golden and navy tones, joyful and unhurried mood."
+      "prompt": "A small church school scene: a teacher with her hair uncovered (no headscarf or head covering of any kind) and young children seated around a low wooden table with open picture-books, a small icon corner glowing warmly in the background, warm autumn light through a tall arched window, golden and navy tones, joyful and unhurried mood. No candles anywhere in the scene."
     },
     {
       "slug": "serbian-language-school",
       "label_en": "Serbian Language School",
       "label_sr": "Српска школа језика",
-      "prompt": "Watercolor scene of a Serbian language classroom: a grandmother figure and a child reading together from an open book, loose brushwork suggesting handwriting without legible letters, a wooden desk, a small Serbian tricolor ribbon and a tamburica resting nearby, warm cream and gold tones, tender intergenerational mood."
+      "prompt": "A Serbian language classroom scene: a woman in her 50s to 60s and a child reading together from an open book, a wooden desk, a small Serbian tricolor ribbon and a tamburica resting nearby, warm cream and gold tones, tender intergenerational mood."
     },
     {
       "slug": "young-adults",
       "label_en": "Young Adults",
       "label_sr": "Млади",
-      "prompt": "Watercolor scene of young adults gathered warmly around a table with coffee cups and an open board game, soft string lights overhead, a hint of a church courtyard visible through a window behind them, relaxed navy and green accents, candlelit evening mood, easy conversation."
+      "prompt": "A young-adults gathering scene: friends around a table with coffee cups and an open board game, bright natural daylight streaming through tall windows, a hint of a sunny church courtyard visible through a window behind them, relaxed navy and green accents, cheerful upbeat daytime mood, easy conversation."
     }
   ]
 }
