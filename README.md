@@ -8,6 +8,18 @@ website (`stnicholasphilly.org`, a separate CMS), and a short brief email via
 Beehiiv that links out to the full issue. Full pipeline below — seven
 phases, roughly Sunday draft through the post-send archive update.
 
+**Fast path (2026-10-08):** once `<date>.both.html` and `<date>.email.html`
+are written and board-approved (Steps 1–2), run
+`python3 prepare_publish.py <date>` to do every remaining LOCAL step in
+one shot — regenerate variants, run both QA gates (calendar + the
+board↔email consistency check that catches a correction left stale in
+the email brief), publish the GitHub Pages archive, build the CMS paste
+file, tag UTM links, and commit+push at each stage. It ends by printing
+exactly what's still needed by hand (CMS page, Newsletter Archive
+listing, Beehiiv draft — all human/browser-gated, see Steps 4–6 below for
+the manual mechanics). Run `python3 check_publish_status.py <date>` any
+time to see which of the four publish surfaces are actually live.
+
 ## Weekly workflow
 
 ### 1. Draft
