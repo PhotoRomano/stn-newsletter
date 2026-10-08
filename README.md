@@ -262,23 +262,23 @@ creation time (older instructions describing that are stale).
 6. **Audience** tab → confirm "All free subscribers"
 7. Leave as **Draft** — do not send
 
-### 6. Thursday: send
+### 6. Add it to the live parish Newsletter Archive page
 
-Max reviews the Beehiiv draft (Preview, then the full Review step) and
-sends it himself. This is a deliberate two-gate process — board approves
-the content, Max approves the actual send — and the final click is
-always his.
-
-### 7. After send: add it to the live parish Newsletter Archive page
+**2026-10-08: moved to run BEFORE send, as part of "prepare for publish"
+— not after.** Previously this was Step 7, gated on "only sent issues
+belong on this list," which meant it got silently skipped on sessions
+that staged everything else (archive + CMS page + Beehiiv draft) but
+stopped short of Max's own send click per the two-gate rule — the step
+just never had a trigger. Doing it here instead means every surface is
+ready the moment Max clicks send in Beehiiv, with nothing left over to
+remember afterward.
 
 **This is a separate, easy-to-forget page from the GitHub Pages archive
 in Step 3** — it's `stnicholasphilly.org/newsletter-archive`, a real page
 on the parish CMS (Site Manager) that visitors browsing the site can find,
 not just board members with the unlisted GitHub link. It went 2+ weeks
 stale before (missed Sept 10 and Sept 17 entirely) because nothing in
-this workflow pointed at it — do this every week, right after the issue
-is actually sent (not before — only sent issues belong on this public
-list).
+this workflow pointed at it.
 
 1. In Site Manager: **Pages** → **Newsletter Archive** (page id **127**,
    its one **HTML Code** section is id **321** — both stable, this page
@@ -301,6 +301,15 @@ never needs to be re-pointed later — it stays live at `/newsletter-<date>`
 indefinitely. (That wasn't true before 2026-09-24, when page 129 got
 renamed to a new slug every week and silently broke every older archive
 link — see Step 4's note.)
+
+### 7. Thursday: send
+
+Max reviews the Beehiiv draft (Preview, then the full Review step) and
+sends it himself. This is a deliberate two-gate process — board approves
+the content, Max approves the actual send — and the final click is
+always his. By this point every other surface (GitHub Pages archive,
+parish CMS page, Newsletter Archive listing) is already live — send is
+the only thing left.
 
 This section's field is a genuine plain `<textarea>` (same as page 129's
 HTML Code section in Step 4) — setting `.value` directly via JS and
