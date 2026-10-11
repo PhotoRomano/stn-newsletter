@@ -213,8 +213,8 @@ textarea { resize: vertical; min-height: 100px; }
       <p>St. Nicholas Serbian Orthodox Church &mdash; Community Board</p>
     </div>
     <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-      <button class="btn-post my-listings-tab" id="myListingsBtn" onclick="openMyListings()">My Listings</button>
-      <button class="btn-post" onclick="openModal()">+ Post a Listing</button>
+      <button class="btn-post my-listings-tab" id="myListingsBtn" onclick="openMyListings()" data-track="my_listings_open">My Listings</button>
+      <button class="btn-post" onclick="openModal()" data-track="post_listing_open">+ Post a Listing</button>
     </div>
   </div>
 </div>
@@ -246,7 +246,7 @@ textarea { resize: vertical; min-height: 100px; }
 
 <div class="digest-bar">
   <p>Get new listings delivered to your inbox every week.</p>
-  <button class="btn-digest" onclick="openDigestModal()">Subscribe to Weekly Digest</button>
+  <button class="btn-digest" onclick="openDigestModal()" data-track="digest_open">Subscribe to Weekly Digest</button>
 </div>
 
 <!-- My Listings modal -->
@@ -313,7 +313,7 @@ textarea { resize: vertical; min-height: 100px; }
         <textarea id="cMessage" maxlength="1000" placeholder="Ask a question or express your interest…"></textarea>
         <div class="field-hint">1,000 characters max</div>
       </div>
-      <button class="btn-submit" id="contactBtn" onclick="sendContactMessage()">Send Message</button>
+      <button class="btn-submit" id="contactBtn" onclick="sendContactMessage()" data-track="message_sent">Send Message</button>
     </div>
   </div>
 </div>
@@ -332,7 +332,7 @@ textarea { resize: vertical; min-height: 100px; }
         <label for="dEmail">Email address *</label>
         <input id="dEmail" type="email" maxlength="200" placeholder="you@example.com" onkeydown="if(event.key==='Enter')submitDigest()">
       </div>
-      <button class="btn-submit" id="digestBtn" onclick="submitDigest()">Subscribe</button>
+      <button class="btn-submit" id="digestBtn" onclick="submitDigest()" data-track="digest_subscribe">Subscribe</button>
       <p style="font-size:12px;color:var(--muted);text-align:center;">Already on The Messenger list? Just enter your email — we'll add the digest preference.</p>
     </div>
   </div>
@@ -433,7 +433,7 @@ textarea { resize: vertical; min-height: 100px; }
         <img id="fImagePreview" class="img-preview" alt="Preview">
       </div>
 
-      <button class="btn-submit" id="submitBtn" onclick="submitListing()">Submit for Review</button>
+      <button class="btn-submit" id="submitBtn" onclick="submitListing()" data-track="listing_submitted">Submit for Review</button>
       <p style="font-size:12px; color:var(--muted); text-align:center;">
         Listings are reviewed before going live and expire automatically after 30 days.
       </p>
@@ -619,9 +619,9 @@ function card(l, highlight = false) {
       ${l.contact ? `<div class="listing-meta">&#128222; ${esc(l.contact)}</div>` : ''}
       <div class="listing-meta">Posted by ${esc(l.name)} &middot; ${posted} &middot; expires in ${daysLeft}d</div>
       <div class="card-actions">
-        <button class="btn-contact" onclick="openContact(${l.id})">Message Poster</button>
-        <button class="btn-share" title="Copy link" onclick="shareLink(${l.id})">&#128279;</button>
-        <button class="btn-report" title="Report listing" onclick="openReport(${l.id})">&#9873;</button>
+        <button class="btn-contact" onclick="openContact(${l.id})" data-track="message_poster">Message Poster</button>
+        <button class="btn-share" title="Copy link" onclick="shareLink(${l.id})" data-track="share_listing">&#128279;</button>
+        <button class="btn-report" title="Report listing" onclick="openReport(${l.id})" data-track="report_listing">&#9873;</button>
       </div>
     </div>`;
 }
@@ -1174,5 +1174,6 @@ init().then(() => {
   new MutationObserver(patch).observe(document.documentElement, {childList:true, subtree:true});
 })();
 </script>
+<script src="https://stnicholas-classifieds.photoromano.workers.dev/t.js" defer></script>
 </body>
 </html>
