@@ -605,7 +605,7 @@ function render() {
 
 function card(l, highlight = false) {
   const daysLeft = Math.ceil((new Date(l.expires_at) - Date.now()) / 86_400_000);
-  const posted   = new Date(l.approved_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  const posted   = window.stnFmtDate ? window.stnFmtDate(new Date(l.approved_at), 'short') : new Date(l.approved_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
   const cls      = CAT_CLASS[l.category] || 'community';
   return `
     <div class="listing-card${highlight ? ' highlight' : ''}" id="listing-${l.id}">
@@ -671,7 +671,7 @@ async function openMyListings() {
     }
     body.innerHTML = data.listings.map(l => {
       const statusLabel = { pending: '⏳ Pending review', approved: '✅ Live', closed: '✗ Closed' }[l.status] || l.status;
-      const expiry = l.expires_at ? new Date(l.expires_at).toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'}) : '—';
+      const expiry = l.expires_at ? (window.stnFmtDate ? window.stnFmtDate(new Date(l.expires_at), 'short') : new Date(l.expires_at).toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'})) : '—';
       return `
         <div style="border:1px solid var(--border);border-radius:3px;padding:14px;margin-bottom:10px;">
           <div style="font-size:15px;font-weight:700;color:var(--navy);">${esc(l.title)}</div>
@@ -906,7 +906,7 @@ async function loadManageToken(token) {
     }
     const l = data.listing;
     const statusLabel = { pending: 'Pending review', approved: 'Live', closed: 'Closed' }[l.status] || l.status;
-    const expiry = new Date(l.expires_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+    const expiry = window.stnFmtDate ? window.stnFmtDate(new Date(l.expires_at), 'longDate') : new Date(l.expires_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
     body.innerHTML = `
       <div class="form-msg" id="manageMsg"></div>
       <table style="width:100%;border-collapse:collapse;font-size:13.5px;margin-bottom:14px;">
@@ -941,7 +941,7 @@ async function renewListing(token) {
     const res  = await fetch(`${API}/api/manage/${token}/renew`, { method: 'POST' });
     const data = await res.json();
     if (data.ok) {
-      const expiry = new Date(data.expires_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+      const expiry = window.stnFmtDate ? window.stnFmtDate(new Date(data.expires_at), 'longDate') : new Date(data.expires_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
       msg.className = 'form-msg success'; msg.style.display = 'block';
       msg.textContent = `Renewed! Your listing is now live until ${expiry}.`;
     } else {
