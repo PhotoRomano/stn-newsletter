@@ -1,0 +1,10 @@
+name = "stnicholas-social-rsvp"
+main = "src/index.js"
+compatibility_date = "2026-08-01"
+
+[observability]
+enabled = true
+
+[[kv_namespaces]]
+binding = "RSVPS"
+id = "cc1ca2c0aebe4d339be020b647c51742"
