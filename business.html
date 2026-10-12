@@ -116,10 +116,10 @@ body.lang-sr .lang-en { display: none; }
 
 <div class="bd-hero" id="bdHero">
   <div class="bd-hero-top">
-    <a class="bd-back" href="https://stnicholasphilly.org/parish-businesses">&larr; All Parishioner Businesses</a>
+    <a class="bd-back" id="bdBackTop" href="https://stnicholasphilly.org/parish-businesses">&larr; All Parishioner Businesses</a>
   </div>
   <div class="bd-hero-bottom" id="bdLoadingHero">
-    <div style="color:#fff; font-size:16px;">Loading business…</div>
+    <div style="color:#fff; font-size:16px;" id="bdLoadingText">Loading business…</div>
   </div>
 </div>
 
@@ -132,12 +132,12 @@ body.lang-sr .lang-en { display: none; }
     </div>
     <div class="bd-sidebar">
       <div class="bd-card bd-sidebar-card">
-        <h3 class="heading-font">Connect</h3>
+        <h3 class="heading-font" id="bdConnectHeading">Connect</h3>
         <div class="bd-connect-list" id="bdConnectList"></div>
       </div>
       <div class="bd-card bd-promo-card">
-        <p>Parishioners and friends of the parish can get featured right here, with a full page just like this one.</p>
-        <a href="https://stnicholasphilly.org/parish-businesses">Learn More &rarr;</a>
+        <p id="bdPromoText">Parishioners and friends of the parish can get featured right here, with a full page just like this one.</p>
+        <a href="https://stnicholasphilly.org/parish-businesses" id="bdPromoLink">Learn More &rarr;</a>
       </div>
     </div>
   </div>
@@ -146,7 +146,7 @@ body.lang-sr .lang-en { display: none; }
 
 <div class="bd-footer">
   <div style="margin-bottom:6px;">
-    <a href="https://stnicholasphilly.org/parish-businesses">&larr; Browse All Parishioner Businesses</a>
+    <a href="https://stnicholasphilly.org/parish-businesses" id="bdBackBottom">&larr; Browse All Parishioner Businesses</a>
   </div>
   St. Nicholas Serbian Orthodox Church &middot; 506 Stahr Road, Elkins Park, PA 19027
 </div>
@@ -191,6 +191,31 @@ const CATEGORY_SR = {
 };
 function categoryLabel(cat) { return siteLang() === 'sr' ? (CATEGORY_SR[cat] || cat) : cat; }
 function featuredLabel() { return siteLang() === 'sr' ? 'Истакнути посао' : 'Featured Business'; }
+
+// Fixed page-chrome strings (back links, headings, loading/not-found states) --
+// same tier as CATEGORY_SR above, not the free-form business copy. These were
+// previously hardcoded English in the markup/JS below and never switched when
+// the EN/СР toggle fired (found 2026-10-12 after the same bug was caught and
+// fixed in a single business's detail_html -- this is the page template every
+// business listing shares, so the fix belongs here, once, not per-listing).
+const UI_SR = {
+  backAll: 'Све фирме парохијана',
+  loading: 'Учитавање…',
+  connect: 'Повежите се',
+  promoText: 'Парохијани и пријатељи парохије могу бити представљени управо овде, на целој страници као што је ова.',
+  promoLink: 'Сазнајте више →',
+  backBottom: 'Све фирме парохијана',
+  businessNotFound: 'Фирма није пронађена',
+  browseAll: 'Погледајте све фирме парохијана →',
+  noBusinessSpecified: 'Фирма није наведена.',
+  noContactInfo: 'Контакт подаци још нису наведени.',
+  website: 'Сајт',
+  email: 'Имејл',
+};
+function t(key) {
+  if (siteLang() !== 'sr') return null; // caller falls back to its own English literal
+  return UI_SR[key];
+}
 // Business name is a proper noun/brand -- stays the same in both languages.
 // Tagline is business-specific prose -- only shown in Serbian if the owner
 // has provided a real (board-reviewed-standard) tagline_sr; no machine
@@ -208,6 +233,20 @@ function applySiteLang() {
   if (catPill && currentBusiness) catPill.textContent = categoryLabel(currentBusiness.category);
   const featuredPill = document.querySelector('.bd-featured-pill');
   if (featuredPill) featuredPill.textContent = featuredLabel();
+
+  const backTop = document.getElementById('bdBackTop');
+  if (backTop) backTop.textContent = '← ' + (t('backAll') || 'All Parishioner Businesses');
+  const loadingText = document.getElementById('bdLoadingText');
+  if (loadingText) loadingText.textContent = (t('loading') || 'Loading business…');
+  const connectHeading = document.getElementById('bdConnectHeading');
+  if (connectHeading) connectHeading.textContent = t('connect') || 'Connect';
+  const promoText = document.getElementById('bdPromoText');
+  if (promoText) promoText.textContent = t('promoText') || 'Parishioners and friends of the parish can get featured right here, with a full page just like this one.';
+  const promoLink = document.getElementById('bdPromoLink');
+  if (promoLink) promoLink.textContent = t('promoLink') || 'Learn More →';
+  const backBottom = document.getElementById('bdBackBottom');
+  if (backBottom) backBottom.textContent = '← ' + (t('backBottom') || 'Browse All Parishioner Businesses');
+
   if (currentBusiness) {
     const tagline = taglineFor(currentBusiness);
     const heroTagline = document.querySelector('.bd-hero-tagline');
@@ -227,7 +266,7 @@ function applySiteLang() {
         about.textContent = ctaBody;
         about.style.display = '';
       } else {
-        if (aboutHeading) aboutHeading.textContent = 'About';
+        if (aboutHeading) aboutHeading.textContent = lang === 'sr' ? 'О нама' : 'About';
         about.textContent = tagline;
         about.style.display = tagline ? '' : 'none';
       }
@@ -253,12 +292,13 @@ function esc(s) {
   return d.innerHTML;
 }
 
-function showNotFound(message) {
+function showNotFound(messageEn, messageSr) {
+  const message = (siteLang() === 'sr' && messageSr) ? messageSr : messageEn;
   document.getElementById('bdLoadingHero').innerHTML = '';
   document.getElementById('bdHero').style.backgroundImage = `url('${FALLBACK_HERO}')`;
-  document.querySelector('.bd-hero-bottom').innerHTML = '<h1 class="heading-font">Business Not Found</h1>';
+  document.querySelector('.bd-hero-bottom').innerHTML = `<h1 class="heading-font">${t('businessNotFound') || 'Business Not Found'}</h1>`;
   document.getElementById('bdNotFoundWrap').innerHTML =
-    `<div class="bd-card bd-not-found" style="margin-top:20px;">${message} <a href="https://stnicholasphilly.org/parish-businesses">Browse all parishioner businesses &rarr;</a></div>`;
+    `<div class="bd-card bd-not-found" style="margin-top:20px;">${esc(message)} <a href="https://stnicholasphilly.org/parish-businesses">${t('browseAll') || 'Browse all parishioner businesses →'}</a></div>`;
 }
 
 async function loadBusiness() {
@@ -268,7 +308,7 @@ async function loadBusiness() {
   const slug = params.get('slug');
 
   if (!slug) {
-    showNotFound('No business specified.');
+    showNotFound('No business specified.', 'Фирма није наведена.');
     return;
   }
 
@@ -296,11 +336,11 @@ async function loadBusiness() {
     document.getElementById('bdDetailContent').innerHTML = b.detail_html || '';
 
     const connect = [];
-    if (b.website_url)   connect.push({ icon: '🌐', label: 'Website', href: b.website_url });
+    if (b.website_url)   connect.push({ icon: '🌐', label: t('website') || 'Website', href: b.website_url });
     if (b.facebook_url)  connect.push({ icon: '📘', label: 'Facebook', href: b.facebook_url });
     if (b.instagram_url) connect.push({ icon: '📷', label: 'Instagram', href: b.instagram_url });
     if (b.contact_phone) connect.push({ icon: '📞', label: b.contact_phone, href: `tel:${b.contact_phone}` });
-    if (b.contact_email) connect.push({ icon: '✉️', label: 'Email', href: `mailto:${b.contact_email}` });
+    if (b.contact_email) connect.push({ icon: '✉️', label: t('email') || 'Email', href: `mailto:${b.contact_email}` });
 
     const connectList = document.getElementById('bdConnectList');
     if (connect.length) {
@@ -308,12 +348,12 @@ async function loadBusiness() {
         `<a class="bd-connect-item" href="${esc(c.href)}" target="_blank" rel="noopener"><span class="icon">${c.icon}</span> ${esc(c.label)}</a>`
       ).join('');
     } else {
-      connectList.innerHTML = '<div style="font-size:13px;color:var(--muted);">No contact info listed yet.</div>';
+      connectList.innerHTML = `<div style="font-size:13px;color:var(--muted);">${t('noContactInfo') || 'No contact info listed yet.'}</div>`;
     }
 
     document.getElementById('bdGrid').style.display = 'grid';
   } catch (err) {
-    showNotFound('This business listing could not be found.');
+    showNotFound('This business listing could not be found.', 'Ова фирма није пронађена.');
   }
 }
 

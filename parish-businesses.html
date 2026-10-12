@@ -81,11 +81,11 @@ body { font-family: Arial, Helvetica, sans-serif; background: var(--light); colo
 <div class="pb-header">
   <div class="pb-header-row">
     <div>
-      <h1>Parishioner Businesses</h1>
-      <p>Parishioners and friends of the parish can advertise their business here.</p>
+      <h1 id="pbHeading">Parishioner Businesses</h1>
+      <p id="pbSubheading">Parishioners and friends of the parish can advertise their business here.</p>
     </div>
     <div style="display:flex; flex-direction:column; align-items:flex-end; gap:8px;">
-      <a class="btn-advertise" href="https://stnicholasphilly.org/advertise-with-us">Contact Us to Advertise</a>
+      <a class="btn-advertise" id="pbAdvertiseBtn" href="https://stnicholasphilly.org/advertise-with-us">Contact Us to Advertise</a>
     </div>
   </div>
 </div>
@@ -131,6 +131,13 @@ function applySiteLang() {
   });
   const searchInput = document.getElementById('searchInput');
   if (searchInput) searchInput.placeholder = uiText('searchPlaceholder', 'Search businesses…');
+
+  const heading = document.getElementById('pbHeading');
+  if (heading) heading.textContent = uiText('heading', 'Parishioner Businesses');
+  const subheading = document.getElementById('pbSubheading');
+  if (subheading) subheading.textContent = uiText('subheading', 'Parishioners and friends of the parish can advertise their business here.');
+  const advertiseBtn = document.getElementById('pbAdvertiseBtn');
+  if (advertiseBtn) advertiseBtn.textContent = uiText('advertiseBtn', 'Contact Us to Advertise');
 }
 
 // The site's own header EN/СР buttons (.stn-lang-btn[data-l="en"/"sr"])
@@ -164,6 +171,9 @@ const UI_SR = {
   clickForDetails: 'Кликните за детаље →',
   emptyState: 'Тренутно нема резултата претраге.',
   searchPlaceholder: 'Претражите послове…',
+  heading: 'Фирме парохијана',
+  subheading: 'Парохијани и пријатељи парохије могу рекламирати своју фирму овде.',
+  advertiseBtn: 'Контактирајте нас за рекламирање',
 };
 function categoryLabel(cat) { return siteLang() === 'sr' ? (CATEGORY_SR[cat] || cat) : cat; }
 // Business name is a proper noun/brand -- stays the same in both languages.
