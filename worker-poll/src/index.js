@@ -8,9 +8,9 @@ const POLLS = {
 const RSVP_EVENT = "parish-social-2026-10-17";
 const RSVP_POLL_ID = "Social Night RSVP headcount (people expected)";
 const RSVP_ACTIVITIES = {
-  "movie": "Movie (12-2 PM)",
-  "games": "Informal games (2-4 PM)",
-  "kids-karaoke": "Kids karaoke (4-7 PM)",
+  "movie": "Movie (2-4 PM)",
+  "games": "Informal games (4-5 PM)",
+  "kids-karaoke": "Kids karaoke (5-7 PM)",
   "young-adults-karaoke": "Young adults karaoke (7-10 PM)"
 };
 const WRITEIN_MAX_LEN = 200;
