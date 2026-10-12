@@ -1,0 +1,44 @@
+<div id="stn-rsvp-admin" style="max-width:720px; margin:0 auto; padding:16px; font-family:Georgia,'Times New Roman',serif; color:#333;">
+  <meta name="robots" content="noindex,nofollow">
+  <h2 style="font-size:22px; color:#02306e; margin:0 0 4px; font-weight:700;">Parish Social Night &mdash; RSVP Headcount</h2>
+  <p style="font-size:14px; color:#666; margin:0 0 16px;">Saturday, October 17 &middot; board use only</p>
+  <div id="ra-login" style="margin:0 0 16px;">
+    <input type="password" id="ra-token" placeholder="Admin key" autocomplete="off" style="padding:9px 10px; font-size:14px; width:260px; border:1px solid #ccc; border-radius:3px;">
+    <button type="button" id="ra-go" style="padding:9px 16px; font-size:14px; background:#02306e; color:#fff; border:none; border-radius:3px; cursor:pointer;">View</button>
+    <p id="ra-err" style="display:none; color:#8c1419; font-size:13px; margin:8px 0 0;"></p>
+  </div>
+  <div id="ra-out" style="display:none;">
+    <table style="border-collapse:collapse; width:100%; font-size:15px; margin:0 0 14px;" id="ra-totals"></table>
+    <p id="ra-hh" style="font-size:14px; color:#555; margin:0 0 14px;"></p>
+    <table style="border-collapse:collapse; width:100%; font-size:13.5px;" id="ra-list"></table>
+    <p style="margin:14px 0 0;"><button type="button" id="ra-refresh" style="padding:7px 14px; font-size:13px; cursor:pointer;">Refresh</button>
+    <button type="button" id="ra-forget" style="padding:7px 14px; font-size:13px; cursor:pointer;">Forget key on this device</button></p>
+  </div>
+  <script>
+  (function(){
+    var API='https://stnicholas-social-rsvp.photoromano.workers.dev', EV='parish-social-2026-10-17';
+    var LABEL={'movie':'Movie (12–2 PM)','games':'Informal games (2–4 PM)','kids-karaoke':'Kids karaoke (4–7 PM)','young-adults-karaoke':'Young adults karaoke (7–10 PM)'};
+    var $=function(i){return document.getElementById(i);};
+    function store(k,v){try{ if(v===null) localStorage.removeItem(k); else if(v!==undefined) localStorage.setItem(k,v); else return localStorage.getItem(k);}catch(e){} return null;}
+    function cell(tr,t,bold){var td=document.createElement('td');td.textContent=t;td.style.cssText='padding:7px 8px;border-bottom:1px solid #e3e8f0;'+(bold?'font-weight:bold;':'');tr.appendChild(td);}
+    function load(){
+      var tok=$('ra-token').value.trim()||store('stn-rsvp-key'); if(!tok){return;}
+      fetch(API+'/results?event='+EV,{headers:{Authorization:'Bearer '+tok}}).then(function(r){return r.json();}).then(function(d){
+        if(!d.ok){ $('ra-err').textContent='Wrong key.'; $('ra-err').style.display='block'; store('stn-rsvp-key',null); $('ra-login').style.display='block'; $('ra-out').style.display='none'; return; }
+        store('stn-rsvp-key',tok); $('ra-err').style.display='none'; $('ra-login').style.display='none'; $('ra-out').style.display='block';
+        var t=$('ra-totals'); t.innerHTML='';
+        var h=document.createElement('tr'); cell(h,'Activity',true); cell(h,'People expected',true); t.appendChild(h);
+        Object.keys(LABEL).forEach(function(k){var tr=document.createElement('tr');cell(tr,LABEL[k]);cell(tr,String(d.headcount[k]||0),true);t.appendChild(tr);});
+        $('ra-hh').textContent=d.households+' household'+(d.households===1?'':'s')+' have RSVP’d.';
+        var l=$('ra-list'); l.innerHTML='';
+        var lh=document.createElement('tr'); ['Name','Party','Attending'].forEach(function(x){cell(lh,x,true);}); l.appendChild(lh);
+        d.rsvps.forEach(function(r){var tr=document.createElement('tr');cell(tr,r.name);cell(tr,String(r.party_size));cell(tr,r.activities.map(function(a){return (LABEL[a]||a).replace(/ \(.*\)/,'');}).join(', '));l.appendChild(tr);});
+      }).catch(function(){ $('ra-err').textContent='Could not reach the RSVP service.'; $('ra-err').style.display='block'; });
+    }
+    $('ra-go').addEventListener('click',load); $('ra-refresh').addEventListener('click',load);
+    $('ra-token').addEventListener('keydown',function(e){if(e.key==='Enter')load();});
+    $('ra-forget').addEventListener('click',function(){store('stn-rsvp-key',null);location.reload();});
+    if(store('stn-rsvp-key')) load();
+  })();
+  </script>
+</div>
