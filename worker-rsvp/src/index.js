@@ -42,10 +42,20 @@ export default {
       const event = url.searchParams.get('event') || '';
       if (!EVENTS[event]) return json({ ok: false, error: 'Unknown event' }, 404, headers);
       const rows = await loadAll(env, event);
+      const zero = () => ({ kids: 0, young_adults: 0, adults: 0, total: 0 });
       const headcount = Object.fromEntries(EVENTS[event].map((e) => [e, 0]));
-      let households = rows.length;
-      for (const r of rows) for (const e of r.activities) headcount[e] += r.party_size;
-      return json({ ok: true, event, households, headcount, rsvps: rows }, 200, headers);
+      const segments = Object.fromEntries(EVENTS[event].map((e) => [e, zero()]));
+      const totals = zero();
+      const households = rows.length;
+      for (const r of rows) {
+        const k = r.kids ?? 0, y = r.young_adults ?? 0, a = r.adults ?? r.party_size ?? 0;
+        totals.kids += k; totals.young_adults += y; totals.adults += a; totals.total += k + y + a;
+        for (const e of r.activities) {
+          headcount[e] += r.party_size;
+          segments[e].kids += k; segments[e].young_adults += y; segments[e].adults += a; segments[e].total += k + y + a;
+        }
+      }
+      return json({ ok: true, event, households, headcount, segments, totals, rsvps: rows }, 200, headers);
     }
 
     if (request.method === 'POST' && url.pathname === '/rsvp') {
@@ -55,12 +65,14 @@ export default {
       const event = String(b.event || '').trim();
       if (!EVENTS[event]) return json({ ok: false, error: 'Unknown event' }, 400, headers);
       const name = String(b.name || '').trim().slice(0, 100);
-      const partySize = parseInt(b.party_size, 10);
+      const num = (v) => { const n = parseInt(v, 10); return Number.isInteger(n) ? n : NaN; };
+      const kids = num(b.kids), youngAdults = num(b.young_adults), adults = num(b.adults);
+      const partySize = kids + youngAdults + adults;
       const activities = Array.isArray(b.activities) ? [...new Set(b.activities.map(String))] : [];
       if (!name) return json({ ok: false, error: 'Name required' }, 400, headers);
-      if (!Number.isInteger(partySize) || partySize < 1 || partySize > MAX_PARTY) return json({ ok: false, error: 'Party size 1-30 required' }, 400, headers);
+      if ([kids, youngAdults, adults].some((n) => !(n >= 0 && n <= MAX_PARTY)) || !(partySize >= 1)) return json({ ok: false, error: 'Enter how many kids / young adults / adults (at least 1 person)' }, 400, headers);
       if (!activities.length || !activities.every((a) => EVENTS[event].includes(a))) return json({ ok: false, error: 'Pick at least one activity' }, 400, headers);
-      const row = { name, party_size: partySize, activities, ts: new Date().toISOString() };
+      const row = { name, party_size: partySize, kids, young_adults: youngAdults, adults, activities, ts: new Date().toISOString() };
       // Same name re-submitting replaces their earlier RSVP (lets people fix a mistake).
       const key = `rsvp:${event}:${name.toLowerCase().replace(/\s+/g, ' ')}`;
       await env.RSVPS.put(key, JSON.stringify(row));

@@ -55,10 +55,23 @@ async function getRsvpView(env) {
   const list = await env.RSVPS.list({ prefix: `rsvp:${RSVP_EVENT}:` });
   const raw = await Promise.all(list.keys.map((k) => env.RSVPS.get(k.name)));
   const rows = raw.filter(Boolean).map((r) => JSON.parse(r)).sort((a, b) => a.ts.localeCompare(b.ts));
-  const counts = Object.fromEntries(Object.values(RSVP_ACTIVITIES).map((l) => [l, 0]));
-  for (const r of rows) for (const a of r.activities) if (RSVP_ACTIVITIES[a]) counts[RSVP_ACTIVITIES[a]] += r.party_size;
-  const writeins = rows.map((r) => `${r.name} — ${r.party_size} ${r.party_size === 1 ? "person" : "people"}: ${r.activities.map((a) => RSVP_ACTIVITIES[a] || a).join(", ")}`);
-  return { counts, writeins };
+  const seg = (r) => ({ k: r.kids ?? 0, y: r.young_adults ?? 0, a: r.adults ?? r.party_size ?? 0 });
+  const per = Object.fromEntries(Object.keys(RSVP_ACTIVITIES).map((a) => [a, { k: 0, y: 0, a: 0 }]));
+  const tot = { k: 0, y: 0, a: 0 };
+  for (const r of rows) {
+    const g = seg(r);
+    tot.k += g.k; tot.y += g.y; tot.a += g.a;
+    for (const act of r.activities) if (per[act]) { per[act].k += g.k; per[act].y += g.y; per[act].a += g.a; }
+  }
+  const counts = {};
+  for (const [act, label] of Object.entries(RSVP_ACTIVITIES)) counts[label] = per[act].k + per[act].y + per[act].a;
+  counts["ALL RSVPs: kids"] = tot.k;
+  counts["ALL RSVPs: young adults"] = tot.y;
+  counts["ALL RSVPs: adults"] = tot.a;
+  const fmt = (g) => `${g.k} kids, ${g.y} young adults, ${g.a} adults`;
+  const lines = Object.entries(RSVP_ACTIVITIES).map(([act, label]) => `${label}: ${fmt(per[act])}`);
+  const households = rows.map((r) => { const g = seg(r); return `${r.name} \u2014 ${fmt(g)} \u2014 ${r.activities.map((a) => RSVP_ACTIVITIES[a] || a).join(", ")}`; });
+  return { counts, writeins: [...lines, "\u2014 Households \u2014", ...households] };
 }
 export default {
   async fetch(request, env) {

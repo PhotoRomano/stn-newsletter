@@ -124,8 +124,12 @@
 <p style="font-size:12.5px; color:#666; margin:0 0 14px; text-align:center;">One RSVP per household, please. / Једна пријава по домаћинству.</p>
 <label style="display:block; font-size:13.5px; color:#333; margin:0 0 4px;">Name / Име и презиме</label>
 <input id="stn-rsvp-name" maxlength="100" style="display:block; width:100%; box-sizing:border-box; padding:8px 10px; font-size:14px; margin:0 0 12px; border:1px solid #ccc; border-radius:3px;" type="text"/>
-<label style="display:block; font-size:13.5px; color:#333; margin:0 0 4px;">How many people in your group? / Колико вас долази?</label>
-<input id="stn-rsvp-size" max="30" min="1" style="display:block; width:90px; box-sizing:border-box; padding:8px 10px; font-size:14px; margin:0 0 14px; border:1px solid #ccc; border-radius:3px;" type="number" value="1"/>
+<p style="font-size:13.5px; color:#333; margin:0 0 8px;">Who is coming in your group? / Ко долази у вашој групи?</p>
+<div style="display:flex; gap:10px; margin:0 0 14px;">
+<div style="flex:1; min-width:90px;"><label for="stn-rsvp-kids" style="display:block; font-size:12.5px; color:#333; margin:0 0 4px;">Kids<br/><span style="color:#777;">Деца</span></label><input id="stn-rsvp-kids" max="30" min="0" style="display:block; width:100%; box-sizing:border-box; padding:8px 10px; font-size:14px; border:1px solid #ccc; border-radius:3px;" type="number" value="0"/></div>
+<div style="flex:1; min-width:90px;"><label for="stn-rsvp-ya" style="display:block; font-size:12.5px; color:#333; margin:0 0 4px;">Young adults<br/><span style="color:#777;">Млади</span></label><input id="stn-rsvp-ya" max="30" min="0" style="display:block; width:100%; box-sizing:border-box; padding:8px 10px; font-size:14px; border:1px solid #ccc; border-radius:3px;" type="number" value="0"/></div>
+<div style="flex:1; min-width:90px;"><label for="stn-rsvp-adults" style="display:block; font-size:12.5px; color:#333; margin:0 0 4px;">Adults<br/><span style="color:#777;">Одрасли</span></label><input id="stn-rsvp-adults" max="30" min="0" style="display:block; width:100%; box-sizing:border-box; padding:8px 10px; font-size:14px; border:1px solid #ccc; border-radius:3px;" type="number" value="1"/></div>
+</div>
 <p style="font-size:13.5px; color:#333; margin:0 0 8px;">Which parts will you attend? / Којим деловима ћете присуствовати?</p>
 <div style="text-align:left; margin:0 0 12px;">
 <label style="display:block; font-size:13.5px; color:#333; margin:0 0 9px; cursor:pointer;"><input name="stn-rsvp-act" style="margin-right:8px;" type="checkbox" value="movie"/>🎥 Movie, 12–2 PM <span style="color:#777;">/ Филм, 12–14 ч</span></label>
@@ -158,14 +162,16 @@
       function err(m) { var e = document.getElementById('stn-rsvp-error'); if (e) { e.textContent = m; e.style.display = 'block'; } }
       function submit() {
         var name = (document.getElementById('stn-rsvp-name').value || '').trim();
-        var size = parseInt(document.getElementById('stn-rsvp-size').value, 10);
+        var kids = parseInt(document.getElementById('stn-rsvp-kids').value, 10) || 0;
+        var ya = parseInt(document.getElementById('stn-rsvp-ya').value, 10) || 0;
+        var adults = parseInt(document.getElementById('stn-rsvp-adults').value, 10) || 0;
         var acts = Array.prototype.map.call(body.querySelectorAll('input[name="stn-rsvp-act"]:checked'), function(i){ return i.value; });
         if (!name) return err('Please enter your name. / Молимо унесите име.');
-        if (!(size >= 1 && size <= 30)) return err('Group size must be 1\u201330. / Број особа мора бити 1\u201330.');
+        if (kids < 0 || ya < 0 || adults < 0 || kids + ya + adults < 1) return err('Enter at least one person. / Унесите бар једну особу.');
         if (!acts.length) return err('Pick at least one activity. / Изаберите бар једну активност.');
         var btn = document.getElementById('stn-rsvp-confirm'); btn.disabled = true; btn.textContent = 'Sending\u2026';
         fetch(API + '/rsvp', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ event: EVENT, name: name, party_size: size, activities: acts }) })
+          body: JSON.stringify({ event: EVENT, name: name, kids: kids, young_adults: ya, adults: adults, activities: acts }) })
         .then(function(r){ return r.json(); }).then(function(d){
           if (d && d.ok) {
             body.innerHTML = '<p style="font-size:15px; color:#155a2b; font-weight:bold; margin:0 0 6px; text-align:center;">\u2713 Thank you \u2014 see you Saturday! / Хвала \u2014 видимо се у суботу!</p>' +
@@ -451,8 +457,12 @@
 <p style="font-size:12.5px; color:#666; margin:0 0 14px; text-align:center;">One RSVP per household, please. / Једна пријава по домаћинству.</p>
 <label style="display:block; font-size:13.5px; color:#333; margin:0 0 4px;">Name / Име и презиме</label>
 <input id="stn-rsvp-name" maxlength="100" style="display:block; width:100%; box-sizing:border-box; padding:8px 10px; font-size:14px; margin:0 0 12px; border:1px solid #ccc; border-radius:3px;" type="text"/>
-<label style="display:block; font-size:13.5px; color:#333; margin:0 0 4px;">How many people in your group? / Колико вас долази?</label>
-<input id="stn-rsvp-size" max="30" min="1" style="display:block; width:90px; box-sizing:border-box; padding:8px 10px; font-size:14px; margin:0 0 14px; border:1px solid #ccc; border-radius:3px;" type="number" value="1"/>
+<p style="font-size:13.5px; color:#333; margin:0 0 8px;">Who is coming in your group? / Ко долази у вашој групи?</p>
+<div style="display:flex; gap:10px; margin:0 0 14px;">
+<div style="flex:1; min-width:90px;"><label for="stn-rsvp-kids" style="display:block; font-size:12.5px; color:#333; margin:0 0 4px;">Kids<br/><span style="color:#777;">Деца</span></label><input id="stn-rsvp-kids" max="30" min="0" style="display:block; width:100%; box-sizing:border-box; padding:8px 10px; font-size:14px; border:1px solid #ccc; border-radius:3px;" type="number" value="0"/></div>
+<div style="flex:1; min-width:90px;"><label for="stn-rsvp-ya" style="display:block; font-size:12.5px; color:#333; margin:0 0 4px;">Young adults<br/><span style="color:#777;">Млади</span></label><input id="stn-rsvp-ya" max="30" min="0" style="display:block; width:100%; box-sizing:border-box; padding:8px 10px; font-size:14px; border:1px solid #ccc; border-radius:3px;" type="number" value="0"/></div>
+<div style="flex:1; min-width:90px;"><label for="stn-rsvp-adults" style="display:block; font-size:12.5px; color:#333; margin:0 0 4px;">Adults<br/><span style="color:#777;">Одрасли</span></label><input id="stn-rsvp-adults" max="30" min="0" style="display:block; width:100%; box-sizing:border-box; padding:8px 10px; font-size:14px; border:1px solid #ccc; border-radius:3px;" type="number" value="1"/></div>
+</div>
 <p style="font-size:13.5px; color:#333; margin:0 0 8px;">Which parts will you attend? / Којим деловима ћете присуствовати?</p>
 <div style="text-align:left; margin:0 0 12px;">
 <label style="display:block; font-size:13.5px; color:#333; margin:0 0 9px; cursor:pointer;"><input name="stn-rsvp-act" style="margin-right:8px;" type="checkbox" value="movie"/>🎥 Movie, 12–2 PM <span style="color:#777;">/ Филм, 12–14 ч</span></label>
@@ -485,14 +495,16 @@
       function err(m) { var e = document.getElementById('stn-rsvp-error'); if (e) { e.textContent = m; e.style.display = 'block'; } }
       function submit() {
         var name = (document.getElementById('stn-rsvp-name').value || '').trim();
-        var size = parseInt(document.getElementById('stn-rsvp-size').value, 10);
+        var kids = parseInt(document.getElementById('stn-rsvp-kids').value, 10) || 0;
+        var ya = parseInt(document.getElementById('stn-rsvp-ya').value, 10) || 0;
+        var adults = parseInt(document.getElementById('stn-rsvp-adults').value, 10) || 0;
         var acts = Array.prototype.map.call(body.querySelectorAll('input[name="stn-rsvp-act"]:checked'), function(i){ return i.value; });
         if (!name) return err('Please enter your name. / Молимо унесите име.');
-        if (!(size >= 1 && size <= 30)) return err('Group size must be 1\u201330. / Број особа мора бити 1\u201330.');
+        if (kids < 0 || ya < 0 || adults < 0 || kids + ya + adults < 1) return err('Enter at least one person. / Унесите бар једну особу.');
         if (!acts.length) return err('Pick at least one activity. / Изаберите бар једну активност.');
         var btn = document.getElementById('stn-rsvp-confirm'); btn.disabled = true; btn.textContent = 'Sending\u2026';
         fetch(API + '/rsvp', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ event: EVENT, name: name, party_size: size, activities: acts }) })
+          body: JSON.stringify({ event: EVENT, name: name, kids: kids, young_adults: ya, adults: adults, activities: acts }) })
         .then(function(r){ return r.json(); }).then(function(d){
           if (d && d.ok) {
             body.innerHTML = '<p style="font-size:15px; color:#155a2b; font-weight:bold; margin:0 0 6px; text-align:center;">\u2713 Thank you \u2014 see you Saturday! / Хвала \u2014 видимо се у суботу!</p>' +
