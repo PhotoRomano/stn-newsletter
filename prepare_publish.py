@@ -84,6 +84,8 @@ def main():
         print(f"missing {both} -- write the draft first (README Step 1)")
         sys.exit(1)
 
+    run([sys.executable, "check_title_date.py", date], label="0. check_title_date.py (HARD GATE)")
+
     run([sys.executable, "build.py", both], label="1. build.py (regenerate EN/SR/other variants)")
     run([sys.executable, "check_calendar.py", date], allow_fail=True, label="2. check_calendar.py (advisory)")
 

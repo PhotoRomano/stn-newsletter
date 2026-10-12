@@ -11,7 +11,8 @@ phases, roughly Sunday draft through the post-send archive update.
 **Fast path (2026-10-08):** once `<date>.both.html` and `<date>.email.html`
 are written and board-approved (Steps 1–2), run
 `python3 prepare_publish.py <date>` to do every remaining LOCAL step in
-one shot — regenerate variants, run both QA gates (calendar + the
+one shot — checks the `<title>` date (2026-10-15 addition, see gotcha
+below), regenerate variants, run both QA gates (calendar + the
 board↔email consistency check that catches a correction left stale in
 the email brief), publish the GitHub Pages archive, build the CMS paste
 file, tag UTM links, and commit+push at each stage. It ends by printing
@@ -31,6 +32,20 @@ two-column rows, each with a `<td class="bl-col bl-en">` / `<td
 class="bl-col bl-sr">` pair — edit both languages together so nothing
 drifts out of sync between them. `<date>` is the Thursday send date, not
 the week-start Sunday.
+
+**Gotcha (hit for real 2026-10-15):** both `<date>.both.html` and
+`<date>.email.html` start life as a copy of last week's file. Update the
+`<title>` tag's date in both, not just the body content — a stale
+`<title>` is invisible in the rendered page (titles aren't shown in the
+body) but it's exactly what link-preview unfurlers (iMessage, Slack,
+etc.) show when someone pastes the GitHub Pages URL, so a copy-paste that
+only updates the visible content still ships a "wrong week" preview card.
+(`.other.html` / `.serbian.html` don't need this — `build.py` regenerates
+their `<title>` fresh from the date argument every run, so they can't go
+stale this way.) `check_title_date.py <date>` checks this and is now
+Step 0 of `prepare_publish.py` — run it (or the fast path) before
+publishing so a stale template title gets caught here, not after it's
+live.
 
 Pull liturgical data from `stnicholasphilly.org/calendar.html` (its JS
 `FEASTS` array) and apply Julian-calendar context (13 days behind
