@@ -1,5 +1,17 @@
 #!/usr/bin/env python3
-"""Generate this week's watercolor section banners via Higgsfield.
+"""DISCONNECTED 2026-10-19 (Max): we no longer use Higgsfield for this. The
+`higgsfield` CLI call below (job_type "canva:generate-image") was already
+broken anyway -- "No model with job_type canva:generate-image" -- so this
+isn't losing a working path. Replacement direction from Max: local image
+models + Canva directly (not through Higgsfield), and banners should get
+incremental weekly improvements rather than a full regenerate-from-scratch
+every week. Don't re-wire this script to Higgsfield; see the plan proposed
+in chat the same day for the new pipeline shape. main() below exits early
+with this message instead of silently trying (and failing) the old path.
+
+Original docstring, kept for the asset layout/behavior it still documents:
+
+Generate this week's watercolor section banners via Higgsfield.
 
 Usage: python3 generate_banners.py <issue-date, e.g. 2026-10-01> [--force]
 
@@ -146,6 +158,12 @@ def center_crop_to_ratio(path, target_ratio):
 
 
 def main():
+    print(
+        "generate_banners.py is disconnected from Higgsfield (2026-10-19) and has no\n"
+        "replacement wired yet -- see the local-models + Canva plan proposed in chat.\n"
+        "Reuse last week's banner images for now rather than running this."
+    )
+    sys.exit(1)
     if len(sys.argv) < 2:
         print(__doc__)
         sys.exit(1)
