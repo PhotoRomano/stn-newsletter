@@ -21,9 +21,14 @@ own docstring):
   6. commit + push archive/*
   7. build_site_html.py    -- produce drafts/<date>.site.html for the CMS paste
   8. add_utm_tags.py       -- tag email.html's links
-  9. check_links.py --no-fetch -- fast offline pass only; the live-fetch
-                               pass is run again at the end of Step 10
-                               below, once the parish CMS page may exist
+  9. check_links.py --no-fetch -- fast offline pass only (on both.html,
+                               email.html, and all three build.py outputs
+                               -- not just email.html, so a regression
+                               like the 2026-10-20 missing-font-link bug
+                               gets caught on every surface, not just one);
+                               the live-fetch pass on email.html is run
+                               again at the end of Step 10 below, once the
+                               parish CMS page may exist
  10. commit + push drafts/*.email.html (if changed)
  11. check_publish_status.py -- reports what's live vs. still needed;
                                at THIS point in the workflow the parish
@@ -101,8 +106,9 @@ def main():
 
     run([sys.executable, "build_site_html.py", both], label="7. build_site_html.py (produces .site.html for CMS paste)")
     run([sys.executable, "add_utm_tags.py", email, date], label="8. add_utm_tags.py")
-    run([sys.executable, "check_links.py", "--no-fetch", email],
-        label="9. check_links.py --no-fetch (fast pass; full fetch happens after CMS page exists)")
+    for surface in [both, email, f"drafts/{date}.html", f"drafts/{date}.serbian.html", f"drafts/{date}.other.html"]:
+        run([sys.executable, "check_links.py", "--no-fetch", surface],
+            label=f"9. check_links.py --no-fetch on {surface} (fast pass; full fetch on {email} happens after CMS page exists)")
 
     git(["drafts/" + Path(email).name], f"Tag {date} email brief links with UTM params")
 

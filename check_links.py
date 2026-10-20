@@ -30,6 +30,15 @@ Checks, in order:
      positive, not a bug.
   4. Every http(s) link actually resolves (HTTP 200, 15s timeout).
      Skipped with --no-fetch for a fast offline pass.
+  5. If the file's CSS uses the 'El Messiri' font-family anywhere, it must
+     also load it via a Google Fonts <link> -- otherwise every heading
+     silently falls back to Georgia with no visible error (the exact bug
+     Max caught 2026-10-20, which had been shipping unnoticed for weeks
+     on every standalone GitHub Pages page: drafts/*.both.html, build.py's
+     per-language output, and archive/index.html). Skipped for
+     `.site.html` -- that file is a content fragment pasted into the
+     parish CMS, which already supplies the font site-wide; it never has
+     its own <head> by design.
 
 Exits non-zero if anything fails, so it can gate the workflow instead of
 just being advisory.
@@ -105,6 +114,15 @@ def main():
     checks_email_tag_stripped = path.name.endswith(".site.html") or "archive" in path.parts
     if checks_email_tag_stripped and "{{email}}" in text:
         problems.append("unresolved {{email}} merge tag found -- should have been stripped by now")
+
+    is_site_fragment = path.name.endswith(".site.html")
+    uses_el_messiri = re.search(r"font-family:\s*['\"]?El Messiri", text) is not None
+    has_el_messiri_link = "fonts.googleapis.com" in text and "El+Messiri" in text
+    if uses_el_messiri and not is_site_fragment and not has_el_messiri_link:
+        problems.append(
+            "uses 'El Messiri' in font-family but has no Google Fonts <link> for it "
+            "-- will silently fall back to Georgia (the 2026-10-20 font bug)"
+        )
 
     if do_fetch:
         seen = set()
