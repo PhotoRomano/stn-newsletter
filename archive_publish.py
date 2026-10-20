@@ -77,6 +77,7 @@ def render_index(issues):
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Messenger — Newsletter Archive — St. Nicholas Serbian Orthodox Church</title>
+<link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@400;700&display=swap" rel="stylesheet">
 <style>
   body {{ margin: 0; background: #ece7dd; font-family: Georgia, serif; color: #2b2b2b; }}
   .wrap {{ max-width: 660px; margin: 40px auto; padding: 0 20px; }}
