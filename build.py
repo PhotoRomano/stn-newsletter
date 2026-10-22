@@ -132,7 +132,7 @@ SHELL = {
         share_body="Forward this email, or share our mailing list with them directly.",
         share_buttons=[("Share the Sign-Up Link", "https://photoromano.github.io/stn-newsletter/subscribe.html")],
         footer_links=[("Calendar", "https://stnicholasphilly.org/calendar.html"),
-                      ("Facebook", "https://www.facebook.com/stnicholasphilly"),
+                      ("Facebook", "https://www.facebook.com/profile.php?id=61576041795124"),
                       ("YouTube", "https://www.youtube.com/@svetinikolasvetinikolaphil2668"),
                       ("Instagram", "https://www.instagram.com/stnicholasphilly")],
         footer_note="You&rsquo;re receiving this because you&rsquo;re part of the St. Nicholas Serbian "
@@ -160,7 +160,7 @@ SHELL = {
         share_body="Проследите овај имејл, или поделите нашу листу за пријаву директно с њима.",
         share_buttons=[("Поделите линк за пријаву", "https://photoromano.github.io/stn-newsletter/subscribe-sr.html")],
         footer_links=[("Календар", "https://stnicholasphilly.org/calendar.html"),
-                      ("Фејсбук", "https://www.facebook.com/stnicholasphilly"),
+                      ("Фејсбук", "https://www.facebook.com/profile.php?id=61576041795124"),
                       ("Јутјуб", "https://www.youtube.com/@svetinikolasvetinikolaphil2668"),
                       ("Инстаграм", "https://www.instagram.com/stnicholasphilly")],
         footer_note="Ово писмо примате јер сте део српске православне породице Светог Николе у Елкинс "
