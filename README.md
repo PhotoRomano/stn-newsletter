@@ -21,6 +21,19 @@ listing, Beehiiv draft — all human/browser-gated, see Steps 4–6 below for
 the manual mechanics). Run `python3 check_publish_status.py <date>` any
 time to see which of the four publish surfaces are actually live.
 
+**After-the-fact fixes (2026-10-22):** once an issue has already been
+built/published/sent and needs a small correction (a wrong phrase, an
+ambiguous date, a dead link), run
+`python3 patch_live_issue.py <date> --find "old text" --replace "new text"`
+instead of hand-repeating edit → build → build_site_html → archive_publish
+→ commit/push → re-copy → re-paste. It applies the find/replace to
+`<date>.both.html` and `<date>.email.html` (whichever actually contain the
+text), re-runs the build/publish chain, commits + pushes drafts/ and
+archive/, and copies the final `.site.html` to the clipboard so the only
+manual step left is one paste into the parish CMS page. It never touches
+the Newsletter Archive listing or Beehiiv — if the text was already sent
+in a live email, that copy is locked in regardless.
+
 ## Weekly workflow
 
 ### 1. Draft
