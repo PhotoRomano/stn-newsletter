@@ -142,9 +142,18 @@ def main():
 
     site_html = ROOT / f"drafts/{date}.site.html"
     if site_html.exists():
-        subprocess.run(["pbcopy"], input=site_html.read_text(), text=True)
-        print(f"\n{site_html.name} copied to clipboard -- paste into the parish CMS page's "
-              f"HTML Code section (Site Manager) to finish.")
+        expected_clip = site_html.read_text()
+        subprocess.run(["pbcopy"], input=expected_clip, text=True)
+        actual_clip = subprocess.run(["pbpaste"], capture_output=True, text=True).stdout
+        if actual_clip != expected_clip:
+            print(f"\nWARNING -- clipboard does not match {site_html.name} right after pbcopy "
+                  f"(something else overwrote it -- a clipboard collision, not a bug in this "
+                  f"script). DO NOT paste into the CMS yet: re-run just the copy with "
+                  f"'pbcopy < drafts/{date}.site.html', then immediately verify with "
+                  f"'pbpaste | diff - drafts/{date}.site.html' before pasting into Site Manager.")
+        else:
+            print(f"\n{site_html.name} copied to clipboard (verified) -- paste into the parish "
+                  f"CMS page's HTML Code section (Site Manager) to finish.")
 
     print(f"""
 {'=' * 70}
