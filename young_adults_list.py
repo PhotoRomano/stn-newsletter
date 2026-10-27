@@ -14,12 +14,19 @@ hood (see teens-signup.html's redirect to /young-adults-sign-up): its
 columns are literally "Teen First/Last Name" and "Teen Age", never
 relabeled after the group was renamed. Real entries include actual minors
 (ages 13 and 15 seen in the data as of 2026-10-27), each with their own
-personal email on file. This script DEFAULTS TO ADULTS ONLY (Teen Age >=
-18) for anything that prints a mailable address list -- minors are counted
-and reported separately, never included, so a caller can't accidentally
-pipe a child's email into a visible group To/CC. Pass --include-minors to
-override this for a specific, deliberate reason (e.g. a parent-facing
-communication), never for a peer group email.
+personal email on file.
+
+RESOLVED (Max, 2026-10-27): minors on this list SHOULD receive Young
+Adults group emails -- a parent signing a child up for this list is
+explicit consent for that child to get this specific communication.
+That's a settled policy, not a per-send judgment call. See
+check_minor_safety.py for the separate, narrower question this module
+still gates: whether a minor's address should be VISIBLE to the rest of
+a self-organizing group (To/Cc) vs. included some other way. Call
+`partition_by_age` from that module to split adults/minors, and
+`require_visible_list_safe` before populating a visible field -- it
+raises unless acknowledge_minors=True, forcing that to stay a conscious
+choice each time rather than a silent default in either direction.
 
 Also flags obvious data-quality issues (duplicate contact across rows,
 an empty name with only a phone number) rather than silently
@@ -103,13 +110,16 @@ def format_report(adults, minors, problems):
     lines = [f"Adults (age >= {MIN_ADULT_AGE}): {len(adults)}"]
     for a in adults:
         lines.append(f"  - {a['name']} ({a['age']}) <{a['email']}>")
-    lines.append(f"\nMinors (age < {MIN_ADULT_AGE}): {len(minors)} -- EXCLUDED from any mailable list by default")
+    lines.append(f"\nMinors (age < {MIN_ADULT_AGE}): {len(minors)} -- parent-opted-in, OK to include "
+                 f"(see RESOLVED note above) but run through check_minor_safety.require_visible_list_safe "
+                 f"before putting any of them in a VISIBLE To/Cc")
     for m in minors:
         lines.append(f"  - {m['name']} ({m['age']}) <{m['email']}> -- row {m['row']}")
     if problems:
         lines.append(f"\nData-quality flags ({len(problems)}):")
         for p in problems:
             lines.append(f"  - {p}")
-    lines.append(f"\nAdult emails, comma-separated (for a visible To/CC list):")
-    lines.append(", ".join(a["email"] for a in adults))
+    all_entries = adults + minors
+    lines.append(f"\nAll {len(all_entries)} email(s), comma-separated:")
+    lines.append(", ".join(e["email"] for e in all_entries))
     return "\n".join(lines)
