@@ -28,9 +28,21 @@ const FORMS = {
     nameCols: [1, 2]
   },
   'Young Adults': {
+    // NOTE 2026-10-27: sheet tab renamed from the old "Teens" labeling to
+    // "Member"/"Parent-Guardian" to match the Young Adults rebrand (this
+    // form spans both teens and adults -- see the newsletter's own Young
+    // Adults section copy, "a few teens and young adults"). `headers` only
+    // controls the label text written to a BRAND NEW sheet's row 1
+    // (getOrCreateSheet only writes headers once, on creation) -- the
+    // live "Young Adults Sign-Ups" tab's row 1 was updated to match by
+    // hand the same day, via the Sheets API, touching no data rows.
+    // `row()`'s p['Teen ...'] keys below are the HTML form's actual field
+    // names on the live site and are intentionally UNCHANGED -- renaming
+    // those would require also updating the live form's input `name`
+    // attributes, a bigger/riskier change out of scope for this cleanup.
     tab: 'Young Adults Sign-Ups',
-    headers: ['Timestamp', 'Teen First Name', 'Teen Last Name', 'Teen Age', 'Teen Contact',
-      'Parent First Name', 'Parent Last Name', 'Parent Email', 'Parent Phone',
+    headers: ['Timestamp', 'Member First Name', 'Member Last Name', 'Member Age', 'Member Contact',
+      'Parent/Guardian First Name', 'Parent/Guardian Last Name', 'Parent/Guardian Email', 'Parent/Guardian Phone',
       'Interested in Leading', 'Activity or Volunteer Idea', 'Notes'],
     row: function (p) {
       return [new Date(), p['Teen First Name'], p['Teen Last Name'], p['Teen Age'], p['Teen Contact'] || '',

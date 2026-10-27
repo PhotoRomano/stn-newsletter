@@ -9,12 +9,16 @@ Source: the "Young Adults Sign-Ups" tab of the shared sign-up spreadsheet
 (apps-script/signup-collector.gs writes to it; SHEET_ID below matches that
 script's SHEET_ID constant -- keep them in sync if the sheet ever moves).
 
-IMPORTANT -- this sheet is still the old "Teens" sign-up form under the
-hood (see teens-signup.html's redirect to /young-adults-sign-up): its
-columns are literally "Teen First/Last Name" and "Teen Age", never
-relabeled after the group was renamed. Real entries include actual minors
-(ages 13 and 15 seen in the data as of 2026-10-27), each with their own
-personal email on file.
+IMPORTANT -- this sheet used to be the old "Teens" sign-up form under the
+hood (see teens-signup.html's redirect to /young-adults-sign-up); its
+column headers ("Teen First/Last Name" etc.) were relabeled to "Member
+.../Parent-Guardian ..." on 2026-10-27 (live sheet row 1 updated via the
+Sheets API, apps-script/signup-collector.gs's `headers` config updated to
+match for any future fresh-sheet creation) -- see that script's comment
+for why `row()`'s p['Teen ...'] lookups were deliberately left alone (they
+match the live HTML form's field names, a separate thing from the sheet's
+display headers). Real entries include actual minors (ages 13 and 15 seen
+in the data as of 2026-10-27), each with their own personal email on file.
 
 RESOLVED (Max, 2026-10-27): minors on this list SHOULD receive Young
 Adults group emails -- a parent signing a child up for this list is
@@ -54,15 +58,48 @@ number) fall back to Parent Email, since several real rows show the
 Teen and Parent columns (e.g. age 26 with name==parent name).
 """
 
+import datetime
+
 SHEET_ID = "1wAKlKyWzOQsbK4DU6BzvvGuWeBnnfdjWFtqM_ITE5jk"
 TAB = "Young Adults Sign-Ups"
 RANGE = f"{TAB}!A1:L"
 
 MIN_ADULT_AGE = 18
 
+# Explicit, auditable one-character-typo fixes for common domains -- NOT a
+# fuzzy/guessed correction. Added 2026-10-27 after a real repeat submission
+# had "jlotrean6@yahoo.com" the first time and "jlotrean6@yahoo.con" the
+# second -- same person, same local-part, a dropped keystroke on the TLD.
+# Extend this list only when a specific real typo like that shows up; don't
+# turn it into general fuzzy email correction.
+DOMAIN_TYPO_FIXES = {
+    "yahoo.con": "yahoo.com", "gmail.con": "gmail.com", "hotmail.con": "hotmail.com",
+    "yahoo.comm": "yahoo.com", "gmail.comm": "gmail.com", "hotmail.comm": "hotmail.com",
+    "icloud.con": "icloud.com", "outlook.con": "outlook.com",
+}
+
 
 def looks_like_email(s):
     return bool(s) and "@" in s and "." in s.split("@")[-1]
+
+
+def parse_sheet_timestamp(s):
+    """Sheet timestamps are un-zero-padded M/D/YYYY H:MM:SS text (e.g.
+    '9/20/2026 15:45:20') -- NOT lexically sortable (plain string sort
+    puts '9/20/2026' after '10/8/2026' because '9' > '1'). Parse to a
+    real datetime so chronological order is actually chronological.
+    Returns datetime.min for anything unparseable, so bad timestamps sort
+    first rather than crashing the whole dedupe pass."""
+    try:
+        return datetime.datetime.strptime(s.strip(), "%m/%d/%Y %H:%M:%S")
+    except ValueError:
+        return datetime.datetime.min
+
+
+def fix_known_domain_typo(email):
+    local, _, domain = email.rpartition("@")
+    fixed = DOMAIN_TYPO_FIXES.get(domain)
+    return f"{local}@{fixed}" if fixed else email
 
 
 def parse_rows(values):
@@ -95,18 +132,71 @@ def parse_rows(values):
             problems.append(f"row {i} ({name}, age {age}): no usable email in Teen Contact or Parent Email")
             continue
 
-        entry = {"name": name, "age": age, "email": email.strip().lower(), "row": i}
+        email = email.strip().lower()
+        fixed = fix_known_domain_typo(email)
+        if fixed != email:
+            problems.append(f"row {i} ({name}): auto-corrected known domain typo {email!r} -> {fixed!r}")
+            email = fixed
 
-        if email.strip().lower() in seen_emails:
+        entry = {
+            "name": name, "age": age, "email": email, "row": i,
+            "timestamp": timestamp, "leading": leading, "idea": idea,
+        }
+
+        if email in seen_emails:
             problems.append(f"row {i} ({name}): duplicate email {email} already seen -- likely a repeat sign-up")
-        seen_emails.add(email.strip().lower())
+        seen_emails.add(email)
 
         (adults if age >= MIN_ADULT_AGE else minors).append(entry)
 
     return adults, minors, problems
 
 
+def dedupe_by_person(entries):
+    """Collapse multiple rows for the same person (matched by normalized
+    name) into one entry, after fix_known_domain_typo has already run in
+    parse_rows. If a name's rows DISAGREE on email even after typo-fixing,
+    don't guess -- keep every distinct (name, email) pair and flag it, so
+    a real ambiguity surfaces instead of silently picking one.
+
+    Returns (deduped_entries, notes)."""
+    by_name = {}
+    for e in entries:
+        by_name.setdefault(e["name"].lower(), []).append(e)
+
+    out, notes = [], []
+    for name_key, group in by_name.items():
+        distinct_emails = {e["email"] for e in group}
+        if len(distinct_emails) == 1:
+            # Same person, same (post-typo-fix) email across 1+ rows --
+            # keep the most recently submitted row's data, but carry
+            # forward any non-empty "leading"/"idea" text an earlier row
+            # had that the latest row left blank (people often fill more
+            # in on a later submission, but not always everything).
+            group.sort(key=lambda e: parse_sheet_timestamp(e["timestamp"]))
+            best = dict(group[-1])
+            for e in group[:-1]:
+                if not best.get("leading") and e.get("leading"):
+                    best["leading"] = e["leading"]
+                if not best.get("idea") and e.get("idea"):
+                    best["idea"] = e["idea"]
+            if len(group) > 1:
+                notes.append(f"{best['name']}: merged {len(group)} repeat sign-up rows "
+                             f"(rows {[e['row'] for e in group]}) into one")
+            out.append(best)
+        else:
+            notes.append(f"{group[0]['name']}: {len(distinct_emails)} DIFFERENT emails across rows "
+                         f"{[e['row'] for e in group]} ({sorted(distinct_emails)}) -- not merged, "
+                         f"needs a human decision (could be two different people sharing a name, "
+                         f"or a real address change)")
+            out.extend(group)
+    return out, notes
+
+
 def format_report(adults, minors, problems):
+    adults, dedupe_notes_a = dedupe_by_person(adults)
+    minors, dedupe_notes_m = dedupe_by_person(minors)
+
     lines = [f"Adults (age >= {MIN_ADULT_AGE}): {len(adults)}"]
     for a in adults:
         lines.append(f"  - {a['name']} ({a['age']}) <{a['email']}>")
@@ -115,6 +205,11 @@ def format_report(adults, minors, problems):
                  f"before putting any of them in a VISIBLE To/Cc")
     for m in minors:
         lines.append(f"  - {m['name']} ({m['age']}) <{m['email']}> -- row {m['row']}")
+    dedupe_notes = dedupe_notes_a + dedupe_notes_m
+    if dedupe_notes:
+        lines.append(f"\nDeduplication ({len(dedupe_notes)}):")
+        for n in dedupe_notes:
+            lines.append(f"  - {n}")
     if problems:
         lines.append(f"\nData-quality flags ({len(problems)}):")
         for p in problems:
