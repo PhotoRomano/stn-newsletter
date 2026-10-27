@@ -209,6 +209,13 @@ STYLE_SINGLE = """
     .pad h2       { font-size: 22px !important; }
     .issue-title  { font-size: 30px !important; }
   }
+
+  /* ── Newspaper-style justified body copy (2026-10-27 per Max) ──
+     Mirrors the same rule in the .both.html source template -- kept in
+     sync by hand since this file has its own separate STYLE_SINGLE block
+     rather than reusing both.html's <style>. Any <p> with its own inline
+     text-align (centered CTAs, etc.) keeps that; inline always wins. */
+  .pad p { text-align: justify; }
 """
 
 
