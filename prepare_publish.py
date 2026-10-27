@@ -93,6 +93,10 @@ def main():
 
     run([sys.executable, "build.py", both], label="1. build.py (regenerate EN/SR/other variants)")
     run([sys.executable, "check_calendar.py", date], allow_fail=True, label="2. check_calendar.py (advisory)")
+    run([sys.executable, "check_board_resolutions.py", date], allow_fail=True,
+        label="2b. check_board_resolutions.py (advisory -- catches a cancelled/resolved "
+              "item from a past issue silently reappearing, e.g. the 2026-10-29 Boris "
+              "Batula/Krajina Evening miss)")
 
     consistency_cmd = [sys.executable, "check_email_consistency.py", date]
     if strict:

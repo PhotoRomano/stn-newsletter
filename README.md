@@ -73,6 +73,11 @@ Before moving on, check:
   times (it doesn't even cover every weekday feast), so it won't catch
   everything, but it catches the "forgot this was happening" class of
   miss for free.
+- Run `python3 check_board_resolutions.py <date>` — catches an item that
+  was explicitly cancelled/removed in a past issue silently reappearing
+  in this one (e.g. copying forward an older week's draft that predates
+  the cancellation). Advisory, not authoritative — a flag means "go read
+  that commit," not "definitely remove this."
 - Prayer-request names and Serbian phrasing confirmed with Max
 - SerbFest / school-enrollment / event dates are correct
 - No `[BOARD:]` placeholder text left anywhere, in any language — an
@@ -482,6 +487,14 @@ review.
 - `check_calendar.py` — cross-checks a draft's week against the site's
   live `calendar.html` FEASTS data; prints anything the draft might have
   missed. Checklist only, not an auto-populator (see Step 1).
+- `check_board_resolutions.py` — scans this repo's git history for past
+  commits that cancelled/removed something (quoted phrases in the commit
+  message, plus proper-noun phrases in removed diff lines that weren't
+  re-added elsewhere in the same commit), then flags any that reappear in
+  the CURRENT draft. Advisory only, not authoritative — built after the
+  2026-10-29 issue briefly resurrected a cancelled Nov 7 dinner event by
+  copying forward from an older draft without checking *why* it had
+  disappeared. Requires `beautifulsoup4`.
 - `add_utm_tags.py` — tags `<date>.email.html`'s outbound links for
   click attribution before loading into Beehiiv (see Step 5).
 - `check_links.py` — pre-send QA gate: wrong-link-target detection
