@@ -523,6 +523,15 @@ review.
   missing or out of sync with what the newsletter actually says (see
   Step 1). `--fix`/`--fix --apply` can write the correction straight to
   D1 (backs up first).
+- `hooks/pre-commit` / `install_precommit_hook.sh` — a repo-local git hook
+  (run `./install_precommit_hook.sh` once after cloning; git hooks
+  themselves aren't version-controlled) that warns, at commit time, if
+  `business_owner_map.json` doesn't match the Parishioner Businesses
+  section of a `drafts/<date>.both.html` being committed -- i.e. `build.py`
+  wasn't re-run after editing the listing. WARN-ONLY, never blocks a
+  commit. Deliberately doesn't also check the live D1 table here (that
+  needs `--offline`'s local backup inside a hook, which can be stale
+  enough to cry wolf) -- that stays a manual Step 1 action.
 - `*.html`, `*-sr.html` at the repo root — standalone sign-up/subscribe
   pages linked from newsletter CTAs (Church School, Serbian School,
   Teens/Young Adults, general mailing list).
