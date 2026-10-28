@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+# pre-commit — catches a Parishioner Businesses / D1 contact_name drift at
+# commit time instead of needing someone to remember to run
+# check_business_owner_sync.py by hand. Tracked here as hooks/pre-commit;
+# install_precommit_hook.sh copies it into .git/hooks/pre-commit (git hooks
+# themselves are never version-controlled, so the copy step is required).
+#
+# Scope: only fires when a drafts/<date>.both.html master is part of this
+# commit -- every other commit in this repo is a no-op, instant exit.
+#
+# WARN-ONLY, same as git_staging_guard.py's pattern for this repo: prints a
+# loud warning and the full check output on failure, but ALWAYS exits 0.
+# Never blocks an ordinary commit (feedback_always_commit_git, HARD).
+#
+# Runs check_business_owner_sync.py --offline deliberately -- a pre-commit
+# hook making a live wrangler/network call on every commit is slow and
+# flaky by design; --offline uses the latest classifieds/backups/*.json
+# snapshot instead. That snapshot can itself be stale, so this is a
+# best-effort local tripwire, not the authoritative check -- the real
+# pre-send gate is still running check_business_owner_sync.py (no --offline)
+# by hand per the README's Step 1 checklist.
+set -u
+
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+STAGED=$(git diff --cached --name-only --diff-filter=ACM)
+
+if ! grep -q '^drafts/.*\.both\.html$' <<< "$STAGED"; then
+  exit 0
+fi
+
+OUTPUT=$(cd "$REPO_ROOT" && python3 check_business_owner_sync.py --offline 2>&1)
+STATUS=$?
+
+if [[ $STATUS -ne 0 ]]; then
+  echo "⚠️  pre-commit WARNING: business_owner_map.json may be out of sync with the businesses DB"
+  echo "$OUTPUT" | sed 's/^/    /'
+  echo "    (checked against the latest local backup, not live -- re-run without --offline for the real check)"
+  echo "    Commit proceeding anyway -- this is advisory only."
+fi
+
+exit 0
