@@ -1,41 +1,99 @@
-#!/usr/bin/env bash
-# pre-commit — catches a Parishioner Businesses / D1 contact_name drift at
-# commit time instead of needing someone to remember to run
-# check_business_owner_sync.py by hand. Tracked here as hooks/pre-commit;
-# install_precommit_hook.sh copies it into .git/hooks/pre-commit (git hooks
-# themselves are never version-controlled, so the copy step is required).
-#
-# Scope: only fires when a drafts/<date>.both.html master is part of this
-# commit -- every other commit in this repo is a no-op, instant exit.
-#
-# WARN-ONLY, same as git_staging_guard.py's pattern for this repo: prints a
-# loud warning and the full check output on failure, but ALWAYS exits 0.
-# Never blocks an ordinary commit (feedback_always_commit_git, HARD).
-#
-# Runs check_business_owner_sync.py --offline deliberately -- a pre-commit
-# hook making a live wrangler/network call on every commit is slow and
-# flaky by design; --offline uses the latest classifieds/backups/*.json
-# snapshot instead. That snapshot can itself be stale, so this is a
-# best-effort local tripwire, not the authoritative check -- the real
-# pre-send gate is still running check_business_owner_sync.py (no --offline)
-# by hand per the README's Step 1 checklist.
-set -u
+#!/usr/bin/env python3
+"""
+pre-commit — catches business_owner_map.json going stale relative to the
+Parishioner Businesses section it's supposed to be generated from, at
+commit time instead of needing someone to remember `python3 build.py`.
+Tracked here as hooks/pre-commit; install_precommit_hook.sh copies it into
+.git/hooks/pre-commit (git hooks are never version-controlled themselves,
+so that copy step is required).
 
-REPO_ROOT="$(git rev-parse --show-toplevel)"
-STAGED=$(git diff --cached --name-only --diff-filter=ACM)
+Scope: only fires when a drafts/<date>.both.html master is part of the
+commit -- every other commit is an instant no-op.
 
-if ! grep -q '^drafts/.*\.both\.html$' <<< "$STAGED"; then
-  exit 0
-fi
+WARN-ONLY, same as git_staging_guard.py's pattern for this repo: prints a
+warning on drift but ALWAYS exits 0. Never blocks an ordinary commit, per
+feedback_always_commit_git (HARD).
 
-OUTPUT=$(cd "$REPO_ROOT" && python3 check_business_owner_sync.py --offline 2>&1)
-STATUS=$?
+Deliberately does NOT re-run check_business_owner_sync.py's live-DB
+comparison here -- tried that first, but it only has `--offline` available
+inside a hook (a live wrangler call on every commit is slow/flaky), and the
+local backup snapshot can be arbitrarily stale (caught this for real: it
+reported two "problems" that were already fixed in the live DB hours
+earlier, because the backup predated the fix). A pre-commit check that can
+confidently cry wolf is worse than no check. What IS deterministic and
+worth checking locally: whether business_owner_map.json actually reflects
+the draft(s) being committed right now. The live-DB comparison stays a
+manual step (README Step 1 / `check_business_owner_sync.py` with no flags).
+"""
+import subprocess
+import sys
+from pathlib import Path
 
-if [[ $STATUS -ne 0 ]]; then
-  echo "⚠️  pre-commit WARNING: business_owner_map.json may be out of sync with the businesses DB"
-  echo "$OUTPUT" | sed 's/^/    /'
-  echo "    (checked against the latest local backup, not live -- re-run without --offline for the real check)"
-  echo "    Commit proceeding anyway -- this is advisory only."
-fi
+# NOTE: __file__ is NOT reliable for locating the repo root here -- this
+# script is COPIED (not symlinked) into .git/hooks/pre-commit by
+# install_precommit_hook.sh, which puts it two directories deeper than the
+# tracked hooks/pre-commit source. Ask git directly instead.
+REPO_ROOT = Path(
+    subprocess.run(
+        ["git", "rev-parse", "--show-toplevel"], capture_output=True, text=True, check=True
+    ).stdout.strip()
+)
+sys.path.insert(0, str(REPO_ROOT))
 
-exit 0
+import extract_business_owner_map as eom  # noqa: E402
+
+
+def staged_both_html_files():
+    result = subprocess.run(
+        ["git", "diff", "--cached", "--name-only", "--diff-filter=ACM"],
+        cwd=REPO_ROOT, capture_output=True, text=True,
+    )
+    return [
+        REPO_ROOT / line
+        for line in result.stdout.splitlines()
+        if line.startswith("drafts/") and line.endswith(".both.html")
+    ]
+
+
+def current_map():
+    if not eom.MAP_PATH.exists():
+        return {}
+    import json
+    data = json.loads(eom.MAP_PATH.read_text(encoding="utf-8"))
+    return {k: v for k, v in data.items() if not k.startswith("_")}
+
+
+def main():
+    drafts = staged_both_html_files()
+    if not drafts:
+        return 0
+
+    on_disk_map = current_map()
+    problems = []
+
+    for draft in drafts:
+        owner_map, errors = eom.extract(draft)
+        if errors:
+            problems.append(f"{draft.name}: {'; '.join(errors)}")
+            continue
+        if not owner_map:
+            continue  # this draft has no Parishioner Businesses section (nothing to check)
+        for slug, name in owner_map.items():
+            if on_disk_map.get(slug) != name:
+                problems.append(
+                    f"{draft.name}: slug={slug!r} shows '{name}' but business_owner_map.json "
+                    f"has {on_disk_map.get(slug)!r}"
+                )
+
+    if problems:
+        print("⚠️  pre-commit WARNING: business_owner_map.json is stale relative to the draft(s) being committed:")
+        for p in problems:
+            print(f"    - {p}")
+        print("    Run `python3 build.py drafts/<date>.both.html`, then `git add business_owner_map.json`.")
+        print("    Commit proceeding anyway -- this is advisory only.")
+
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
