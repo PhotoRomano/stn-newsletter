@@ -21,12 +21,20 @@ Boilerplate (masthead, quick links, language-preference bar, footer, share
 block) is NOT extracted from the master — each language's wording for that
 boilerplate is fixed and rarely changes, so it lives directly in this
 script's SHELL templates below, authored once per language.
+
+Also regenerates business_owner_map.json from the master's Parishioner
+Businesses `data-slug` attributes on every run (see
+extract_business_owner_map.py) -- best-effort: a problem there (e.g. an
+older master predating data-slug, or the section temporarily missing)
+prints a warning but never fails the actual newsletter build.
 """
 import re
 import sys
 from pathlib import Path
 
 from bs4 import BeautifulSoup, Comment, NavigableString
+
+import extract_business_owner_map
 
 ROOT = Path(__file__).parent
 BANNER_URL = "https://photoromano.github.io/stn-newsletter/st_nicholas_banner.png"
@@ -401,6 +409,18 @@ def main():
         out_path = master_path.parent / f"{date_label}{suffix}"
         out_path.write_text(out, encoding="utf-8")
         print(f"wrote {out_path}")
+
+    try:
+        owner_map, errors = extract_business_owner_map.extract(master_path)
+        if errors:
+            print("warning: business_owner_map.json NOT regenerated -- " + "; ".join(errors))
+        elif owner_map:
+            extract_business_owner_map.write_map(owner_map)
+            print(f"wrote {extract_business_owner_map.MAP_PATH.name} ({len(owner_map)} businesses)")
+        else:
+            print("note: no Parishioner Businesses data-slug entries found -- business_owner_map.json left unchanged")
+    except Exception as e:
+        print(f"warning: business_owner_map.json NOT regenerated -- {e}")
 
 
 if __name__ == "__main__":

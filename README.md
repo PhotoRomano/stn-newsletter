@@ -79,13 +79,17 @@ Before moving on, check:
   the cancellation). Advisory, not authoritative — a flag means "go read
   that commit," not "definitely remove this."
 - If the Parishioner Businesses section changed (new business, owner name
-  confirmed/corrected), update `business_owner_map.json` and run
-  `python3 check_business_owner_sync.py` — diffs it against the live
-  businesses D1 table's `contact_name` field and flags any business whose
-  DB record is missing, incomplete, or out of sync with what the
-  newsletter actually displays. Use `--offline` for a fast pass against
-  the latest `classifieds/backups/*.json` instead of a live `wrangler`
-  query.
+  confirmed/corrected), add/update that `<li data-slug="...">`'s owner name
+  directly in the master — `business_owner_map.json` regenerates from those
+  `data-slug` attributes automatically the next time `build.py` runs (see
+  `extract_business_owner_map.py`), so there's nothing to hand-edit. Then
+  run `python3 check_business_owner_sync.py` — diffs the regenerated map
+  against the live businesses D1 table's `contact_name` field and flags
+  any business whose DB record is missing, incomplete, or out of sync with
+  what the newsletter actually displays. Use `--offline` for a fast pass
+  against the latest `classifieds/backups/*.json` instead of a live
+  `wrangler` query; `--fix` (dry run) / `--fix --apply` (backs up, then
+  writes) closes an empty-or-mismatched `contact_name` automatically.
 - Prayer-request names and Serbian phrasing confirmed with Max
 - SerbFest / school-enrollment / event dates are correct
 - No `[BOARD:]` placeholder text left anywhere, in any language — an
@@ -509,12 +513,16 @@ review.
   (GitHub archive vs. live site), leftover placeholder text, unresolved
   `{{email}}` leaks, and dead links. Run before loading the Beehiiv
   draft (see Step 5); exits non-zero on failure.
-- `check_business_owner_sync.py` / `business_owner_map.json` — diffs the
-  Parishioner Businesses section's owner names against the live
+- `extract_business_owner_map.py` / `business_owner_map.json` — regenerates
+  `business_owner_map.json` from the master's Parishioner Businesses
+  `<li data-slug="...">` attributes every time `build.py` runs. Don't
+  hand-edit the JSON file; edit the `<li>` in `drafts/<date>.both.html`.
+- `check_business_owner_sync.py` — diffs `business_owner_map.json`
+  (regenerated straight from the newsletter, see above) against the live
   businesses D1 table's `contact_name` field, catching a DB record that's
   missing or out of sync with what the newsletter actually says (see
-  Step 1). `business_owner_map.json` is the hand-maintained source of
-  truth for what the newsletter currently displays per business slug.
+  Step 1). `--fix`/`--fix --apply` can write the correction straight to
+  D1 (backs up first).
 - `*.html`, `*-sr.html` at the repo root — standalone sign-up/subscribe
   pages linked from newsletter CTAs (Church School, Serbian School,
   Teens/Young Adults, general mailing list).
