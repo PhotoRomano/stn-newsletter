@@ -11,8 +11,10 @@ Investments, while the newsletter needed each owner's real full name
 (Jon Lotrean, Čedo Plevac). Nothing had been checking the two stayed in
 sync.
 
-    python3 check_business_owner_sync.py            # live D1 query via wrangler
-    python3 check_business_owner_sync.py --offline   # use the newest backups/*.json instead
+    python3 check_business_owner_sync.py              # live D1 query via wrangler
+    python3 check_business_owner_sync.py --offline     # use the newest backups/*.json instead
+    python3 check_business_owner_sync.py --fix         # dry run: show the UPDATEs that would fix it
+    python3 check_business_owner_sync.py --fix --apply # back up, then actually write them to D1
 
 Source of truth for "what the newsletter currently shows": business_owner_map.json
 in this directory (slug -> owner full name). Update that file by hand whenever
@@ -23,16 +25,30 @@ reliable to parse out automatically).
 
 Checks, per ACTIVE business row in the DB:
   1. Map has no entry for this slug -- newsletter may be missing this
-     business, or the map just hasn't been updated yet.
+     business, or the map just hasn't been updated yet. NOT auto-fixable
+     (nothing to write -- ambiguous which side is wrong).
   2. DB contact_name is empty -- newsletter has a real name (from the map)
      that was confirmed by Max but never written back to the DB.
+     Auto-fixable: UPDATE contact_name to the map's value.
   3. DB contact_name doesn't match the map's name -- one of the two is
-     stale.
+     stale. Auto-fixable the same way -- the map is treated as the
+     authoritative "what we actually told subscribers" side, since it's
+     only ever hand-updated right after a real newsletter edit.
   4. DB contact_name has no space (looks like a first name only, e.g.
      "Chad") -- flagged as a weaker warning even if it happens to match
      the map, since the map itself might just be carrying the same gap.
+     NOT auto-fixable -- there's no fuller name to write without a human
+     confirming it.
   5. Map has a slug with no matching ACTIVE row in the DB at all -- stale
-     map entry (business removed/deactivated) or a typo'd slug.
+     map entry (business removed/deactivated) or a typo'd slug. NOT
+     auto-fixable.
+
+--fix only ever touches categories 2 and 3, and only ever writes
+`contact_name` (never any other column). --apply runs
+`backup_businesses.sh` first (same "snapshot before any admin write"
+convention as every other write path in classifieds/), then one `UPDATE
+... WHERE slug = ?` per fix via `wrangler d1 execute --remote`, then
+re-queries the DB to confirm each fix landed.
 
 Exits non-zero if anything is found, so it can gate the weekly "Draft"
 step the same way check_calendar.py / check_board_resolutions.py do.
@@ -47,6 +63,7 @@ ROOT = Path(__file__).parent
 MAP_PATH = ROOT / "business_owner_map.json"
 WORKER_DIR = ROOT.parent / "classifieds" / "worker"
 BACKUPS_DIR = ROOT.parent / "classifieds" / "backups"
+BACKUP_SCRIPT = ROOT.parent / "classifieds" / "backup_businesses.sh"
 
 SELECT_COLUMNS = "id,slug,name,contact_name,contact_email,website_url,status"
 
@@ -59,27 +76,32 @@ def normalize(s):
     return s.strip().casefold()
 
 
+def sql_quote(s):
+    return "'" + s.replace("'", "''") + "'"
+
+
 def load_map():
     data = json.loads(MAP_PATH.read_text(encoding="utf-8"))
     return {k: v for k, v in data.items() if not k.startswith("_")}
 
 
-def load_live_rows():
+def run_wrangler(command, timeout=60):
     result = subprocess.run(
-        [
-            "wrangler", "d1", "execute", "stnicholas-classifieds", "--remote",
-            "--command", f"SELECT {SELECT_COLUMNS} FROM businesses ORDER BY sort_order;",
-        ],
+        ["wrangler", "d1", "execute", "stnicholas-classifieds", "--remote", "--command", command],
         cwd=WORKER_DIR,
         capture_output=True,
         text=True,
-        timeout=60,
+        timeout=timeout,
     )
     if result.returncode != 0:
-        raise RuntimeError(f"wrangler query failed:\n{result.stderr}")
+        raise RuntimeError(f"wrangler command failed:\n{result.stderr}")
+    return result.stdout
+
+
+def load_live_rows():
+    stdout = run_wrangler(f"SELECT {SELECT_COLUMNS} FROM businesses ORDER BY sort_order;")
     # wrangler prints progress/warning lines before the JSON array -- same
     # convention backup_businesses.sh relies on (sed -n '/^\[/,$p').
-    stdout = result.stdout
     start = stdout.index("[")
     payload = json.loads(stdout[start:])
     return payload[0]["results"]
@@ -95,13 +117,12 @@ def load_offline_rows():
     return data[0]["results"]
 
 
-def main():
-    offline = "--offline" in sys.argv[1:]
-    owner_map = load_map()
-    rows = load_offline_rows() if offline else load_live_rows()
-
+def find_problems(rows, owner_map):
+    """Returns (messages, fixable) -- fixable is a list of
+    {slug, name, db_contact, mapped_name} dicts for categories 2 and 3."""
     active_slugs = set()
-    problems = []
+    messages = []
+    fixable = []
 
     for row in rows:
         if row.get("status") != "active":
@@ -112,7 +133,7 @@ def main():
         db_contact = row.get("contact_name")
 
         if slug not in owner_map:
-            problems.append(
+            messages.append(
                 f"'{name}' (slug={slug}) has no entry in business_owner_map.json -- "
                 f"may be missing from the newsletter, or the map just needs updating"
             )
@@ -121,35 +142,99 @@ def main():
         mapped_name = owner_map[slug]
 
         if not db_contact:
-            problems.append(
+            messages.append(
                 f"'{name}' (slug={slug}): DB contact_name is empty, but the newsletter "
                 f"shows '{mapped_name}' -- backfill the DB via the admin API"
             )
+            fixable.append({"slug": slug, "name": name, "db_contact": db_contact, "mapped_name": mapped_name})
         elif normalize(db_contact) != normalize(mapped_name):
-            problems.append(
+            messages.append(
                 f"'{name}' (slug={slug}): mismatch -- DB contact_name='{db_contact}' "
                 f"but newsletter shows '{mapped_name}'"
             )
+            fixable.append({"slug": slug, "name": name, "db_contact": db_contact, "mapped_name": mapped_name})
         elif " " not in db_contact.strip():
-            problems.append(
+            messages.append(
                 f"'{name}' (slug={slug}): DB contact_name='{db_contact}' looks like a "
                 f"first name only (no space) -- verify it's the full name"
             )
 
     for slug, mapped_name in owner_map.items():
         if slug not in active_slugs:
-            problems.append(
+            messages.append(
                 f"business_owner_map.json has slug='{slug}' -> '{mapped_name}' but no "
                 f"matching ACTIVE business row in the DB -- stale entry or typo'd slug"
             )
 
-    if problems:
-        print(f"FAILED -- {len(problems)} issue(s):")
-        for p in problems:
-            print(f"  - {p}")
+    return messages, fixable, active_slugs
+
+
+def run_backup():
+    print(f"Running {BACKUP_SCRIPT.name} (snapshot before admin write)...")
+    result = subprocess.run(["bash", str(BACKUP_SCRIPT)], capture_output=True, text=True, timeout=60)
+    print(result.stdout.strip())
+    if result.returncode != 0:
+        raise RuntimeError(f"backup failed, aborting fix:\n{result.stderr}")
+
+
+def apply_fixes(fixable):
+    run_backup()
+    for fix in fixable:
+        cmd = f"UPDATE businesses SET contact_name = {sql_quote(fix['mapped_name'])} WHERE slug = {sql_quote(fix['slug'])};"
+        print(f"Applying: {cmd}")
+        run_wrangler(cmd)
+    print("\nRe-querying DB to confirm...")
+    rows = load_live_rows()
+    by_slug = {r["slug"]: r for r in rows}
+    for fix in fixable:
+        actual = by_slug.get(fix["slug"], {}).get("contact_name")
+        ok = normalize(actual) == normalize(fix["mapped_name"])
+        status = "OK" if ok else "STILL WRONG"
+        print(f"  [{status}] {fix['slug']}: contact_name is now '{actual}'")
+
+
+def main():
+    args = sys.argv[1:]
+    offline = "--offline" in args
+    fix = "--fix" in args
+    apply = "--apply" in args
+
+    if apply and not fix:
+        print("--apply only makes sense with --fix")
+        sys.exit(1)
+    if offline and apply:
+        print("--apply writes to the live DB -- can't combine with --offline")
         sys.exit(1)
 
-    print(f"OK -- business_owner_map.json matches the live DB for all {len(active_slugs)} active businesses")
+    owner_map = load_map()
+    rows = load_offline_rows() if offline else load_live_rows()
+    messages, fixable, active_slugs = find_problems(rows, owner_map)
+
+    if not messages:
+        print(f"OK -- business_owner_map.json matches the live DB for all {len(active_slugs)} active businesses")
+        return
+
+    print(f"FAILED -- {len(messages)} issue(s):")
+    for m in messages:
+        print(f"  - {m}")
+
+    if not fix:
+        sys.exit(1)
+
+    if not fixable:
+        print("\n--fix: nothing auto-fixable (remaining issues need a human decision).")
+        sys.exit(1)
+
+    if not apply:
+        print(f"\n--fix dry run -- {len(fixable)} UPDATE(s) would run with --apply:")
+        for f in fixable:
+            cmd = f"UPDATE businesses SET contact_name = {sql_quote(f['mapped_name'])} WHERE slug = {sql_quote(f['slug'])};"
+            print(f"  {cmd}")
+        sys.exit(1)
+
+    print(f"\n--fix --apply: writing {len(fixable)} fix(es) to the live DB...")
+    apply_fixes(fixable)
+    sys.exit(1 if len(fixable) < len(messages) else 0)
 
 
 if __name__ == "__main__":
