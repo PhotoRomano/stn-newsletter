@@ -1,0 +1,8 @@
+{
+  "_comment": "slug -> owner full name as displayed in the newsletter's Parishioner Businesses section (drafts/<date>.both.html). Update this whenever that section's listings change. check_business_owner_sync.py diffs this against the live businesses D1 table's contact_name field.",
+  "modern-home-investments": "Čedo Plevac",
+  "ticas-souvlaki": "Jon Lotrean",
+  "lock-911": "Nebojsa Ignjatovic",
+  "mini-golf-philly": "Marko Mihalovic",
+  "maxstudio": "Max Romano"
+}

@@ -78,6 +78,14 @@ Before moving on, check:
   in this one (e.g. copying forward an older week's draft that predates
   the cancellation). Advisory, not authoritative — a flag means "go read
   that commit," not "definitely remove this."
+- If the Parishioner Businesses section changed (new business, owner name
+  confirmed/corrected), update `business_owner_map.json` and run
+  `python3 check_business_owner_sync.py` — diffs it against the live
+  businesses D1 table's `contact_name` field and flags any business whose
+  DB record is missing, incomplete, or out of sync with what the
+  newsletter actually displays. Use `--offline` for a fast pass against
+  the latest `classifieds/backups/*.json` instead of a live `wrangler`
+  query.
 - Prayer-request names and Serbian phrasing confirmed with Max
 - SerbFest / school-enrollment / event dates are correct
 - No `[BOARD:]` placeholder text left anywhere, in any language — an
@@ -501,6 +509,12 @@ review.
   (GitHub archive vs. live site), leftover placeholder text, unresolved
   `{{email}}` leaks, and dead links. Run before loading the Beehiiv
   draft (see Step 5); exits non-zero on failure.
+- `check_business_owner_sync.py` / `business_owner_map.json` — diffs the
+  Parishioner Businesses section's owner names against the live
+  businesses D1 table's `contact_name` field, catching a DB record that's
+  missing or out of sync with what the newsletter actually says (see
+  Step 1). `business_owner_map.json` is the hand-maintained source of
+  truth for what the newsletter currently displays per business slug.
 - `*.html`, `*-sr.html` at the repo root — standalone sign-up/subscribe
   pages linked from newsletter CTAs (Church School, Serbian School,
   Teens/Young Adults, general mailing list).
