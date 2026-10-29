@@ -1,0 +1,589 @@
+<style>
+
+  /* ── Mobile responsive overrides ─────────────────── */
+  @media only screen and (max-width: 620px) {
+    .email-body { width: 100% !important; }
+    .pad  { padding-left: 16px !important; padding-right: 16px !important; }
+    .ql-table { display: block !important; }
+    .ql-row   { display: block !important; font-size: 0; }
+    .ql-cell  { display: inline-block !important; width: 50% !important;
+                box-sizing: border-box !important; vertical-align: top !important;
+                font-size: 13px !important; padding: 13px 8px !important; }
+    .ql-cell.r2 { border-top: 1px solid #c8d5e8 !important; }
+    .ql-cell.left { border-left: none !important; }
+    .svc-date { width: auto !important; white-space: normal !important; font-size: 13px !important; }
+    .pad h2 { font-size: 17px !important; }
+    .give-cell { display: block !important; width: 100% !important;
+                 padding: 0 0 10px 0 !important; box-sizing: border-box !important; }
+    .give-cell a { padding-top: 14px !important; padding-bottom: 14px !important;
+                   font-size: 15px !important; }
+    .issue-title { font-size: 22px !important; }
+    .footer-links a { display: inline-block !important; padding: 4px 0 !important; }
+  }
+
+  /* ── Wide-browser treatment (a full browser window, not Outlook/Gmail's
+       reading pane, which stays under 620px anyway) ── */
+  @media only screen and (min-width: 820px) {
+    .shell        { padding: 40px 8px !important; }
+    .email-body   { width: 680px !important; max-width: 680px !important; }
+    .pad          { padding-left: 46px !important; padding-right: 46px !important; }
+    .masthead-img { max-width: 620px !important; }
+    .pad > p, .pad td p { font-size: 16.5px !important; line-height: 1.8 !important; }
+    .pad h2       { font-size: 22px !important; }
+    .issue-title  { font-size: 30px !important; }
+  }
+
+  /* ── Newspaper-style justified body copy (2026-10-27 per Max) ──
+     Mirrors the same rule in the .both.html source template -- kept in
+     sync by hand since this file has its own separate STYLE_SINGLE block
+     rather than reusing both.html's <style>. Any <p> with its own inline
+     text-align (centered CTAs, etc.) keeps that; inline always wins. */
+  .pad p { text-align: justify; }
+
+.stn-nl-wrap { background:#eef1f6; padding:16px 8px; }
+</style>
+<div class="stn-nl-wrap">
+<center>
+<div class="stn-en">
+<table cellpadding="0" cellspacing="0" class="email-body" role="presentation" style="width:600px; max-width:600px; background:#ffffff; border:1px solid #c8d5e8;" width="600">
+
+<!-- ══ Masthead ══ -->
+<tr><td style="background:#ffffff; padding:14px 16px 10px; text-align:center;">
+<img alt="St. Nicholas Serbian Orthodox Church — Elkins Park, PA" class="masthead-img" src="https://photoromano.github.io/stn-newsletter/st_nicholas_banner.png" style="display:block; margin:0 auto; width:100%; max-width:560px; height:auto;" width="560"/>
+</td></tr>
+<!-- flag stripe: red · navy header · gold rule -->
+<tr><td style="height:3px; background:#c31f27;"></td></tr>
+<tr><td style="background:#02306e; padding:14px 20px; text-align:center;">
+<span class="issue-title" style="color:#ffffff; font-family:'El Messiri',Georgia,serif; font-size:26px; font-weight:700; letter-spacing:1px;">The Messenger</span><br/>
+<span style="color:#a8c4e0; font-size:13px; font-style:italic; letter-spacing:.3px;">Week of October 29, 2026  ·  Добро дошли · Welcome</span>
+</td></tr>
+<tr><td style="height:4px; background:#c9a227;"></td></tr>
+<tr><td style="padding:12px 16px;">
+<table cellpadding="0" cellspacing="0" class="ql-table" role="presentation" style="background:#f0f4fb; border:1px solid #c8d5e8; border-radius:3px;" width="100%">
+<tr class="ql-row"><td class="ql-cell left" style="padding:11px; text-align:center; font-size:13px; width:25%;"><a href="https://stnicholasphilly.org/calendar.html" style="color:#02306e; text-decoration:none;">📅 Calendar</a></td><td class="ql-cell" style="padding:11px; text-align:center; font-size:13px; width:25%; border-left:1px solid #c8d5e8;"><a href="https://stnicholasphilly.org/donate" style="color:#02306e; text-decoration:none;">🙏 Donate</a></td><td class="ql-cell r2 left" style="padding:11px; text-align:center; font-size:13px; width:25%; border-left:1px solid #c8d5e8;"><a href="https://www.instagram.com/stnicholasphilly" style="color:#02306e; text-decoration:none;">📷 Instagram</a></td><td class="ql-cell r2" style="padding:11px; text-align:center; font-size:13px; width:25%; border-left:1px solid #c8d5e8;"><a href="mailto:hello@stnicholasphilly.org" style="color:#02306e; text-decoration:none;">✉ Contact</a></td></tr>
+</table>
+</td></tr>
+<tr><td class="pad" style="padding:14px 32px 2px;">
+<p style="font-size:14.5px; line-height:1.55; color:#0b4fc4; font-family:'El Messiri',Georgia,serif; font-weight:600; margin:0 0 10px; background:#eef4ff; border:1px solid #c7d9f5; border-radius:4px; padding:12px 14px;">
+          This Sunday, Nov 1, our parish gathers right after Liturgy for a Special Assembly on a possible real estate purchase. Here’s everything else worth knowing this week, in under two minutes:
+        </p>
+<h2 style="font-size:15px; color:#02306e; font-family:'El Messiri',Georgia,serif; font-weight:700; margin:0 0 8px;">In This Issue</h2>
+<ul style="font-size:13px; line-height:1.65; color:#333; margin:0 0 4px; padding-left:18px;">
+<li><strong style="color:#8c1419;">Special Assembly:</strong> Sun Nov 1, right after Divine Liturgy — board asks the community to authorize a property purchase</li>
+<li><strong>Serbian Language School resumes</strong> this Sunday, Nov 1, after last week’s Slava pause</li>
+<li><strong>Save the date:</strong> Parish Social — Sat Nov 14 (Young Adults Night) &amp; Sun Nov 15 (Kids, after Serbian School)</li>
+</ul>
+</td></tr>
+<tr><td class="pad" style="padding:10px 32px 20px;">
+<table cellpadding="0" cellspacing="0" role="presentation" style="background:#fff8e1; border:3px double #c9a227; border-left:6px solid #8c1419; border-radius:4px;" width="100%">
+<tr><td style="padding:20px 18px;">
+<span style="display:inline-block; font-family:Arial,sans-serif; font-size:10.5px; font-weight:700; letter-spacing:1.2px; color:#8c1419; text-transform:uppercase; margin:0 0 6px;">This Week’s Feature</span><br/>
+<h2 style="font-size:19px; color:#02306e; font-family:'El Messiri',Georgia,serif; font-weight:700; margin:0 0 10px;"><img alt="" height="22" src="https://photoromano.github.io/stn-newsletter/assets/icons/calendar.png" style="vertical-align:middle; margin-right:8px; border:0;" width="22"/> Special Assembly — This Sunday,<br/>Nov 1</h2>
+<p style="font-size:14px; line-height:1.65; color:#333; margin:0 0 10px;">
+              Please join us this Sunday, Nov 1, right after Divine Liturgy, for a Special Assembly. The board is looking to build or buy real estate using funds already allocated for this purpose, and is asking the community to authorize the board to decide on a property purchase if a good deal presents itself — without needing to call a separate assembly each time.
+            </p>
+<p style="font-size:14px; line-height:1.6; color:#333; margin:0 0 10px;">
+              This would let us move quickly when the right property comes on the market. We hope you’ll join us.
+            </p>
+<p style="font-size:13.5px; line-height:1.6; color:#555; margin:0;">
+              Questions? Email <a href="mailto:hello@stnicholasphilly.org" style="color:#02306e;">hello@stnicholasphilly.org</a>.
+            </p>
+</td></tr>
+</table>
+</td></tr>
+<tr><td class="pad" style="padding:6px 32px 20px;">
+<h2 style="font-size:19px; color:#02306e; font-family:'El Messiri',Georgia,serif; font-weight:700; border-bottom:3px double #c9a227; padding-bottom:7px; margin:18px 0 14px;"><img alt="" height="26" src="https://photoromano.github.io/stn-newsletter/assets/icons/chalice.png" style="vertical-align:middle; margin-right:8px; border:0;" width="26"/> This Week at the Altar</h2>
+<p style="font-size:13px; color:#6a7d96; font-style:italic; margin:0 0 14px;">We worship on the Julian Calendar. All are welcome — come as you are.</p>
+<table cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:collapse; font-size:14.5px;" width="100%">
+<tr>
+<td style="padding:9px 10px 9px 0; font-weight:bold; color:#8c1419; font-family:'El Messiri',Georgia,serif; white-space:nowrap;">Sun, Nov 1</td>
+<td style="padding:9px 0; font-weight:bold; color:#8c1419;">Divine Liturgy — 10:00 AM — Special Assembly right after</td>
+</tr>
+</table>
+<p style="font-size:13px; color:#6a7d96; font-style:italic; margin:8px 0 0;">
+          📺 Missed last Sunday? <a href="https://www.youtube.com/@svetinikolasvetinikolaphil2668" style="color:#02306e;">Watch the homily on YouTube</a>.
+        </p>
+</td></tr>
+<tr><td class="pad" style="padding:0 32px 20px;">
+<h2 style="font-size:18px; color:#02306e; font-family:'El Messiri',Georgia,serif; font-weight:700; border-bottom:3px double #c9a227; padding-bottom:7px; margin:4px 0 14px;"><img alt="" height="24" src="https://photoromano.github.io/stn-newsletter/assets/icons/calendar.png" style="vertical-align:middle; margin-right:8px; border:0;" width="24"/> On the Horizon</h2>
+<table cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:collapse; font-size:13.5px;" width="100%">
+<tr>
+<td style="padding:8px 10px 8px 0; font-weight:bold; color:#02306e; white-space:nowrap;">Sat, Nov 14</td>
+<td style="padding:8px 0;">Parish Social Night (Young Adults) — Parish Hall</td>
+</tr>
+<tr>
+<td style="padding:8px 10px 8px 0; font-weight:bold; color:#02306e; white-space:nowrap;">Sun, Nov 15</td>
+<td style="padding:8px 0;">Parish Social (Kids) — after Serbian School</td>
+</tr>
+</table>
+<p style="font-size:13px; color:#333; font-style:italic; margin:10px 0 0;">
+          Mark your calendars — two good reasons to get together over the next few weeks.
+        </p>
+</td></tr>
+<tr><td class="pad" style="padding:0 32px 20px;">
+<table cellpadding="0" cellspacing="0" role="presentation" style="background:#f8f4e8; border:1px solid #e0d4a0; border-left:4px solid #c9a227;" width="100%">
+<tr><td style="padding:18px 16px;">
+<h2 style="font-size:17px; color:#02306e; font-family:'El Messiri',Georgia,serif; font-weight:700; margin:0 0 10px;">🏦 Parishioner Businesses</h2>
+<ul style="font-size:14px; line-height:1.6; color:#333; margin:0 0 10px; padding-left:18px;">
+<li data-slug="modern-home-investments"><strong style="color:#02306e;">Čedo Plevac</strong> — hire Čedo for home renovation, construction &amp; real estate investment</li>
+<li data-slug="ticas-souvlaki"><strong>Jon Lotrean</strong> — hire Jon for Balkan food truck &amp; catering</li>
+<li data-slug="lock-911"><strong>Nebojsa Ignjatovic</strong> — hire Nebojsa for locksmith &amp; key service</li>
+<li data-slug="mini-golf-philly"><strong>Marko Mihalovic</strong> — hire Marko for portable mini golf, laser tag &amp; party rentals</li>
+<li data-slug="maxstudio"><strong>Max Romano</strong> — hire Max for websites, apps &amp; automation</li>
+</ul>
+<p style="font-size:13px; line-height:1.55; color:#555; margin:0 0 10px;">
+              Need a locksmith, a caterer, a contractor, or a website? Check one of ours first.
+            </p>
+<p style="font-size:13px; line-height:1.55; color:#555; margin:0 0 14px;">
+              Run a business? There’s room for yours here too.
+            </p>
+<a href="https://stnicholasphilly.org/parishioner-businesses" style="display:inline-block; background:#155a2b; color:#ffffff; text-decoration:none; padding:10px 18px; font-size:13.5px; font-weight:bold; border-radius:2px; margin:0 8px 8px 0;">
+              Browse Parishioner Businesses →
+            </a>
+</td></tr>
+</table>
+</td></tr>
+<tr><td class="pad" style="padding:0 32px 20px;">
+<table cellpadding="0" cellspacing="0" role="presentation" style="background:#f0f4fb; border:1px solid #c8d5e8; border-left:4px solid #02306e;" width="100%">
+<tr><td style="padding:18px 16px;">
+<h2 style="font-size:17px; color:#02306e; font-family:'El Messiri',Georgia,serif; font-weight:700; margin:0 0 10px;">📋 Parish Community Board</h2>
+<p style="font-size:14px; line-height:1.6; color:#333; margin:0 0 10px;">
+              Our <strong>Parish Classifieds</strong> board — buy, sell, give away, offer services, find
+              housing, and more.
+            </p>
+<p style="font-size:13px; line-height:1.55; color:#555; margin:0 0 14px;">
+              Categories: For Sale · For Free · Wanted · Services · Housing · Jobs · Childcare · Community
+            </p>
+<a href="https://stnicholasphilly.org/classifieds" style="display:inline-block; background:#02306e; color:#ffffff; text-decoration:none; padding:10px 18px; font-size:13.5px; font-weight:bold; border-radius:2px;">
+              Browse &amp; Post Listings →
+            </a>
+</td></tr>
+</table>
+</td></tr>
+<tr><td class="pad" style="padding:0 32px 20px;">
+<table cellpadding="0" cellspacing="0" role="presentation" style="background:#eaf6fb; border:1px solid #b8dceb; border-left:4px solid #4fa8d8;" width="100%">
+<tr><td style="padding:18px 16px;">
+<h2 style="font-size:17px; color:#1c6ea4; font-family:'El Messiri',Georgia,serif; font-weight:700; margin:0 0 10px;"><img alt="" height="22" src="https://photoromano.github.io/stn-newsletter/assets/icons/book.png" style="vertical-align:middle; margin-right:8px; border:0;" width="22"/> Have You Visited the Parish Library Yet?</h2>
+<p style="font-size:14px; line-height:1.6; color:#333; margin:0 0 14px;">
+              Upstairs in the church hallway, our parish library has something for everyone — from age 7 to 77. Browse Scripture, lives of the saints, Serbian literature and history, and children's books. Borrowing is simple: just use the sign-out log, and book donations are always welcome.
+            </p>
+<a href="https://stnicholasphilly.org/library" style="display:inline-block; background:#1c6ea4; color:#ffffff; text-decoration:none; padding:10px 18px; font-size:13.5px; font-weight:bold; border-radius:2px;">
+              Visit the Library Page →
+            </a>
+</td></tr>
+</table>
+</td></tr>
+<tr><td class="pad" style="padding:0 32px 20px;">
+<table cellpadding="0" cellspacing="0" role="presentation" style="background:#eaf6fb; border:1px solid #b8dceb; border-left:4px solid #4fa8d8;" width="100%">
+<tr><td style="padding:18px 16px;">
+<div style="text-align:center;"><img alt="Church School" src="https://photoromano.github.io/stn-newsletter/assets/banners/church-school/2026-10-22.png" style="display:inline-block; width:100%; max-width:440px; height:auto; margin:0 0 10px; border:3px solid #c9a227; border-radius:3px; box-shadow:0 3px 8px rgba(2,48,110,0.18);" width="440"/></div>
+<h2 style="font-size:17px; color:#1c6ea4; font-family:'El Messiri',Georgia,serif; font-weight:700; margin:0 0 10px;"><img alt="" height="22" src="https://photoromano.github.io/stn-newsletter/assets/icons/book.png" style="vertical-align:middle; margin-right:8px; border:0;" width="22"/> Church School — Faith &amp; Friends, Every Sunday</h2>
+<p style="font-size:14px; line-height:1.65; color:#333; margin:0 0 10px;">
+              Every week, our children sit together and dig into Scripture, the lives of the saints, and
+              the traditions that make us who we are — building faith and friendships side by side.
+            </p>
+<p style="font-size:14px; line-height:1.65; color:#333; margin:0 0 14px;">
+              Haven’t enrolled yet? There’s always room — mid-year is a fine time to start.
+            </p>
+<a href="https://stnicholasphilly.org/church-school-signup" style="display:inline-block; background:#1c6ea4; color:#ffffff; text-decoration:none; padding:10px 18px; font-size:13.5px; font-weight:bold; border-radius:2px;">
+              Enroll Your Child →
+            </a>
+</td></tr>
+</table>
+</td></tr>
+<tr><td class="pad" style="padding:0 32px 20px;">
+<table cellpadding="0" cellspacing="0" role="presentation" style="background:#f8f4e8; border:1px solid #e0d4a0; border-left:4px solid #c9a227;" width="100%">
+<tr><td style="padding:18px 16px;">
+<div style="text-align:center;"><img alt="Serbian Language School" src="https://photoromano.github.io/stn-newsletter/assets/banners/serbian-language-school/2026-10-29.png" style="display:inline-block; width:100%; max-width:440px; height:auto; margin:0 0 10px; border:3px solid #c9a227; border-radius:3px; box-shadow:0 3px 8px rgba(2,48,110,0.18);" width="440"/></div>
+<h2 style="font-size:17px; color:#02306e; font-family:'El Messiri',Georgia,serif; font-weight:700; margin:0 0 10px;"><img alt="" height="22" src="https://photoromano.github.io/stn-newsletter/assets/icons/ribbon.png" style="vertical-align:middle; margin-right:8px; border:0;" width="22"/> Serbian Language School — Passing the Language Down</h2>
+<p style="font-size:14px; line-height:1.6; color:#333; margin:0 0 10px;">
+              Every Liturgy we sing, every Slava we celebrate, every song and story we tell — our language
+              carries all of it. Our Serbian School keeps that thread unbroken for the next generation.
+            </p>
+<p style="font-size:14px; line-height:1.6; color:#333; margin:0 0 14px;">
+              Classes are running now, and enrollment stays open — join whenever you’re ready.
+            </p>
+<a href="https://stnicholasphilly.org/serbian-school-signup" style="display:inline-block; background:#c9a227; color:#3a2e00; text-decoration:none; padding:10px 18px; font-size:13.5px; font-weight:bold; border-radius:2px;">
+              Enroll in Serbian School →
+            </a>
+</td></tr>
+</table>
+</td></tr>
+<tr><td class="pad" style="padding:0 32px 20px;">
+<table cellpadding="0" cellspacing="0" role="presentation" style="background:#f0f7f0; border:1px solid #b8d8b8; border-left:4px solid #24764a;" width="100%">
+<tr><td style="padding:18px 16px;">
+<div style="text-align:center;"><img alt="Young Adults" src="https://photoromano.github.io/stn-newsletter/assets/banners/young-adults/2026-10-29.png" style="display:inline-block; width:100%; max-width:440px; height:auto; margin:0 0 10px; border:3px solid #c9a227; border-radius:3px; box-shadow:0 3px 8px rgba(2,48,110,0.18);" width="440"/></div>
+<h2 style="font-size:17px; color:#155a2b; font-family:'El Messiri',Georgia,serif; font-weight:700; margin:0 0 10px;"><img alt="" height="24" src="https://photoromano.github.io/stn-newsletter/assets/icons/people.png" style="vertical-align:middle; margin-right:8px; border:0;" width="24"/> Young Adults</h2>
+<p style="font-size:14px; line-height:1.6; color:#333; margin:0 0 10px;">
+              A game night, a hike, a coffee hour that actually happens — our young adults get to decide
+              what “together” looks like this season. We’re looking for a few teens and young
+              adults willing to help <strong>pick the next thing and make it real</strong>. Got your own idea for
+              a project or a volunteer effort? Even better — we’d love to hear it.
+            </p>
+<p style="font-size:13.5px; line-height:1.55; color:#555; margin:0 0 14px;">
+              No experience needed. Just a willingness to reach out. Reply to this email or write
+              <a href="mailto:hello@stnicholasphilly.org" style="color:#155a2b;">hello@stnicholasphilly.org</a>.
+            </p>
+<a href="https://stnicholasphilly.org/young-adults-sign-up" style="display:inline-block; background:#155a2b; color:#ffffff; text-decoration:none; padding:10px 18px; font-size:13.5px; font-weight:bold; border-radius:2px; margin:0 0 14px;">
+              Sign Up →
+            </a>
+<p style="font-size:13px; color:#155a2b; font-style:italic; margin:0;">
+              “Let no one despise your youth.” (1 Tim. 4:12)
+            </p>
+</td></tr>
+</table>
+</td></tr>
+<tr><td class="pad" style="padding:6px 32px 20px;">
+<h2 style="font-size:18px; color:#02306e; font-family:'El Messiri',Georgia,serif; font-weight:700; border-bottom:3px double #c9a227; padding-bottom:7px; margin:18px 0 14px;"><img alt="" height="24" src="https://photoromano.github.io/stn-newsletter/assets/icons/heart.png" style="vertical-align:middle; margin-right:8px; border:0;" width="24"/> Caring for Our Own</h2>
+<p style="font-size:14px; color:#8c1419; margin:0 0 8px;"><strong>Please keep these families in your prayers this week:</strong><br/>
+<strong>Ilija and Stojana Lacković</strong><br/>
+<strong>Djordje (George) and Nada Rajšić</strong><br/>
+<strong>Bill and Marie Simpson</strong></p>
+<p style="font-size:13px; line-height:1.6; color:#6a7d96; font-style:italic; margin:0;">
+          “Pray for one another, that you may be healed.” (James 5:16) — to add a name or request a
+          pastoral visit, reply or write
+          <a href="mailto:hello@stnicholasphilly.org" style="color:#02306e;">hello@stnicholasphilly.org</a>.
+        </p>
+</td></tr>
+<tr><td class="pad" style="padding:0 32px 28px;">
+<table cellpadding="0" cellspacing="0" role="presentation" style="background:#f0f4fb; border:1px solid #c8d5e8;" width="100%">
+<tr><td style="padding:16px 16px;">
+<p style="font-size:14px; line-height:1.6; color:#333; margin:0; text-align:left;">
+<img alt="" height="20" src="https://photoromano.github.io/stn-newsletter/assets/icons/cross.png" style="vertical-align:middle; margin-right:6px; border:0;" width="20"/><strong style="color:#02306e;">Need a Priest?</strong><br/>
+              For a baptism, confession, a hospital visit, or simply a difficult time — Fr. Milorad is here for
+              you. Reach out at
+              <a href="mailto:FrMilorad@stnicholasphilly.org" style="color:#02306e;">FrMilorad@stnicholasphilly.org</a>
+              and he will be in touch.
+            </p>
+</td></tr>
+</table>
+</td></tr>
+<tr><td class="pad" style="padding:0 32px 24px;">
+<h2 style="font-size:18px; color:#02306e; font-family:'El Messiri',Georgia,serif; font-weight:700; border-bottom:3px double #c9a227; padding-bottom:7px; margin:4px 0 14px;">
+<img alt="" height="24" src="https://photoromano.github.io/stn-newsletter/assets/icons/hands.png" style="vertical-align:middle; margin-right:8px; border:0;" width="24"/> Support Your Parish</h2>
+<p style="font-size:13.5px; line-height:1.6; color:#333; margin:0 0 14px;">
+          Our services, our school, and the care we show one another are all sustained by this family’s
+          generosity. If St. Nicholas is your spiritual home, please consider a gift.
+        </p>
+<table cellpadding="0" cellspacing="0" role="presentation" width="100%">
+<tr>
+<td class="give-cell" style="padding:0 5px 0 0; vertical-align:top;">
+<a href="https://give.tithe.ly/?formId=7a845bbe-9131-48a7-82b1-92f964cbe6ac" style="display:block; text-align:center; background:#155a2b; color:#ffffff; text-decoration:none; padding:14px 4px; font-size:14px; font-weight:bold; letter-spacing:.3px;">
+            Give Monthly</a>
+<div style="text-align:center; font-size:10.5px; color:#6a7d96; margin-top:4px;">Steady parish support</div>
+</td>
+<td class="give-cell" style="padding:0 0 0 5px; vertical-align:top;">
+<a href="https://give.tithe.ly/?formId=7a845bbe-9131-48a7-82b1-92f964cbe6ac" style="display:block; text-align:center; background:#24764a; color:#ffffff; text-decoration:none; padding:14px 4px; font-size:14px; font-weight:bold; letter-spacing:.3px;">
+            Give Once</a>
+<div style="text-align:center; font-size:10.5px; color:#6a7d96; margin-top:4px;">Any amount, anytime</div>
+</td>
+</tr>
+</table>
+</td></tr>
+<!-- ══ Share This Issue ══ -->
+<tr><td class="pad" style="padding:0 32px 24px;">
+<table cellpadding="0" cellspacing="0" role="presentation" style="background:#f8f4e8; border:1px solid #e0d4a0; border-left:4px solid #c9a227;" width="100%">
+<tr><td style="padding:18px 16px; text-align:center;">
+<p style="font-size:15px; line-height:1.65; color:#333; margin:0 0 10px;">
+<strong style="color:#02306e;">📤 Know a Family Who’d Love This?</strong><br/>
+          Forward this email, or share our mailing list with them directly.
+        </p>
+<a href="https://photoromano.github.io/stn-newsletter/subscribe.html" style="display:inline-block; background:#c9a227; color:#3a2e00; text-decoration:none; padding:10px 22px; font-size:14px; font-weight:bold; border-radius:2px; margin:0 4px 8px;">Share the Sign-Up Link</a>
+</td></tr>
+</table>
+</td></tr>
+<!-- ══ Footer ══ -->
+<tr><td style="height:3px; background:#c31f27;"></td></tr>
+<tr><td style="background:#02306e; padding:22px 20px; text-align:center;">
+<div class="footer-links" style="color:#a8c4e0; font-size:14px; margin-bottom:10px;">
+<a href="https://stnicholasphilly.org/calendar.html" style="color:#a8c4e0; text-decoration:none;">📅 Calendar</a>
+       · 
+      <a href="https://www.facebook.com/profile.php?id=61576041795124" style="color:#a8c4e0; text-decoration:none;">📸 Facebook</a>
+       · 
+      <a href="https://www.youtube.com/@svetinikolasvetinikolaphil2668" style="color:#a8c4e0; text-decoration:none;">▶️ YouTube</a>
+       · 
+      <a href="https://www.instagram.com/stnicholasphilly" style="color:#a8c4e0; text-decoration:none;">📷 Instagram</a>
+</div>
+<div style="color:#c9a227; font-size:13px; margin-bottom:14px;">✉ hello@stnicholasphilly.org</div>
+<div style="color:#7090b8; font-size:11.5px; line-height:1.65;">
+      You’re receiving this because you’re part of the St. Nicholas Serbian Orthodox family in Elkins Park, PA.<br/>
+      506 Stahr Road, Elkins Park, PA 19027<br/>
+<a href="#" style="color:#a8c4e0;">Update preferences</a>  ·  <a href="#" style="color:#a8c4e0;">Unsubscribe</a>
+</div>
+</td></tr>
+<tr><td style="height:4px; background:#c9a227;"></td></tr>
+</table>
+</div>
+<div class="stn-sr">
+<table cellpadding="0" cellspacing="0" class="email-body" role="presentation" style="width:600px; max-width:600px; background:#ffffff; border:1px solid #c8d5e8;" width="600">
+
+<!-- ══ Masthead ══ -->
+<tr><td style="background:#ffffff; padding:14px 16px 10px; text-align:center;">
+<img alt="Српска православна црква Светог Николе — Elkins Park, PA" class="masthead-img" src="https://photoromano.github.io/stn-newsletter/st_nicholas_banner.png" style="display:block; margin:0 auto; width:100%; max-width:560px; height:auto;" width="560"/>
+</td></tr>
+<!-- flag stripe: red · navy header · gold rule -->
+<tr><td style="height:3px; background:#c31f27;"></td></tr>
+<tr><td style="background:#02306e; padding:14px 20px; text-align:center;">
+<span class="issue-title" style="color:#ffffff; font-family:'El Messiri',Georgia,serif; font-size:26px; font-weight:700; letter-spacing:1px;">Гласник</span><br/>
+<span style="color:#a8c4e0; font-size:13px; font-style:italic; letter-spacing:.3px;">Недеља, 29. октобар 2026.  ·  Добро дошли</span>
+</td></tr>
+<tr><td style="height:4px; background:#c9a227;"></td></tr>
+<tr><td style="padding:12px 16px;">
+<table cellpadding="0" cellspacing="0" class="ql-table" role="presentation" style="background:#f0f4fb; border:1px solid #c8d5e8; border-radius:3px;" width="100%">
+<tr class="ql-row"><td class="ql-cell left" style="padding:11px; text-align:center; font-size:13px; width:25%;"><a href="https://stnicholasphilly.org/calendar.html" style="color:#02306e; text-decoration:none;">📅 Календар</a></td><td class="ql-cell" style="padding:11px; text-align:center; font-size:13px; width:25%; border-left:1px solid #c8d5e8;"><a href="https://stnicholasphilly.org/donate" style="color:#02306e; text-decoration:none;">🙏 Донирајте</a></td><td class="ql-cell r2 left" style="padding:11px; text-align:center; font-size:13px; width:25%; border-left:1px solid #c8d5e8;"><a href="https://www.instagram.com/stnicholasphilly" style="color:#02306e; text-decoration:none;">📷 Инстаграм</a></td><td class="ql-cell r2" style="padding:11px; text-align:center; font-size:13px; width:25%; border-left:1px solid #c8d5e8;"><a href="mailto:hello@stnicholasphilly.org" style="color:#02306e; text-decoration:none;">✉ Контакт</a></td></tr>
+</table>
+</td></tr>
+<tr><td class="pad" style="padding:14px 32px 2px;">
+<p style="font-size:14.5px; line-height:1.55; color:#0b4fc4; font-family:'El Messiri',Georgia,serif; font-weight:600; margin:0 0 10px; background:#eef4ff; border:1px solid #c7d9f5; border-radius:4px; padding:12px 14px;">
+          Ове недеље, у недељу 1. нов, наша парохија се окупља одмах након Литургије на Ванредну скупштину о могућој куповини некретнине. Ево свега осталог вредног пажње ове недеље, за мање од два минута:
+        </p>
+<h2 style="font-size:15px; color:#02306e; font-family:'El Messiri',Georgia,serif; font-weight:700; margin:0 0 8px;">У овом издању</h2>
+<ul style="font-size:13px; line-height:1.65; color:#333; margin:0 0 4px; padding-left:18px;">
+<li><strong style="color:#8c1419;">Ванредна скупштина:</strong> нед. 1. нов, одмах након Свете Литургије — одбор тражи овлашћење заједнице за куповину некретнине</li>
+<li><strong>Настава Српске школе се наставља</strong> ове недеље, 1. нов, након прошлонедељне пауза због Славе</li>
+<li><strong>Забележите датум:</strong> Парохијско дружење — суб. 14. нов вече (млади) и нед. 15. нов после српске школе (деца)</li>
+</ul>
+</td></tr>
+<tr><td class="pad" style="padding:10px 32px 20px;">
+<table cellpadding="0" cellspacing="0" role="presentation" style="background:#fff8e1; border:3px double #c9a227; border-left:6px solid #8c1419; border-radius:4px;" width="100%">
+<tr><td style="padding:20px 18px;">
+<span style="display:inline-block; font-family:Arial,sans-serif; font-size:10.5px; font-weight:700; letter-spacing:1.2px; color:#8c1419; text-transform:uppercase; margin:0 0 6px;">Издвајамо ове недеље</span><br/>
+<h2 style="font-size:19px; color:#02306e; font-family:'El Messiri',Georgia,serif; font-weight:700; margin:0 0 10px;"><img alt="" height="22" src="https://photoromano.github.io/stn-newsletter/assets/icons/calendar.png" style="vertical-align:middle; margin-right:8px; border:0;" width="22"/> Ванредна скупштина — ове недеље,<br/>1. нов</h2>
+<p style="font-size:14px; line-height:1.65; color:#333; margin:0 0 10px;">
+              Придружите нам се ове недеље, у недељу 1. новембра, одмах након Свете Литургије, на Ванредну скупштину. Одбор разматра куповину или изградњу некретнине користећи средства која су већ издвојена у ту сврху, и тражи од заједнице да овласти одбор да одлучи о куповини некретнине ако се укаже добра прилика — без потребе да се за сваку прилику сазива посебна скупштина.
+            </p>
+<p style="font-size:14px; line-height:1.6; color:#333; margin:0 0 10px;">
+              Ово би нам омогућило да брзо реагујемо када се на тржишту појави права некретнина. Надамо се да ћете нам се придружити.
+            </p>
+<p style="font-size:13.5px; line-height:1.6; color:#555; margin:0;">
+              Питања? Пишите на <a href="mailto:hello@stnicholasphilly.org" style="color:#02306e;">hello@stnicholasphilly.org</a>.
+            </p>
+</td></tr>
+</table>
+</td></tr>
+<tr><td class="pad" style="padding:6px 32px 20px;">
+<h2 style="font-size:19px; color:#02306e; font-family:'El Messiri',Georgia,serif; font-weight:700; border-bottom:3px double #c9a227; padding-bottom:7px; margin:18px 0 14px;"><img alt="" height="26" src="https://photoromano.github.io/stn-newsletter/assets/icons/chalice.png" style="vertical-align:middle; margin-right:8px; border:0;" width="26"/> Ове недеље у олтару</h2>
+<p style="font-size:13px; color:#6a7d96; font-style:italic; margin:0 0 14px;">Богослужимо по јулијанском календару. Сви су добродошли — дођите онакви какви јесте.</p>
+<table cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:collapse; font-size:14.5px;" width="100%">
+<tr>
+<td style="padding:9px 10px 9px 0; font-weight:bold; color:#8c1419; font-family:'El Messiri',Georgia,serif; white-space:nowrap;">Нед, 1. нов</td>
+<td style="padding:9px 0; font-weight:bold; color:#8c1419;">Света Литургија — 10:00 — Ванредна скупштина одмах након</td>
+</tr>
+</table>
+<p style="font-size:13px; color:#6a7d96; font-style:italic; margin:8px 0 0;">
+          📺 Пропустили сте прошлу недељу? <a href="https://www.youtube.com/@svetinikolasvetinikolaphil2668" style="color:#02306e;">Погледајте беседу на Јутјубу</a>.
+        </p>
+</td></tr>
+<tr><td class="pad" style="padding:0 32px 20px;">
+<h2 style="font-size:18px; color:#02306e; font-family:'El Messiri',Georgia,serif; font-weight:700; border-bottom:3px double #c9a227; padding-bottom:7px; margin:4px 0 14px;"><img alt="" height="24" src="https://photoromano.github.io/stn-newsletter/assets/icons/calendar.png" style="vertical-align:middle; margin-right:8px; border:0;" width="24"/> На хоризонту</h2>
+<table cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:collapse; font-size:13.5px;" width="100%">
+<tr>
+<td style="padding:8px 10px 8px 0; font-weight:bold; color:#02306e; white-space:nowrap;">Суб, 14. нов</td>
+<td style="padding:8px 0;">Парохијско вече дружења (за младе) — парохијска сала</td>
+</tr>
+<tr>
+<td style="padding:8px 10px 8px 0; font-weight:bold; color:#02306e; white-space:nowrap;">Нед, 15. нов</td>
+<td style="padding:8px 0;">Парохијско дружење (за децу) — након српске школе</td>
+</tr>
+</table>
+<p style="font-size:13px; color:#333; font-style:italic; margin:10px 0 0;">
+          Забележите датуме — два добра разлога да се окупимо у наредним недељама.
+        </p>
+</td></tr>
+<tr><td class="pad" style="padding:0 32px 20px;">
+<table cellpadding="0" cellspacing="0" role="presentation" style="background:#f8f4e8; border:1px solid #e0d4a0; border-left:4px solid #c9a227;" width="100%">
+<tr><td style="padding:18px 16px;">
+<h2 style="font-size:17px; color:#02306e; font-family:'El Messiri',Georgia,serif; font-weight:700; margin:0 0 10px;">🏦 Парохијски бизниси</h2>
+<ul style="font-size:14px; line-height:1.6; color:#333; margin:0 0 10px; padding-left:18px;">
+<li data-slug="modern-home-investments"><strong style="color:#02306e;">Čedo Plevac</strong> — ваш човек за реновирање и изградњу кућа, инвестиције у некретнине</li>
+<li data-slug="ticas-souvlaki"><strong>Jon Lotrean</strong> — ваш човек за балкански камион са храном и кетеринг</li>
+<li data-slug="lock-911"><strong>Nebojsa Ignjatovic</strong> — ваш човек за браварске и кључарске услуге</li>
+<li data-slug="mini-golf-philly"><strong>Marko Mihalovic</strong> — ваш човек за преносиви мини голф, ласер таг и опрема за забаве</li>
+<li data-slug="maxstudio"><strong>Max Romano</strong> — ваш човек за сајтове, апликације и аутоматизацију</li>
+</ul>
+<p style="font-size:13px; line-height:1.55; color:#555; margin:0 0 10px;">
+              Треба вам бравар, кетеринг, извођач радова или сајт? Прво погледајте наше.
+            </p>
+<p style="font-size:13px; line-height:1.55; color:#555; margin:0 0 14px;">
+              Имате бизнис? Има места и за ваш.
+            </p>
+<a href="https://stnicholasphilly.org/parishioner-businesses" style="display:inline-block; background:#155a2b; color:#ffffff; text-decoration:none; padding:10px 18px; font-size:13.5px; font-weight:bold; border-radius:2px; margin:0 8px 8px 0;">
+              Прегледај парохијске бизнисе →
+            </a>
+</td></tr>
+</table>
+</td></tr>
+<tr><td class="pad" style="padding:0 32px 20px;">
+<table cellpadding="0" cellspacing="0" role="presentation" style="background:#f0f4fb; border:1px solid #c8d5e8; border-left:4px solid #02306e;" width="100%">
+<tr><td style="padding:18px 16px;">
+<h2 style="font-size:17px; color:#02306e; font-family:'El Messiri',Georgia,serif; font-weight:700; margin:0 0 10px;">📋 Парохијска огласна табла</h2>
+<p style="font-size:14px; line-height:1.6; color:#333; margin:0 0 10px;">
+              Наша <strong>парохијска огласна табла</strong> — за куповину, продају, поклањање, услуге,
+              станове и још много тога.
+            </p>
+<p style="font-size:13px; line-height:1.55; color:#555; margin:0 0 14px;">
+              Категорије: Продаја · Бесплатно · Тражим · Услуге · Стамбени простор · Посао · Чување деце · Заједница
+            </p>
+<a href="https://stnicholasphilly.org/classifieds" style="display:inline-block; background:#02306e; color:#ffffff; text-decoration:none; padding:10px 18px; font-size:13.5px; font-weight:bold; border-radius:2px;">
+              Прегледај и постави огласе →
+            </a>
+</td></tr>
+</table>
+</td></tr>
+<tr><td class="pad" style="padding:0 32px 20px;">
+<table cellpadding="0" cellspacing="0" role="presentation" style="background:#eaf6fb; border:1px solid #b8dceb; border-left:4px solid #4fa8d8;" width="100%">
+<tr><td style="padding:18px 16px;">
+<h2 style="font-size:17px; color:#1c6ea4; font-family:'El Messiri',Georgia,serif; font-weight:700; margin:0 0 10px;"><img alt="" height="22" src="https://photoromano.github.io/stn-newsletter/assets/icons/book.png" style="vertical-align:middle; margin-right:8px; border:0;" width="22"/> Јесте ли посетили парохијску библиотеку?</h2>
+<p style="font-size:14px; line-height:1.6; color:#333; margin:0 0 14px;">
+              На спрату, у ходнику цркве, наша парохијска библиотека нуди нешто за свакога — од 7 до 77 година. Прегледајте Свето писмо, животе светитеља, српску књижевност и историју, и књиге за децу. Позајмљивање је једноставно: само се упишите у евиденцију, а донације књига су увек добродошле.
+            </p>
+<a href="https://stnicholasphilly.org/library" style="display:inline-block; background:#1c6ea4; color:#ffffff; text-decoration:none; padding:10px 18px; font-size:13.5px; font-weight:bold; border-radius:2px;">
+              Посетите страницу библиотеке →
+            </a>
+</td></tr>
+</table>
+</td></tr>
+<tr><td class="pad" style="padding:0 32px 20px;">
+<table cellpadding="0" cellspacing="0" role="presentation" style="background:#eaf6fb; border:1px solid #b8dceb; border-left:4px solid #4fa8d8;" width="100%">
+<tr><td style="padding:18px 16px;">
+<div style="text-align:center;"><img alt="Church School" src="https://photoromano.github.io/stn-newsletter/assets/banners/church-school/2026-10-22.png" style="display:inline-block; width:100%; max-width:440px; height:auto; margin:0 0 10px; border:3px solid #c9a227; border-radius:3px; box-shadow:0 3px 8px rgba(2,48,110,0.18);" width="440"/></div>
+<h2 style="font-size:17px; color:#1c6ea4; font-family:'El Messiri',Georgia,serif; font-weight:700; margin:0 0 10px;"><img alt="" height="22" src="https://photoromano.github.io/stn-newsletter/assets/icons/book.png" style="vertical-align:middle; margin-right:8px; border:0;" width="22"/> Црквена школа — вера и другарство, сваке недеље</h2>
+<p style="font-size:14px; line-height:1.65; color:#333; margin:0 0 10px;">
+              Сваке недеље наша деца заједно уче Свето писмо, животе светих и традиције које
+              нас чине оним што јесмо — градећи веру и пријатељства заједно.
+            </p>
+<p style="font-size:14px; line-height:1.65; color:#333; margin:0 0 14px;">
+              Још нисте уписали дете? Увек има места — и усред године је добро време да почнете.
+            </p>
+<a href="https://stnicholasphilly.org/church-school-signup" style="display:inline-block; background:#1c6ea4; color:#ffffff; text-decoration:none; padding:10px 18px; font-size:13.5px; font-weight:bold; border-radius:2px;">
+              Упишите своје дете →
+            </a>
+</td></tr>
+</table>
+</td></tr>
+<tr><td class="pad" style="padding:0 32px 20px;">
+<table cellpadding="0" cellspacing="0" role="presentation" style="background:#f8f4e8; border:1px solid #e0d4a0; border-left:4px solid #c9a227;" width="100%">
+<tr><td style="padding:18px 16px;">
+<div style="text-align:center;"><img alt="Serbian Language School" src="https://photoromano.github.io/stn-newsletter/assets/banners/serbian-language-school/2026-10-29.png" style="display:inline-block; width:100%; max-width:440px; height:auto; margin:0 0 10px; border:3px solid #c9a227; border-radius:3px; box-shadow:0 3px 8px rgba(2,48,110,0.18);" width="440"/></div>
+<h2 style="font-size:17px; color:#02306e; font-family:'El Messiri',Georgia,serif; font-weight:700; margin:0 0 10px;"><img alt="" height="22" src="https://photoromano.github.io/stn-newsletter/assets/icons/ribbon.png" style="vertical-align:middle; margin-right:8px; border:0;" width="22"/> Српска школа језика — преносимо језик даље</h2>
+<p style="font-size:14px; line-height:1.6; color:#333; margin:0 0 10px;">
+              Свака Литургија коју певамо, свака слава коју прославимо, свака песма и прича — све то носи
+              наш језик. Наша Српска школа чува ту нит неисцепаном за будуће генерације.
+            </p>
+<p style="font-size:14px; line-height:1.6; color:#333; margin:0 0 14px;">
+              Настава је у току, а упис је отворен — придружите се кад будете спремни.
+            </p>
+<a href="https://stnicholasphilly.org/serbian-school-signup" style="display:inline-block; background:#c9a227; color:#3a2e00; text-decoration:none; padding:10px 18px; font-size:13.5px; font-weight:bold; border-radius:2px;">
+              Упишите се у српску школу →
+            </a>
+</td></tr>
+</table>
+</td></tr>
+<tr><td class="pad" style="padding:0 32px 20px;">
+<table cellpadding="0" cellspacing="0" role="presentation" style="background:#f0f7f0; border:1px solid #b8d8b8; border-left:4px solid #24764a;" width="100%">
+<tr><td style="padding:18px 16px;">
+<div style="text-align:center;"><img alt="Young Adults" src="https://photoromano.github.io/stn-newsletter/assets/banners/young-adults/2026-10-29.png" style="display:inline-block; width:100%; max-width:440px; height:auto; margin:0 0 10px; border:3px solid #c9a227; border-radius:3px; box-shadow:0 3px 8px rgba(2,48,110,0.18);" width="440"/></div>
+<h2 style="font-size:17px; color:#155a2b; font-family:'El Messiri',Georgia,serif; font-weight:700; margin:0 0 10px;"><img alt="" height="24" src="https://photoromano.github.io/stn-newsletter/assets/icons/people.png" style="vertical-align:middle; margin-right:8px; border:0;" width="24"/> Млади</h2>
+<p style="font-size:14px; line-height:1.6; color:#333; margin:0 0 10px;">
+              Вече игара, поход, дружење уз кафу које се заиста деси — наши млади бирају шта ће значити
+              „заједно“ ове сезоне. Тражимо неколико тинејџера и младих који желе да помогну да се
+              <strong>изабере следећа ствар и спроведе</strong>. Имате сопствену идеју за пројекат или волонтерски
+              подухват? Још боље — волели бисмо да је чујемо.
+            </p>
+<p style="font-size:13.5px; line-height:1.55; color:#555; margin:0 0 14px;">
+              Није потребно претходно искуство. Само жеља да се јавите. Одговорите на овај имејл или пишите на
+              <a href="mailto:hello@stnicholasphilly.org" style="color:#155a2b;">hello@stnicholasphilly.org</a>.
+            </p>
+<a href="https://stnicholasphilly.org/young-adults-sign-up" style="display:inline-block; background:#155a2b; color:#ffffff; text-decoration:none; padding:10px 18px; font-size:13.5px; font-weight:bold; border-radius:2px; margin:0 0 14px;">
+              Пријави се →
+            </a>
+<p style="font-size:13px; color:#155a2b; font-style:italic; margin:0;">
+              „Нико нека не омаловажава твоју младост.” (1. Тим. 4:12)
+            </p>
+</td></tr>
+</table>
+</td></tr>
+<tr><td class="pad" style="padding:6px 32px 20px;">
+<h2 style="font-size:18px; color:#02306e; font-family:'El Messiri',Georgia,serif; font-weight:700; border-bottom:3px double #c9a227; padding-bottom:7px; margin:18px 0 14px;"><img alt="" height="24" src="https://photoromano.github.io/stn-newsletter/assets/icons/heart.png" style="vertical-align:middle; margin-right:8px; border:0;" width="24"/> Брига о нашима</h2>
+<p style="font-size:14px; color:#8c1419; margin:0 0 8px;"><strong>Молимо вас да ове недеље у молитвама држите следеће породице:</strong><br/>
+<strong>Илију и Стојану Лаковић</strong><br/>
+<strong>Ђорђа и Наду Рајшић</strong><br/>
+<strong>Бил и Мари Симпсон</strong></p>
+<p style="font-size:13px; line-height:1.6; color:#6a7d96; font-style:italic; margin:0;">
+          „Молите се једни за друге, да оздравите.” (Јаков 5:16) — да бисте додали име или затражили пастирску
+          посету, одговорите или пишите на
+          <a href="mailto:hello@stnicholasphilly.org" style="color:#02306e;">hello@stnicholasphilly.org</a>.
+        </p>
+</td></tr>
+<tr><td class="pad" style="padding:0 32px 28px;">
+<table cellpadding="0" cellspacing="0" role="presentation" style="background:#f0f4fb; border:1px solid #c8d5e8;" width="100%">
+<tr><td style="padding:16px 16px;">
+<p style="font-size:14px; line-height:1.6; color:#333; margin:0; text-align:left;">
+<img alt="" height="20" src="https://photoromano.github.io/stn-newsletter/assets/icons/cross.png" style="vertical-align:middle; margin-right:6px; border:0;" width="20"/><strong style="color:#02306e;">Потребан вам је свештеник?</strong><br/>
+              За крштење, исповест, посету болници или просто тежак тренутак — јереј Милорад је ту за вас.
+              Јавите се на
+              <a href="mailto:FrMilorad@stnicholasphilly.org" style="color:#02306e;">FrMilorad@stnicholasphilly.org</a>
+              и он ће вам одговорити.
+            </p>
+</td></tr>
+</table>
+</td></tr>
+<tr><td class="pad" style="padding:0 32px 24px;">
+<h2 style="font-size:18px; color:#02306e; font-family:'El Messiri',Georgia,serif; font-weight:700; border-bottom:3px double #c9a227; padding-bottom:7px; margin:4px 0 14px;">
+<img alt="" height="24" src="https://photoromano.github.io/stn-newsletter/assets/icons/hands.png" style="vertical-align:middle; margin-right:8px; border:0;" width="24"/>Подржите своју парохију
+    </h2>
+<p style="font-size:13.5px; line-height:1.6; color:#333; margin:0 0 14px;">
+          Наше службе, наша школа и брига коју показујемо једни за друге одржавају се захваљујући дарежљивости ове
+          породице. Ако вам је Свети Никола духовни дом, размислите о прилогу.
+        </p>
+<table cellpadding="0" cellspacing="0" role="presentation" width="100%">
+<tr>
+<td class="give-cell" style="padding:0 5px 0 0; vertical-align:top;">
+<a href="https://give.tithe.ly/?formId=7a845bbe-9131-48a7-82b1-92f964cbe6ac" style="display:block; text-align:center; background:#155a2b; color:#ffffff; text-decoration:none; padding:14px 4px; font-size:14px; font-weight:bold; letter-spacing:.3px;">Месечно
+          </a>
+<div style="text-align:center; font-size:10.5px; color:#6a7d96; margin-top:4px;">Стална подршка парохији</div>
+</td>
+<td class="give-cell" style="padding:0 0 0 5px; vertical-align:top;">
+<a href="https://give.tithe.ly/?formId=7a845bbe-9131-48a7-82b1-92f964cbe6ac" style="display:block; text-align:center; background:#24764a; color:#ffffff; text-decoration:none; padding:14px 4px; font-size:14px; font-weight:bold; letter-spacing:.3px;">Једном
+          </a>
+<div style="text-align:center; font-size:10.5px; color:#6a7d96; margin-top:4px;">Било који износ, било када</div>
+</td>
+</tr>
+</table>
+</td></tr>
+<!-- ══ Share This Issue ══ -->
+<tr><td class="pad" style="padding:0 32px 24px;">
+<table cellpadding="0" cellspacing="0" role="presentation" style="background:#f8f4e8; border:1px solid #e0d4a0; border-left:4px solid #c9a227;" width="100%">
+<tr><td style="padding:18px 16px; text-align:center;">
+<p style="font-size:15px; line-height:1.65; color:#333; margin:0 0 10px;">
+<strong style="color:#02306e;">📤 Знате породицу која би ово волела?</strong><br/>
+          Проследите овај имејл, или поделите нашу листу за пријаву директно с њима.
+        </p>
+<a href="https://photoromano.github.io/stn-newsletter/subscribe-sr.html" style="display:inline-block; background:#c9a227; color:#3a2e00; text-decoration:none; padding:10px 22px; font-size:14px; font-weight:bold; border-radius:2px; margin:0 4px 8px;">Поделите линк за пријаву</a>
+</td></tr>
+</table>
+</td></tr>
+<!-- ══ Footer ══ -->
+<tr><td style="height:3px; background:#c31f27;"></td></tr>
+<tr><td style="background:#02306e; padding:22px 20px; text-align:center;">
+<div class="footer-links" style="color:#a8c4e0; font-size:14px; margin-bottom:10px;">
+<a href="https://stnicholasphilly.org/calendar.html" style="color:#a8c4e0; text-decoration:none;">📅 Календар</a>
+       · 
+      <a href="https://www.facebook.com/profile.php?id=61576041795124" style="color:#a8c4e0; text-decoration:none;">📸 Фејсбук</a>
+       · 
+      <a href="https://www.youtube.com/@svetinikolasvetinikolaphil2668" style="color:#a8c4e0; text-decoration:none;">▶️ Јутјуб</a>
+       · 
+      <a href="https://www.instagram.com/stnicholasphilly" style="color:#a8c4e0; text-decoration:none;">📷 Инстаграм</a>
+</div>
+<div style="color:#c9a227; font-size:13px; margin-bottom:14px;">✉ hello@stnicholasphilly.org</div>
+<div style="color:#7090b8; font-size:11.5px; line-height:1.65;">
+      Ово писмо примате јер сте део српске православне породице Светог Николе у Елкинс Парку, Пенсилванија.<br/>
+      506 Stahr Road, Elkins Park, PA 19027<br/>
+<a href="#" style="color:#a8c4e0;">Ажурирајте подешавања</a>  ·  <a href="#" style="color:#a8c4e0;">Одјавите се</a>
+</div>
+</td></tr>
+<tr><td style="height:4px; background:#c9a227;"></td></tr>
+</table>
+</div>
+</center>
+</div>
