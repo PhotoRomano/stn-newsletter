@@ -8,7 +8,7 @@ in `contact_name` -- before it's just something Max happens to notice.
 Built right after exactly that gap was found by hand: `contact_name` was
 null for Tica's Souvlaki and just "Chad" (no last name) for Modern Home
 Investments, while the newsletter needed each owner's real full name
-(Jon Lotrean, Čedo Plevac). Nothing had been checking the two stayed in
+(Jon Lotrean, Čedo Pjevac). Nothing had been checking the two stayed in
 sync.
 
     python3 check_business_owner_sync.py              # live D1 query via wrangler
