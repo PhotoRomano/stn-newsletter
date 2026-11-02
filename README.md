@@ -547,7 +547,10 @@ review.
   the CURRENT draft. Advisory only, not authoritative — built after the
   2026-10-29 issue briefly resurrected a cancelled Nov 7 dinner event by
   copying forward from an older draft without checking *why* it had
-  disappeared. Requires `beautifulsoup4`.
+  disappeared. Also runs automatically, WARN-ONLY, from `hooks/pre-commit`
+  (added 2026-11-02) for every staged `.both.html` — pure git-history +
+  local-file scan, no network call, fast enough for a commit-time check.
+  Requires `beautifulsoup4`.
 - `add_utm_tags.py` — tags `<date>.email.html`'s outbound links for
   click attribution before loading into Beehiiv (see Step 5).
 - `check_links.py` — pre-send QA gate: wrong-link-target detection

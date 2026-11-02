@@ -35,6 +35,17 @@ always revive something later, and the warning is just a prompt to check.
 Advisory only -- never fails the build (matches check_calendar.py, not
 check_email_consistency.py). Run as part of prepare_publish.py's chain,
 or standalone any time while drafting.
+
+Also runs automatically, WARN-ONLY, from hooks/pre-commit whenever a
+drafts/<date>.both.html is staged -- same pre-commit pattern as
+check_build_freshness.py/check_email_consistency.py (added 2026-11-02).
+Pure git-history + local-file scan, no network call, ~1.5s at this
+repo's current commit count -- unlike check_calendar.py (live fetch of
+stnicholasphilly.org) which is deliberately NOT wired into the hook for
+the same slow/flaky reason check_business_owner_sync.py's live-DB
+comparison was rejected (see hooks/pre-commit's own docstring).
+check(date) is the importable entry point the hook uses (returns a list
+of hit dicts, never exits); main() is the CLI wrapper.
 """
 import re
 import subprocess
@@ -42,6 +53,8 @@ import sys
 from pathlib import Path
 
 from bs4 import BeautifulSoup, Comment
+
+from check_utils import CheckError
 
 ROOT = Path(__file__).parent
 
@@ -234,23 +247,22 @@ def visible_text_excluding_board_box(path):
     return soup.get_text(" ")
 
 
-def main():
-    args = sys.argv[1:]
-    if len(args) != 1:
-        print(__doc__)
-        sys.exit(1)
-    date = args[0]
+def check(date):
+    """Returns (hits, phrase_count) -- hits is a list of {phrase, hash, date,
+    subject} dicts for phrases found reappearing (empty = nothing flagged),
+    phrase_count is how many candidate phrases were scanned (for the "N
+    previously-cancelled phrases checked" context). Raises CheckError if
+    neither drafts/<date>.both.html nor .email.html exists yet. Never
+    exits; never prints. main() is the CLI wrapper for that."""
     both_path = ROOT / f"drafts/{date}.both.html"
     email_path = ROOT / f"drafts/{date}.email.html"
     paths = [p for p in (both_path, email_path) if p.exists()]
     if not paths:
-        print(f"missing drafts/{date}.both.html -- write the draft first")
-        sys.exit(1)
+        raise CheckError(f"missing drafts/{date}.both.html -- write the draft first")
 
     phrases = collect_resolved_phrases(date)
     if not phrases:
-        print("No quoted cancellation/removal phrases found in git history -- nothing to check.")
-        return
+        return [], 0
 
     draft_text = " ".join(visible_text_excluding_board_box(p) for p in paths)
 
@@ -258,9 +270,28 @@ def main():
     for entry in phrases:
         if re.search(re.escape(entry["phrase"]), draft_text, re.IGNORECASE):
             hits.append(entry)
+    return hits, len(phrases)
+
+
+def main():
+    args = sys.argv[1:]
+    if len(args) != 1:
+        print(__doc__)
+        sys.exit(1)
+    date = args[0]
+
+    try:
+        hits, phrase_count = check(date)
+    except CheckError as e:
+        print(str(e))
+        sys.exit(1)
+
+    if phrase_count == 0:
+        print("No quoted cancellation/removal phrases found in git history -- nothing to check.")
+        return
 
     if not hits:
-        print(f"OK -- none of the {len(phrases)} previously-cancelled/removed phrase(s) "
+        print(f"OK -- none of the {phrase_count} previously-cancelled/removed phrase(s) "
               f"found in git history reappear in this draft.")
         return
 

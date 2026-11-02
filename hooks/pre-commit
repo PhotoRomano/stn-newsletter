@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-pre-commit — three checks:
+pre-commit — four checks:
 
   1. business_owner_map.json going stale relative to the Parishioner
      Businesses section it's supposed to be generated from, at commit
@@ -26,9 +26,21 @@ pre-commit — three checks:
      drafts/<date>.email.html is staged (either side of the drift could
      be the one changing).
 
-Checks 1-2 only fire when a drafts/<date>.both.html master is part of the
-commit; every other commit is an instant no-op for those two. Check 3 has
-its own, slightly broader trigger -- see above.
+  4. (added 2026-11-02) a cancelled/removed item from a past issue
+     silently reappearing in the current draft -- delegates to
+     check_board_resolutions.check(), see that module's docstring for
+     the 2026-10-29 Krajina Evening incident that motivated it (a
+     confirmed-cancelled dinner got re-added by copying forward from a
+     stale draft). Pure git-history + local-file scan, no network call
+     (~1.5s at this repo's current commit count) -- unlike
+     check_calendar.py, which fetches stnicholasphilly.org live and is
+     deliberately NOT wired in here for the same reason the live
+     business_owner_map DB comparison below was rejected. Fires when a
+     drafts/<date>.both.html master is staged.
+
+Checks 1-2 and 4 only fire when a drafts/<date>.both.html master is part
+of the commit; every other commit is an instant no-op for those three.
+Check 3 has its own, slightly broader trigger -- see above.
 
 Tracked here as hooks/pre-commit; install_precommit_hook.sh copies it into
 .git/hooks/pre-commit (git hooks are never version-controlled themselves,
@@ -67,6 +79,7 @@ sys.path.insert(0, str(REPO_ROOT))
 import extract_business_owner_map as eom  # noqa: E402
 import check_build_freshness  # noqa: E402
 import check_email_consistency  # noqa: E402
+import check_board_resolutions  # noqa: E402
 from check_utils import CheckError  # noqa: E402
 
 
@@ -103,6 +116,7 @@ def main():
     _check_business_owner_map(drafts)
     _check_build_freshness(drafts)
     _check_email_consistency(drafts, email_drafts)
+    _check_board_resolutions(drafts)
     return 0
 
 
@@ -186,6 +200,30 @@ def _check_email_consistency(drafts, email_drafts):
         for p in email_problems:
             print(f"    - {p}")
         print("    Review both.html's board-approved content against email.html before the Beehiiv load (README Step 5).")
+        print("    Commit proceeding anyway -- this is advisory only.")
+
+
+def _check_board_resolutions(drafts):
+    if not drafts:
+        return
+    resolution_hits = []
+    for draft in drafts:
+        date = draft.name.replace(".both.html", "")
+        try:
+            hits, _phrase_count = check_board_resolutions.check(date)
+        except CheckError as e:
+            resolution_hits.append(f"{draft.name}: {e}")
+            continue
+        resolution_hits.extend(
+            f'{draft.name}: "{h["phrase"]}" -- flagged in commit {h["hash"]} ({h["date"]}): {h["subject"]}'
+            for h in hits
+        )
+
+    if resolution_hits:
+        print("⚠️  pre-commit WARNING: phrase(s) from a past cancellation/removal reappear in the draft being committed:")
+        for r in resolution_hits:
+            print(f"    - {r}")
+        print("    Check the named commit before keeping this -- confirm it wasn't re-confirmed since, not just carried forward by habit.")
         print("    Commit proceeding anyway -- this is advisory only.")
 
 
