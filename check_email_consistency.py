@@ -35,6 +35,14 @@ so a UTM-tagged href doesn't trip the word check):
 
 Run this BEFORE loading the Beehiiv draft (README Step 5), right after
 add_utm_tags.py.
+
+Also runs automatically, WARN-ONLY, from hooks/pre-commit whenever a
+drafts/<date>.both.html OR drafts/<date>.email.html is staged -- so a
+mid-week correction to the master (the exact 2026-10-08 incident above)
+gets flagged at commit time instead of only at the final Thursday
+publish pass, days later. check(date) is the importable entry point the
+hook uses (returns (problems, warnings) lists, never exits); main() is
+the CLI wrapper that turns the same result into exit codes.
 """
 import re
 import sys
@@ -72,21 +80,13 @@ def visible_text(path):
     return URL_PATTERN.sub(" ", soup.get_text(" "))
 
 
-def main():
-    args = sys.argv[1:]
-    strict = "--strict" in args
-    args = [a for a in args if a != "--strict"]
-    if len(args) != 1:
-        print(__doc__)
-        sys.exit(1)
-    date = args[0]
+def check(date, strict=False):
+    """Returns (problems, warnings) -- both lists of strings, either may be
+    empty. Raises CheckError on a fatal precondition failure (missing file).
+    Never exits; never prints. main() is the CLI wrapper for that."""
     both_path = Path(f"drafts/{date}.both.html")
     email_path = Path(f"drafts/{date}.email.html")
-    try:
-        require_files(both_path, email_path)
-    except CheckError as e:
-        print(str(e))
-        sys.exit(1)
+    require_files(both_path, email_path)
 
     both_text = visible_text(both_path)
     email_text = visible_text(email_path)
@@ -119,6 +119,24 @@ def main():
         else:
             warnings.append(msg)
 
+    return problems, warnings
+
+
+def main():
+    args = sys.argv[1:]
+    strict = "--strict" in args
+    args = [a for a in args if a != "--strict"]
+    if len(args) != 1:
+        print(__doc__)
+        sys.exit(1)
+    date = args[0]
+
+    try:
+        problems, warnings = check(date, strict=strict)
+    except CheckError as e:
+        print(str(e))
+        sys.exit(1)
+
     if warnings:
         print(f"WARNINGS -- {len(warnings)} (advisory, review before sending):")
         for w in warnings:
@@ -130,7 +148,7 @@ def main():
             print(f"  - {p}")
         sys.exit(1)
 
-    print(f"\nOK -- {email_path} is consistent with {both_path}"
+    print(f"\nOK -- drafts/{date}.email.html is consistent with drafts/{date}.both.html"
           + (" (no warnings)" if not warnings else ""))
 
 

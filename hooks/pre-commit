@@ -1,18 +1,34 @@
 #!/usr/bin/env python3
 """
-pre-commit — two checks, both scoped to "only fires when a
-drafts/<date>.both.html master is part of the commit; every other commit
-is an instant no-op":
+pre-commit — three checks:
 
   1. business_owner_map.json going stale relative to the Parishioner
      Businesses section it's supposed to be generated from, at commit
      time instead of needing someone to remember `python3 build.py`.
+     Fires when a drafts/<date>.both.html master is staged.
   2. (added 2026-11-02) drafts/<date>.html/.serbian.html/.other.html/
      .site.html going stale relative to .both.html -- delegates to
      check_build_freshness.check(), see that module's docstring for the
      2026-11-02 incident that motivated it (a hand-edit applied to all
      four generated files instead of rebuilding from the master, with
-     the hand-edit itself incomplete on .site.html).
+     the hand-edit itself incomplete on .site.html). Fires when a
+     drafts/<date>.both.html master is staged.
+  3. (added 2026-11-02) drafts/<date>.email.html going stale relative to
+     the approved drafts/<date>.both.html master -- delegates to
+     check_email_consistency.check(), see that module's docstring for the
+     2026-10-08 incident that motivated the underlying script (a board
+     correction to both.html left two stale values in email.html,
+     caught only because the draft happened to be read closely before
+     the Beehiiv load). Previously only ran as part of
+     prepare_publish.py's fast path at final-publish time; fires here
+     too, at ordinary commit time, so a mid-week correction gets flagged
+     days earlier. Fires when EITHER drafts/<date>.both.html OR
+     drafts/<date>.email.html is staged (either side of the drift could
+     be the one changing).
+
+Checks 1-2 only fire when a drafts/<date>.both.html master is part of the
+commit; every other commit is an instant no-op for those two. Check 3 has
+its own, slightly broader trigger -- see above.
 
 Tracked here as hooks/pre-commit; install_precommit_hook.sh copies it into
 .git/hooks/pre-commit (git hooks are never version-controlled themselves,
@@ -50,10 +66,11 @@ sys.path.insert(0, str(REPO_ROOT))
 
 import extract_business_owner_map as eom  # noqa: E402
 import check_build_freshness  # noqa: E402
+import check_email_consistency  # noqa: E402
 from check_utils import CheckError  # noqa: E402
 
 
-def staged_both_html_files():
+def staged_drafts(suffix):
     result = subprocess.run(
         ["git", "diff", "--cached", "--name-only", "--diff-filter=ACM"],
         cwd=REPO_ROOT, capture_output=True, text=True,
@@ -61,8 +78,12 @@ def staged_both_html_files():
     return [
         REPO_ROOT / line
         for line in result.stdout.splitlines()
-        if line.startswith("drafts/") and line.endswith(".both.html")
+        if line.startswith("drafts/") and line.endswith(suffix)
     ]
+
+
+def staged_both_html_files():
+    return staged_drafts(".both.html")
 
 
 def current_map():
@@ -75,9 +96,19 @@ def current_map():
 
 def main():
     drafts = staged_both_html_files()
-    if not drafts:
+    email_drafts = staged_drafts(".email.html")
+    if not drafts and not email_drafts:
         return 0
 
+    _check_business_owner_map(drafts)
+    _check_build_freshness(drafts)
+    _check_email_consistency(drafts, email_drafts)
+    return 0
+
+
+def _check_business_owner_map(drafts):
+    if not drafts:
+        return
     on_disk_map = current_map()
     problems = []
 
@@ -102,6 +133,10 @@ def main():
         print("    Run `python3 build.py drafts/<date>.both.html`, then `git add business_owner_map.json`.")
         print("    Commit proceeding anyway -- this is advisory only.")
 
+
+def _check_build_freshness(drafts):
+    if not drafts:
+        return
     stale_builds = []
     for draft in drafts:
         date = draft.name.replace(".both.html", "")
@@ -120,7 +155,38 @@ def main():
         print("    re-add the regenerated files, and amend/recommit.")
         print("    Commit proceeding anyway -- this is advisory only.")
 
-    return 0
+
+def _check_email_consistency(drafts, email_drafts):
+    # Either side of the drift could be the one staged -- a .both.html
+    # correction with no matching email.html edit, OR an email.html edit
+    # alone (e.g. a wording tweak) that now disagrees with the approved
+    # master. Union the dates from both, dedup, check each once.
+    dates = {d.name.replace(".both.html", "") for d in drafts}
+    dates |= {d.name.replace(".email.html", "") for d in email_drafts}
+
+    email_problems = []
+    for date in sorted(dates):
+        both_path = REPO_ROOT / "drafts" / f"{date}.both.html"
+        email_path = REPO_ROOT / "drafts" / f"{date}.email.html"
+        if not both_path.exists() or not email_path.exists():
+            # Step 1 writes .both.html and .email.html separately -- early
+            # in the week one can legitimately exist without the other yet.
+            # That's "not drafted yet," not drift; nothing to compare.
+            continue
+        try:
+            problems, warnings = check_email_consistency.check(date)
+        except CheckError as e:
+            email_problems.append(f"{date}: {e}")
+            continue
+        email_problems.extend(f"{date}: {p}" for p in problems)
+        email_problems.extend(f"{date}: {w}" for w in warnings)
+
+    if email_problems:
+        print("⚠️  pre-commit WARNING: drafts/<date>.email.html out of sync with the approved drafts/<date>.both.html:")
+        for p in email_problems:
+            print(f"    - {p}")
+        print("    Review both.html's board-approved content against email.html before the Beehiiv load (README Step 5).")
+        print("    Commit proceeding anyway -- this is advisory only.")
 
 
 if __name__ == "__main__":

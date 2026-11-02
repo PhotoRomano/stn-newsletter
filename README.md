@@ -517,6 +517,17 @@ review.
   `.site.html` even though `build_site_html.py` itself always overwrites
   it in place — restores the original bytes after comparing, via
   `check_utils.preserve_file`. Requires `beautifulsoup4`.
+- `check_email_consistency.py` — catches `<date>.email.html` drifting
+  from the board-approved `<date>.both.html` (a correction made to the
+  master that never propagated to the hand-written brief — the
+  2026-10-08 incident, see the script's own docstring). Hard gate for
+  date-number drift, soft advisory for general stale-word drift (pass
+  `--strict` to make both hard); run standalone before the Beehiiv load
+  (README Step 5) or via `prepare_publish.py`'s fast path. Also runs
+  automatically, WARN-ONLY, from `hooks/pre-commit` (added 2026-11-02)
+  whenever either `.both.html` or `.email.html` is staged, so a mid-week
+  master correction gets flagged at commit time instead of only at final
+  publish. Requires `beautifulsoup4`.
 - `check_utils.py` — shared helpers for `check_*.py` scripts:
   `CheckError` (a common exception for a fatal precondition failure,
   distinct from a drift finding), `require_files()` (bail with one clear
