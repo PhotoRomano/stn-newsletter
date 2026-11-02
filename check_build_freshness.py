@@ -27,6 +27,14 @@ Run this BEFORE committing drafts/ (README Step 1, right after editing
 .both.html -- before or alongside check_title_date.py/check_calendar.py).
 It does not run archive_publish.py or any publish step -- safe during
 board review, well before Max approves the Thursday send.
+
+Also runs automatically, WARN-ONLY, from hooks/pre-commit whenever a
+drafts/<date>.both.html is part of the commit -- same pattern as that
+hook's existing business_owner_map.json check, and for the same reason
+(feedback_always_commit_git is HARD: nothing in this repo blocks an
+ordinary commit). check(date) is the importable entry point the hook
+uses; main() is the CLI wrapper that turns the same result into a hard
+exit code for standalone/README use.
 """
 import filecmp
 import shutil
@@ -37,6 +45,12 @@ from pathlib import Path
 
 ROOT = Path(__file__).parent
 DRAFTS_DIR = ROOT / "drafts"
+
+
+class BuildCheckError(Exception):
+    """Fatal -- a precondition failed (missing file, build.py/build_site_html.py itself errored).
+    Distinct from a drift finding (a generated file not matching a fresh build), which is
+    reported as a plain string in check()'s returned list instead."""
 
 # build.py writes its outputs next to whatever .both.html path it's given
 # (master_path.parent), so it's safe to point at a temp copy. build_site_html.py
@@ -54,8 +68,7 @@ def check_build_py(date, both_path):
     }
     for suffix, path in committed.items():
         if not path.exists():
-            print(f"missing file: {path}")
-            sys.exit(1)
+            raise BuildCheckError(f"missing file: {path}")
 
     with tempfile.TemporaryDirectory() as tmp:
         tmp = Path(tmp)
@@ -68,8 +81,7 @@ def check_build_py(date, both_path):
             text=True,
         )
         if result.returncode != 0:
-            print(f"build.py failed:\n{result.stdout}\n{result.stderr}")
-            sys.exit(1)
+            raise BuildCheckError(f"build.py failed:\n{result.stdout}\n{result.stderr}")
 
         stale = []
         for suffix, committed_path in committed.items():
@@ -85,8 +97,7 @@ def check_build_py(date, both_path):
 def check_site_html(date, both_path):
     site_path = DRAFTS_DIR / f"{date}.site.html"
     if not site_path.exists():
-        print(f"missing file: {site_path}")
-        sys.exit(1)
+        raise BuildCheckError(f"missing file: {site_path}")
 
     original = site_path.read_bytes()
     try:
@@ -96,8 +107,7 @@ def check_site_html(date, both_path):
             text=True,
         )
         if result.returncode != 0:
-            print(f"build_site_html.py failed:\n{result.stdout}\n{result.stderr}")
-            sys.exit(1)
+            raise BuildCheckError(f"build_site_html.py failed:\n{result.stdout}\n{result.stderr}")
         fresh = site_path.read_bytes()
         return [] if fresh == original else [f"{site_path.name}: differs from a fresh build_site_html.py run"]
     finally:
@@ -106,15 +116,12 @@ def check_site_html(date, both_path):
         site_path.write_bytes(original)
 
 
-def main():
-    if len(sys.argv) != 2:
-        print(__doc__)
-        sys.exit(1)
-    date = sys.argv[1]
+def check(date):
+    """Returns a list of drift strings (empty = clean). Raises BuildCheckError
+    on a fatal precondition failure (missing file, build script itself errored)."""
     both_path = DRAFTS_DIR / f"{date}.both.html"
     if not both_path.exists():
-        print(f"missing file: {both_path}")
-        sys.exit(1)
+        raise BuildCheckError(f"missing file: {both_path}")
 
     stale = check_build_py(date, both_path)
     # site.html is derived FROM .html/.serbian.html, not from .both.html
@@ -122,9 +129,23 @@ def main():
     # answers "is site.html in sync with its immediate inputs"), but call
     # that out so the fix instructions aren't misread as two unrelated bugs.
     stale += check_site_html(date, both_path)
+    return stale
+
+
+def main():
+    if len(sys.argv) != 2:
+        print(__doc__)
+        sys.exit(1)
+    date = sys.argv[1]
+
+    try:
+        stale = check(date)
+    except BuildCheckError as e:
+        print(str(e))
+        sys.exit(1)
 
     if stale:
-        print(f"FAILED -- {len(stale)} generated file(s) out of sync with {both_path.name}:")
+        print(f"FAILED -- {len(stale)} generated file(s) out of sync with drafts/{date}.both.html:")
         for s in stale:
             print(f"  - {s}")
         print(
@@ -135,7 +156,7 @@ def main():
         )
         sys.exit(1)
 
-    print(f"OK -- all four generated variants match a fresh build from {both_path.name}")
+    print(f"OK -- all four generated variants match a fresh build from drafts/{date}.both.html")
 
 
 if __name__ == "__main__":

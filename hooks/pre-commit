@@ -1,14 +1,22 @@
 #!/usr/bin/env python3
 """
-pre-commit — catches business_owner_map.json going stale relative to the
-Parishioner Businesses section it's supposed to be generated from, at
-commit time instead of needing someone to remember `python3 build.py`.
+pre-commit — two checks, both scoped to "only fires when a
+drafts/<date>.both.html master is part of the commit; every other commit
+is an instant no-op":
+
+  1. business_owner_map.json going stale relative to the Parishioner
+     Businesses section it's supposed to be generated from, at commit
+     time instead of needing someone to remember `python3 build.py`.
+  2. (added 2026-11-02) drafts/<date>.html/.serbian.html/.other.html/
+     .site.html going stale relative to .both.html -- delegates to
+     check_build_freshness.check(), see that module's docstring for the
+     2026-11-02 incident that motivated it (a hand-edit applied to all
+     four generated files instead of rebuilding from the master, with
+     the hand-edit itself incomplete on .site.html).
+
 Tracked here as hooks/pre-commit; install_precommit_hook.sh copies it into
 .git/hooks/pre-commit (git hooks are never version-controlled themselves,
 so that copy step is required).
-
-Scope: only fires when a drafts/<date>.both.html master is part of the
-commit -- every other commit is an instant no-op.
 
 WARN-ONLY, same as git_staging_guard.py's pattern for this repo: prints a
 warning on drift but ALWAYS exits 0. Never blocks an ordinary commit, per
@@ -41,6 +49,7 @@ REPO_ROOT = Path(
 sys.path.insert(0, str(REPO_ROOT))
 
 import extract_business_owner_map as eom  # noqa: E402
+import check_build_freshness  # noqa: E402
 
 
 def staged_both_html_files():
@@ -90,6 +99,24 @@ def main():
         for p in problems:
             print(f"    - {p}")
         print("    Run `python3 build.py drafts/<date>.both.html`, then `git add business_owner_map.json`.")
+        print("    Commit proceeding anyway -- this is advisory only.")
+
+    stale_builds = []
+    for draft in drafts:
+        date = draft.name.replace(".both.html", "")
+        try:
+            stale = check_build_freshness.check(date)
+        except check_build_freshness.BuildCheckError as e:
+            stale_builds.append(f"{draft.name}: {e}")
+            continue
+        stale_builds.extend(f"{draft.name}: {s}" for s in stale)
+
+    if stale_builds:
+        print("⚠️  pre-commit WARNING: generated draft variant(s) out of sync with the master being committed:")
+        for s in stale_builds:
+            print(f"    - {s}")
+        print("    Run `python3 build.py drafts/<date>.both.html` then `python3 build_site_html.py drafts/<date>.both.html`,")
+        print("    re-add the regenerated files, and amend/recommit.")
         print("    Commit proceeding anyway -- this is advisory only.")
 
     return 0
