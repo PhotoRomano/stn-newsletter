@@ -107,6 +107,21 @@ def current_map():
     return {k: v for k, v in data.items() if not k.startswith("_")}
 
 
+def _warn(header, items, fix_lines):
+    """Print one of this hook's four near-identical WARN-ONLY blocks:
+    a header, each finding as a bullet, then fix instructions, then the
+    standing "proceeding anyway" line every one of them ends with. No-op
+    if items is empty -- callers don't need their own `if problems:` guard."""
+    if not items:
+        return
+    print(f"⚠️  pre-commit WARNING: {header}")
+    for item in items:
+        print(f"    - {item}")
+    for line in fix_lines:
+        print(f"    {line}")
+    print("    Commit proceeding anyway -- this is advisory only.")
+
+
 def main():
     drafts = staged_both_html_files()
     email_drafts = staged_drafts(".email.html")
@@ -140,12 +155,11 @@ def _check_business_owner_map(drafts):
                     f"has {on_disk_map.get(slug)!r}"
                 )
 
-    if problems:
-        print("⚠️  pre-commit WARNING: business_owner_map.json is stale relative to the draft(s) being committed:")
-        for p in problems:
-            print(f"    - {p}")
-        print("    Run `python3 build.py drafts/<date>.both.html`, then `git add business_owner_map.json`.")
-        print("    Commit proceeding anyway -- this is advisory only.")
+    _warn(
+        "business_owner_map.json is stale relative to the draft(s) being committed:",
+        problems,
+        ["Run `python3 build.py drafts/<date>.both.html`, then `git add business_owner_map.json`."],
+    )
 
 
 def _check_build_freshness(drafts):
@@ -161,13 +175,14 @@ def _check_build_freshness(drafts):
             continue
         stale_builds.extend(f"{draft.name}: {s}" for s in stale)
 
-    if stale_builds:
-        print("⚠️  pre-commit WARNING: generated draft variant(s) out of sync with the master being committed:")
-        for s in stale_builds:
-            print(f"    - {s}")
-        print("    Run `python3 build.py drafts/<date>.both.html` then `python3 build_site_html.py drafts/<date>.both.html`,")
-        print("    re-add the regenerated files, and amend/recommit.")
-        print("    Commit proceeding anyway -- this is advisory only.")
+    _warn(
+        "generated draft variant(s) out of sync with the master being committed:",
+        stale_builds,
+        [
+            "Run `python3 build.py drafts/<date>.both.html` then `python3 build_site_html.py drafts/<date>.both.html`,",
+            "re-add the regenerated files, and amend/recommit.",
+        ],
+    )
 
 
 def _check_email_consistency(drafts, email_drafts):
@@ -195,12 +210,11 @@ def _check_email_consistency(drafts, email_drafts):
         email_problems.extend(f"{date}: {p}" for p in problems)
         email_problems.extend(f"{date}: {w}" for w in warnings)
 
-    if email_problems:
-        print("⚠️  pre-commit WARNING: drafts/<date>.email.html out of sync with the approved drafts/<date>.both.html:")
-        for p in email_problems:
-            print(f"    - {p}")
-        print("    Review both.html's board-approved content against email.html before the Beehiiv load (README Step 5).")
-        print("    Commit proceeding anyway -- this is advisory only.")
+    _warn(
+        "drafts/<date>.email.html out of sync with the approved drafts/<date>.both.html:",
+        email_problems,
+        ["Review both.html's board-approved content against email.html before the Beehiiv load (README Step 5)."],
+    )
 
 
 def _check_board_resolutions(drafts):
@@ -219,12 +233,11 @@ def _check_board_resolutions(drafts):
             for h in hits
         )
 
-    if resolution_hits:
-        print("⚠️  pre-commit WARNING: phrase(s) from a past cancellation/removal reappear in the draft being committed:")
-        for r in resolution_hits:
-            print(f"    - {r}")
-        print("    Check the named commit before keeping this -- confirm it wasn't re-confirmed since, not just carried forward by habit.")
-        print("    Commit proceeding anyway -- this is advisory only.")
+    _warn(
+        "phrase(s) from a past cancellation/removal reappear in the draft being committed:",
+        resolution_hits,
+        ["Check the named commit before keeping this -- confirm it wasn't re-confirmed since, not just carried forward by habit."],
+    )
 
 
 if __name__ == "__main__":
