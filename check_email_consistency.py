@@ -19,10 +19,19 @@ flagged it automatically.
 Two checks, against the VISIBLE TEXT only (HTML tags/attributes stripped,
 so a UTM-tagged href doesn't trip the word check):
 
-  1. DATE NUMBERS (hard failure) -- every day-of-month mentioned near
-     "Oct"/"окт" in email.html must also appear near "Oct"/"окт"
-     somewhere in both.html. A date in the brief that doesn't exist
-     anywhere in the approved full issue is almost certainly stale.
+  1. DATE NUMBERS (hard failure) -- every (month, day) mentioned in
+     email.html (English "Mon Day" or Serbian "Day. mon") must also
+     appear somewhere in both.html. A date in the brief that doesn't
+     exist anywhere in the approved full issue is almost certainly stale.
+     Covers all 12 months, English + Serbian, full name or common
+     abbreviation, nominative or genitive Serbian case -- originally
+     hardcoded to October only (the month of the 2026-10-08 incident
+     above), generalized 2026-11-02 after a November issue's stale date
+     sailed through undetected during testing. Tracks month WITH day (not
+     bare day numbers) specifically to avoid a false negative across
+     month boundaries -- e.g. "Oct 15" approved in both.html must not
+     silently cover a stale "15. нов" in email.html just because the
+     digits match.
 
   2. STALE WORDS (soft warning, not a failure) -- any Cyrillic or Latin
      word of 5+ characters in email.html that does not appear anywhere
@@ -52,10 +61,44 @@ from bs4 import BeautifulSoup
 
 from check_utils import CheckError, require_files
 
-DATE_NUM_PATTERNS = [
-    r"Oct\.?\s+(\d{1,2})\b",
-    r"(\d{1,2})\.\s*окт(?:обра|обар)?\b",
-]
+# Canonical month key -> (English stem regex, Serbian stem regex). Stems
+# are deliberately permissive (a short literal prefix + a trailing
+# cyrillic/letter class) rather than an exhaustive enumeration of every
+# inflected form, since real usage in these drafts mixes nominative
+# ("1. октобар") and genitive ("11. октобра") case inconsistently, plus
+# both 3-letter and full-word abbreviations on the English side ("Aug"
+# and "August" both appear). Safe to be loose here because each stem is
+# only matched when directly adjacent to a date-shaped number in the
+# patterns below, not matched against free-standing prose.
+MONTHS = {
+    "jan": (r"Jan(?:uary)?\.?", r"јан[а-шa-z]*"),
+    "feb": (r"Feb(?:ruary)?\.?", r"феб[а-шa-z]*"),
+    "mar": (r"Mar(?:ch)?\.?", r"мар[а-шa-z]*"),
+    "apr": (r"Apr(?:il)?\.?", r"апр[а-шa-z]*"),
+    "may": (r"May", r"маја?"),
+    "jun": (r"Jun(?:e)?\.?", r"јуна?"),
+    "jul": (r"Jul(?:y)?\.?", r"јула?"),
+    "aug": (r"Aug(?:ust)?\.?", r"авг[а-шa-z]*"),
+    "sep": (r"Sep(?:t(?:ember)?)?\.?", r"сеп[а-шa-z]*"),
+    "oct": (r"Oct(?:ober)?\.?", r"окт[а-шa-z]*"),
+    "nov": (r"Nov(?:ember)?\.?", r"нов[а-шa-z]*"),
+    "dec": (r"Dec(?:ember)?\.?", r"дец[а-шa-z]*"),
+}
+
+# (month_key, compiled_pattern) pairs -- English "Mon Day", Serbian "Day. mon".
+DATE_PATTERNS = []
+for _key, (_en, _sr) in MONTHS.items():
+    DATE_PATTERNS.append((_key, re.compile(_en + r"\s+(\d{1,2})\b")))
+    DATE_PATTERNS.append((_key, re.compile(r"(\d{1,2})\.\s*" + _sr + r"\b", re.IGNORECASE)))
+
+
+def find_dates(text):
+    """Returns a set of (month_key, day) tuples found in text."""
+    found = set()
+    for month_key, pattern in DATE_PATTERNS:
+        for day in pattern.findall(text):
+            found.add((month_key, int(day)))
+    return found
 
 WORD_PATTERN = re.compile(r"[A-Za-zА-Яа-яЂђЋћЧчЏџШшЖжЉљЊњ]{5,}")
 
@@ -94,17 +137,16 @@ def check(date, strict=False):
     problems = []
     warnings = []
 
-    # 1. Date numbers
-    both_dates = set()
-    email_dates = set()
-    for pat in DATE_NUM_PATTERNS:
-        both_dates |= set(re.findall(pat, both_text))
-        email_dates |= set(re.findall(pat, email_text))
+    # 1. Date numbers (month + day together, not bare day numbers)
+    both_dates = find_dates(both_text)
+    email_dates = find_dates(email_text)
     stale_dates = email_dates - both_dates
     if stale_dates:
+        stale_labels = sorted(f"{m}-{d}" for m, d in stale_dates)
+        approved_labels = sorted(f"{m}-{d}" for m, d in both_dates)
         problems.append(
-            f"email.html mentions Oct day(s) {sorted(stale_dates)} near 'Oct'/'окт' "
-            f"that don't appear anywhere in both.html (approved dates: {sorted(both_dates)}) "
+            f"email.html mentions date(s) {stale_labels} "
+            f"that don't appear anywhere in both.html (approved dates: {approved_labels}) "
             f"-- likely a stale date left over from before a board correction"
         )
 
