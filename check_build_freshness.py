@@ -35,6 +35,10 @@ hook's existing business_owner_map.json check, and for the same reason
 ordinary commit). check(date) is the importable entry point the hook
 uses; main() is the CLI wrapper that turns the same result into a hard
 exit code for standalone/README use.
+
+Shares CheckError/require_files/preserve_file with check_utils.py --
+see that module's docstring for why preserve_file exists (the
+build_site_html.py mutate-in-place-then-restore pattern below).
 """
 import filecmp
 import shutil
@@ -43,14 +47,10 @@ import sys
 import tempfile
 from pathlib import Path
 
+from check_utils import CheckError, preserve_file, require_files
+
 ROOT = Path(__file__).parent
 DRAFTS_DIR = ROOT / "drafts"
-
-
-class BuildCheckError(Exception):
-    """Fatal -- a precondition failed (missing file, build.py/build_site_html.py itself errored).
-    Distinct from a drift finding (a generated file not matching a fresh build), which is
-    reported as a plain string in check()'s returned list instead."""
 
 # build.py writes its outputs next to whatever .both.html path it's given
 # (master_path.parent), so it's safe to point at a temp copy. build_site_html.py
@@ -66,9 +66,7 @@ def check_build_py(date, both_path):
     committed = {
         suffix: DRAFTS_DIR / f"{date}.{suffix}" for suffix in BUILD_PY_SUFFIXES
     }
-    for suffix, path in committed.items():
-        if not path.exists():
-            raise BuildCheckError(f"missing file: {path}")
+    require_files(*committed.values())
 
     with tempfile.TemporaryDirectory() as tmp:
         tmp = Path(tmp)
@@ -81,7 +79,7 @@ def check_build_py(date, both_path):
             text=True,
         )
         if result.returncode != 0:
-            raise BuildCheckError(f"build.py failed:\n{result.stdout}\n{result.stderr}")
+            raise CheckError(f"build.py failed:\n{result.stdout}\n{result.stderr}")
 
         stale = []
         for suffix, committed_path in committed.items():
@@ -96,32 +94,30 @@ def check_build_py(date, both_path):
 
 def check_site_html(date, both_path):
     site_path = DRAFTS_DIR / f"{date}.site.html"
-    if not site_path.exists():
-        raise BuildCheckError(f"missing file: {site_path}")
+    require_files(site_path)
 
-    original = site_path.read_bytes()
-    try:
+    # build_site_html.py always overwrites the real file in place -- see
+    # module docstring on why it can't be run against an isolated temp
+    # copy. preserve_file restores the original bytes no matter what
+    # happens inside the block, so this checker never leaves that
+    # overwrite behind.
+    with preserve_file(site_path) as original:
         result = subprocess.run(
             [sys.executable, str(ROOT / "build_site_html.py"), str(both_path)],
             capture_output=True,
             text=True,
         )
         if result.returncode != 0:
-            raise BuildCheckError(f"build_site_html.py failed:\n{result.stdout}\n{result.stderr}")
+            raise CheckError(f"build_site_html.py failed:\n{result.stdout}\n{result.stderr}")
         fresh = site_path.read_bytes()
         return [] if fresh == original else [f"{site_path.name}: differs from a fresh build_site_html.py run"]
-    finally:
-        # build_site_html.py always overwrites the real file in place --
-        # this checker must not leave that change behind, pass or fail.
-        site_path.write_bytes(original)
 
 
 def check(date):
-    """Returns a list of drift strings (empty = clean). Raises BuildCheckError
+    """Returns a list of drift strings (empty = clean). Raises CheckError
     on a fatal precondition failure (missing file, build script itself errored)."""
     both_path = DRAFTS_DIR / f"{date}.both.html"
-    if not both_path.exists():
-        raise BuildCheckError(f"missing file: {both_path}")
+    require_files(both_path)
 
     stale = check_build_py(date, both_path)
     # site.html is derived FROM .html/.serbian.html, not from .both.html
@@ -140,7 +136,7 @@ def main():
 
     try:
         stale = check(date)
-    except BuildCheckError as e:
+    except CheckError as e:
         print(str(e))
         sys.exit(1)
 

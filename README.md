@@ -508,13 +508,24 @@ review.
 - `build_site_html.py` — assembles `drafts/<date>.site.html` (the
   parish-website CMS content) from the already-generated `.html` /
   `.serbian.html` files. Run after `build.py`. Requires `beautifulsoup4`.
-- `check_build_freshness.py` — hard gate: rebuilds `.html`/`.serbian.html`/
+- `check_build_freshness.py` — rebuilds `.html`/`.serbian.html`/
   `.other.html`/`.site.html` from the current `.both.html` and byte-diffs
   each against what's committed, catching a hand-edit to a generated file
-  (or a `.both.html` edit that was never rebuilt) before it's committed.
-  Does not mutate `.site.html` even though `build_site_html.py` itself
-  always overwrites it in place — restores the original bytes after
-  comparing. Requires `beautifulsoup4`. See Step 1.
+  (or a `.both.html` edit that was never rebuilt). Hard exit-1 gate when
+  run standalone (README Step 1); also runs automatically, WARN-ONLY,
+  from `hooks/pre-commit` for every staged `.both.html`. Does not mutate
+  `.site.html` even though `build_site_html.py` itself always overwrites
+  it in place — restores the original bytes after comparing, via
+  `check_utils.preserve_file`. Requires `beautifulsoup4`.
+- `check_utils.py` — shared helpers for `check_*.py` scripts:
+  `CheckError` (a common exception for a fatal precondition failure,
+  distinct from a drift finding), `require_files()` (bail with one clear
+  message if any input file is missing), and `preserve_file()` (a context
+  manager that snapshots a file's bytes and restores them no matter what
+  happens in between — for the `check_build_freshness.py` pattern above,
+  and any future checker that needs to run something that mutates a real
+  file in place just to see what it would produce). Not a check itself —
+  imported by `check_build_freshness.py` and `check_email_consistency.py`.
 - `check_calendar.py` — cross-checks a draft's week against the site's
   live `calendar.html` FEASTS data; prints anything the draft might have
   missed. Checklist only, not an auto-populator (see Step 1).

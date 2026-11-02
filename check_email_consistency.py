@@ -42,6 +42,8 @@ from pathlib import Path
 
 from bs4 import BeautifulSoup
 
+from check_utils import CheckError, require_files
+
 DATE_NUM_PATTERNS = [
     r"Oct\.?\s+(\d{1,2})\b",
     r"(\d{1,2})\.\s*окт(?:обра|обар)?\b",
@@ -80,10 +82,11 @@ def main():
     date = args[0]
     both_path = Path(f"drafts/{date}.both.html")
     email_path = Path(f"drafts/{date}.email.html")
-    for p in (both_path, email_path):
-        if not p.exists():
-            print(f"missing file: {p}")
-            sys.exit(1)
+    try:
+        require_files(both_path, email_path)
+    except CheckError as e:
+        print(str(e))
+        sys.exit(1)
 
     both_text = visible_text(both_path)
     email_text = visible_text(email_path)

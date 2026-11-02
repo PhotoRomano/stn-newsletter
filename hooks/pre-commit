@@ -50,6 +50,7 @@ sys.path.insert(0, str(REPO_ROOT))
 
 import extract_business_owner_map as eom  # noqa: E402
 import check_build_freshness  # noqa: E402
+from check_utils import CheckError  # noqa: E402
 
 
 def staged_both_html_files():
@@ -106,7 +107,7 @@ def main():
         date = draft.name.replace(".both.html", "")
         try:
             stale = check_build_freshness.check(date)
-        except check_build_freshness.BuildCheckError as e:
+        except CheckError as e:
             stale_builds.append(f"{draft.name}: {e}")
             continue
         stale_builds.extend(f"{draft.name}: {s}" for s in stale)
