@@ -65,6 +65,18 @@ Pull liturgical data from `stnicholasphilly.org/calendar.html` (its JS
 Gregorian) for service listings.
 
 Before moving on, check:
+- After any edit to `.both.html` (including mid-week board-review fixes,
+  not just the initial draft), run `python3 build.py drafts/<date>.both.html`
+  then `python3 build_site_html.py drafts/<date>.both.html` to regenerate
+  `.html`/`.serbian.html`/`.other.html`/`.site.html` — never hand-edit those
+  four files directly, even for a one-line fix; build.py's own docstring
+  says so, but nothing enforced it until this check existed (2026-11-02
+  incident: a same-day fix was applied by hand to all five files instead of
+  rebuilding from the master, and the hand-edit to `.site.html` ended up
+  incomplete — missing from its Serbian half — a drift class a real build
+  can't produce). Run `python3 check_build_freshness.py <date>` to confirm
+  all four generated variants still match a fresh build before committing;
+  it's a hard gate.
 - Run `python3 check_calendar.py <date>` — cross-checks the draft against
   the site's own live `calendar.html` FEASTS data and prints anything
   falling in this issue's week that the draft might have missed (a
@@ -496,6 +508,13 @@ review.
 - `build_site_html.py` — assembles `drafts/<date>.site.html` (the
   parish-website CMS content) from the already-generated `.html` /
   `.serbian.html` files. Run after `build.py`. Requires `beautifulsoup4`.
+- `check_build_freshness.py` — hard gate: rebuilds `.html`/`.serbian.html`/
+  `.other.html`/`.site.html` from the current `.both.html` and byte-diffs
+  each against what's committed, catching a hand-edit to a generated file
+  (or a `.both.html` edit that was never rebuilt) before it's committed.
+  Does not mutate `.site.html` even though `build_site_html.py` itself
+  always overwrites it in place — restores the original bytes after
+  comparing. Requires `beautifulsoup4`. See Step 1.
 - `check_calendar.py` — cross-checks a draft's week against the site's
   live `calendar.html` FEASTS data; prints anything the draft might have
   missed. Checklist only, not an auto-populator (see Step 1).
