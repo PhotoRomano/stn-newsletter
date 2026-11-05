@@ -229,6 +229,16 @@ Then in Site Manager (`stnicholasphilly.org/admin`, login may need a
    Name/slug** (`newsletter-<date>`), uncheck **nav_shown** (these
    issue pages aren't in the nav menu), Save. Note the new pageid Site
    Manager redirects to (`pages_list.php?highlight=<pageid>`).
+   **Gotcha (hit for real 2026-11-05):** the Page Name field has an
+   auto-slug-from-Title JS handler that can fire *after* you've already
+   filled it, silently concatenating the auto-slug onto what you typed
+   instead of replacing it (e.g. `the-messenger-week-of-november-5-2026newsletter-2026-11-05`)
+   — a slug that 404s. Always verify the saved Page Name on the Page
+   Properties view (`page_edit.php?pageid=<id>`, not the create form)
+   after saving, and if it's wrong, set it directly via the native
+   `<input>` value setter + `input`/`change` events immediately before
+   re-saving, not another `fill()` call (which can trigger the same
+   auto-slug race again).
 2. **Add the HTML Code section by navigating straight to
    `/admin/section_html_edit.php?pageid=<new pageid>&id=0`** — `id=0`
    creates a brand-new section on save, no existing section needed.
@@ -462,6 +472,49 @@ confuse the two.
   serving the old version until it was manually re-synced. If you touch
   `<date>.email.html` post-Step-5 for any reason, treat the Beehiiv
   re-sync as part of that same fix, not optional follow-up.
+- **Beehiiv's "New Post" flow no longer offers a "Blank draft post" vs
+  "Template post" choice (confirmed 2026-11-05) — "Start writing" now
+  always routes straight to the full template-library gallery, with no
+  blank/skip option.** The reliable path instead: from the Posts list,
+  open the row-actions menu (⋯) on last week's issue → **Duplicate
+  post** → open the duplicate → **Edit post**. Title/subtitle carry over
+  from the source post and need overwriting (see next gotcha); the body
+  needs its HTML Snippet block deleted and replaced (see gotcha after
+  that).
+- **The Title/Subtitle fields on a duplicated post are real
+  `<textarea>` elements (`.editor-title-textarea` /
+  `.editor-subtitle-textarea`), not the rich-text body editor** — set
+  their value via the native `HTMLTextAreaElement` value setter +
+  `input`/`change` events (same pattern as plain CMS textareas), not
+  `execCommand`/clipboard paste. A naive automation `fill()` call can
+  silently *append* to the old text instead of replacing it if the
+  field already has stale content from the duplicate.
+- **A duplicated post's existing HTML Snippet block has a "HTML
+  code"/"Preview" toggle toolbar that's real but extremely fragile to
+  reach via browser automation.** It only appears after clicking actual
+  rendered text *inside* the block first (not the block's outer
+  wrapper), then clicking the small "HTML Snippet" label badge that
+  floats above it — and that badge is frequently positioned off-screen
+  (negative `y`) until you `scrollIntoView` it, which a dedicated
+  click-tool's own actionability check won't do for you. Synthetic JS
+  `.click()` / dispatched `MouseEvent`s on these elements are silently
+  ignored (no toolbar appears) — only a real trusted click works. Given
+  this fragility, don't fight it: **delete the block (trash icon in
+  that same toolbar) and add a fresh one instead** (`+ Add block` →
+  "HTML snippet", listed directly, no `/html` typing needed) — a brand
+  new block opens already focused in raw-paste mode, which is both the
+  officially-intended path and the one that actually works reliably.
+- **A real OS-level paste (not a CDP-dispatched synthetic key event) is
+  required to get clipboard content into a fresh HTML Snippet block.**
+  Sending `Meta+v` via the browser-automation layer's own key-press tool
+  reaches the page's JS event handlers but does not trigger Chrome/Edge's
+  native paste command — nothing lands. What works: `pbcopy` the file
+  to the real OS clipboard, bring the actual browser app forward, then
+  send a genuine OS-level keystroke via `osascript`
+  (`tell application "System Events" to keystroke "v" using command down`)
+  — indistinguishable from a real user pressing Cmd+V. Requires
+  Accessibility permission for whatever process runs `osascript` and
+  (if running under Claude Code's sandbox) `dangerouslyDisableSandbox`.
 
 ## Why one master file
 
