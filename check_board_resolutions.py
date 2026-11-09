@@ -268,7 +268,7 @@ def check(date):
 
     hits = []
     for entry in phrases:
-        if re.search(re.escape(entry["phrase"]), draft_text, re.IGNORECASE):
+        if re.search(rf"\b{re.escape(entry['phrase'])}\b", draft_text, re.IGNORECASE):
             hits.append(entry)
     return hits, len(phrases)
 
