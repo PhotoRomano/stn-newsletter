@@ -561,6 +561,15 @@ review.
 - `build_site_html.py` — assembles `drafts/<date>.site.html` (the
   parish-website CMS content) from the already-generated `.html` /
   `.serbian.html` files. Run after `build.py`. Requires `beautifulsoup4`.
+- `run_qa.sh <date>` — runs every `check_*.py` report script below in one
+  shot (title/date, calendar, email-consistency, board-resolutions,
+  links against every drafted variant, build-freshness, business-owner-
+  sync, publish-status). Several of those hit external hosts not on a
+  sandboxed Claude Code session's network allowlist and will false-fail
+  with `Tunnel connection failed: 403 Forbidden` there — re-run with the
+  sandbox override if you see that specific error. `check_minor_safety.py`
+  is intentionally excluded (it's an importable guard module, not a
+  per-issue report).
 - `check_build_freshness.py` — rebuilds `.html`/`.serbian.html`/
   `.other.html`/`.site.html` from the current `.both.html` and byte-diffs
   each against what's committed, catching a hand-edit to a generated file
