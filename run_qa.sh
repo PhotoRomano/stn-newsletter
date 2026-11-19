@@ -6,7 +6,8 @@
 # Built 2026-11-11 after repeatedly chaining these by hand every prep
 # session. Runs, in order: title/date, calendar cross-check, email
 # consistency, board-resolution regressions, link validation (both/site/
-# email variants), build freshness, business-owner sync, publish status.
+# email variants), build freshness, business-owner sync, emoji/text
+# consistency, publish status.
 # check_minor_safety.py is NOT included -- it's an importable guard module
 # for scripts that load sign-up-sheet contacts, not a per-issue report.
 #
@@ -22,9 +23,10 @@
 # Advisory checks (calendar, board-resolutions, email-consistency) print
 # their own REVIEW/WARNING output and never affect this script's exit
 # code -- read them, they don't gate anything. Hard-fail checks
-# (title-date, links, build-freshness, business-owner-sync) set FAILED=1
-# on any non-zero exit. publish-status is expected to report NOT READY
-# before send day -- it's informational here, not a failure.
+# (title-date, links, build-freshness, business-owner-sync,
+# emoji-consistency) set FAILED=1 on any non-zero exit. publish-status is
+# expected to report NOT READY before send day -- it's informational
+# here, not a failure.
 set -u
 cd "$(dirname "$0")"
 
@@ -55,6 +57,7 @@ for f in "drafts/$DATE.both.html" "drafts/$DATE.site.html" "drafts/$DATE.email.h
 done
 run check_build_freshness.py "$DATE"
 run check_business_owner_sync.py "$DATE"
+run check_emoji_consistency.py "$DATE"
 
 echo "=== check_publish_status.py $DATE (informational -- NOT READY is expected before send day) ==="
 python3 check_publish_status.py "$DATE"
